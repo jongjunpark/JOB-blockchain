@@ -20,7 +20,10 @@
           <input v-model="signUpMail" type="email" class="login-input-field login-input-email" placeholder="Email" required>
           <span @click="onModal">인증받기</span>
         </div>
-        <input v-model="signUpName" type="text" class="login-input-field" placeholder="Username" required>
+        <div class='signup-name'>
+          <input v-model="signUpFirst" type="text" class="login-input-field login-input-first" placeholder="First Name" required>
+          <input v-model="signUpLast" type="text" class="login-input-field login-input-last" placeholder="Last Name" required>
+        </div>
         <input v-model="signUpPassword" type="password" class="login-input-field" placeholder="Password" required>
         <input v-model="signUpPasswordConfirm" type="password" class="login-input-field" placeholder="Password Confirm" required>
         <div class="login-submit-btn">Signup</div>
@@ -43,7 +46,8 @@ export default {
       loginMail: '',
       loginPassword: '',
       signUpMail: '',
-      signUpName: '',
+      signUpFirst: '',
+      signUpLast: '',
       signUpPassword: '',
       signUpPasswordConfirm: '',
     }
@@ -251,5 +255,15 @@ export default {
 .login-input-email {
   width: 70%;
   padding-right: 24%;
+}
+
+.signup-name {
+  width: 100%;
+  display: flex;
+}
+
+.login-input-last {
+  width: 70%;
+  margin-left: 10px;
 }
 </style>

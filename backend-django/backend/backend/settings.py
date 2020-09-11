@@ -144,8 +144,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.UserSerializer',
+}
+
 
 AUTH_USER_MODEL = 'accounts.User'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 # rest-auth
 SITE_ID = 1
@@ -158,10 +167,17 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+import environ
+
+env = environ.Env()
+# reading .env file
+environ.Env.read_env()
+SECRET_KEY = env('SECRET_KEY')
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = env("DJANGO_DB_USERNAME")
+EMAIL_HOST_PASSWORD = env("DJANGO_DB_PASSWORD")
 EMAIL_USE_TLS = True

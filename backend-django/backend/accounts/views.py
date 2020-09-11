@@ -6,6 +6,7 @@ from .serializers import UserSerializer
 from rest_framework.response import Response
 from django.core.mail import EmailMessage
 import random
+
 # Create your views here.
 
 @api_view(['POST'])
@@ -28,6 +29,3 @@ def email(request, email):
         return Response({"result": number}) 
     else:
         return Response({"result": mqwmenjkcjxzkjqwnebmnsdbhqwbhqkbbxjcbkqjkcxzcq})
-
-
-

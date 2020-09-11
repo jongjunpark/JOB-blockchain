@@ -13,7 +13,7 @@
       <form id="login" class="login-input-group">
         <input v-model="loginMail" type="email" class="login-input-field" placeholder="Email" required>
         <input v-model="loginPassword" type="password" class="login-input-field" placeholder="Password" required>
-        <div class="login-submit-btn">Login</div>
+        <div class="login-submit-btn" @click="goLogin">Login</div>
       </form>
       <form id="signup" class="login-input-group">
         <div class="signup-email">
@@ -34,6 +34,9 @@
 <script>
 import { mapMutations } from 'vuex';
 import MailValidationModal from '../components/MailValidationModal.vue'
+import axios from 'axios';
+
+const SERVER_URL = 'http://127.0.0.1:8000/'
 
 export default {
   name: 'Login',
@@ -84,6 +87,26 @@ export default {
     onModal() {
       this.showModal = true;
       this.setMailInput(this.signUpMail)
+    },
+    goLogin() {
+      const loginData = {
+        email: this.loginMail,
+        password: this.loginPassword
+      }
+
+      axios.post(SERVER_URL + 'rest-auth/login/', loginData)
+        .then(res => {
+          console.log(res.data)
+          // this.$cookies.set('auth-token', res.data.key)
+          // this.isLoggedIn = true
+          // this.sendUserInfo()
+          // this.goKids()
+          // this.$router.go()
+
+          
+        })
+        .catch((err) =>
+          console.log(err.data))
     },
   },
   beforeDestroy() { 

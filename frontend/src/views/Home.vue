@@ -48,7 +48,7 @@
       <div class="calendar-box">
         <p class="calendar-header">일정</p>
         <div class="calendar">
-          <SingleDatePicker class='test' />
+          <SingleDatePicker class='test' @selectDate='test()'/>
         </div>
       </div>
     </div>
@@ -63,6 +63,11 @@ export default {
   name: 'Home',
   components: {
     SingleDatePicker
+  },
+  methods: {
+    test() {
+      console.log(event)
+    }
   }
 }
 </script>

@@ -43,6 +43,13 @@ q:before, q:after {
 
 /* reset CSS end */
 @import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css);
+@font-face {
+  font-family: 'BBTreeTL';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_nine_@1.1/BBTreeTL.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 html {
   height: 100%;
@@ -53,6 +60,10 @@ html {
 body {
   height: 92%;
   background-color: #eff0f5;
+}
+
+#app {
+  height: 100%;
 }
 
 .wrap {

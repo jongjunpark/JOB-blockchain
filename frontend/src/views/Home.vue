@@ -48,7 +48,15 @@
       <div class="calendar-box">
         <p class="calendar-header">일정</p>
         <div class="calendar">
-          <SingleDatePicker class='test' @selectDate='test()'/>
+          <SingleDatePicker class='test' @selectDate='selectDate'/>
+          <div class="calendar-content">
+            <div v-if="!isSelect">오늘의 일정</div>
+            <div v-if='isSelect'>
+              <span>{{ selectYear.substring(0,2) }}.</span>
+              <span>{{ selectMonth }}.</span>
+              <span>{{ selectDay }} 일정 </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -61,12 +69,37 @@ import 'vue-single-date-picker/dist/vue-single-date-picker.css';
 
 export default {
   name: 'Home',
+  data() {
+    return {
+      selectYear: '',
+      selectMonth: '',
+      selectDay: '',
+      isSelect: false,
+    }
+  },
   components: {
     SingleDatePicker
   },
   methods: {
-    test() {
-      console.log(event)
+    selectDate() {
+      this.isSelect = true
+      const Day = event.path[0].innerText
+      if (Day.length == 1) {
+        this.selectDay = '0' + Day
+      } else {
+        this.selectDay = Day
+      }
+      const Month = event.path[5].childNodes[0].childNodes[1].innerText.split(' ')[0].substring(0,3)
+      this.setMonth(Month)
+      this.selectYear = event.path[5].childNodes[0].childNodes[1].innerText.split(' ')[1]
+    },
+    setMonth(month) {
+      if (month === 'Jan') {this.selectMonth = '01'} else if (month === 'Feb') {this.selectMonth = '02'}
+      else if (month === 'Mar') {this.selectMonth = '03'} else if (month === 'Apr') {this.selectMonth = '04'}
+      else if (month === 'May') {this.selectMonth = '05'} else if (month === 'Jun') {this.selectMonth = '06'}
+      else if (month === 'Jul') {this.selectMonth = '07'} else if (month === 'Aug') {this.selectMonth = '08'}
+      else if (month === 'Sep') {this.selectMonth = '09'} else if (month === 'Oct') {this.selectMonth = '10'}
+      else if (month === 'Nov') {this.selectMonth = '11'} else {this.selectMonth = '12'}
     }
   }
 }
@@ -222,5 +255,12 @@ export default {
               -6px -6px 10px -1px rgba(255,255,255,0.7);
   border-radius: 10px;
   border: 1px solid rgba(0,0,0,0);
+}
+
+.calendar-box .calendar-content {
+  display: flex;
+  margin-left: 30px;
+  color: rgba(0,0,0,0.7);
+  font-weight: 700;
 }
 </style>

@@ -9,8 +9,8 @@
         <div class="menu-bar">검색</div>
       </div>
       <div class="user-box">
-        <div v-show="!isLoggedIn" class="user-bar" @click="goLogin">로그인</div>
-        <div v-show="!isLoggedIn" class="user-bar" @click="goLogin">회원가입</div>
+        <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('login')">로그인</div>
+        <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('signup')">회원가입</div>
         <div v-show="isLoggedIn" class="user-bar" @click="goLogout">로그아웃</div>
       </div>
     </div>
@@ -33,11 +33,16 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setIsLoggedIn', 'setToken']),
+    ...mapMutations(['setIsLoggedIn', 'setToken', 'setLoginPath']),
     goHome() {
       this.$router.push('/')
     },
-    goLogin() {
+    goLogin(path) {
+      if(path === 'login') {
+        this.setLoginPath(path)
+      } else {
+        this.setLoginPath(path)
+      }
       this.$router.push('/login')
     },
     goLogout() {

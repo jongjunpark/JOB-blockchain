@@ -16,5 +16,8 @@ export default {
   },
   setToken(state, data) {
     state.authToken = data
+  },
+  setLoginPath(state, data) {
+    state.loginPath = data
   }
 }

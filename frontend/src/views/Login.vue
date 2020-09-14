@@ -11,7 +11,7 @@
       </div>
       <p class='login-logo-text' @click="goHome">MY RESUME</p>
       <form id="login" class="login-input-group">
-        <p v-if="!isLoginValid">이메일 또는 비밀번호를 확인하세요.</p>
+        <p v-if="!isLoginValid" class='signup-err-msg'>이메일 또는 비밀번호를 확인하세요.</p>
         <input v-model="loginMail" type="email" class="login-input-field" placeholder="Email" required @keydown.enter="goLogin">
         <input v-model="loginPassword" type="password" class="login-input-field" placeholder="Password" required @keydown.enter="goLogin">
         <div v-show="!isLoginBtn" class="login-submit-btn">Login</div>
@@ -70,7 +70,7 @@ export default {
     MailValidationModal,
   },
   computed: {
-    ...mapState(['mailValid']),
+    ...mapState(['mailValid', 'loginPath']),
   },
   created() {
     this.passwordSchema
@@ -81,6 +81,11 @@ export default {
   },
   mounted() {
     this.setIsLogin(true)
+    if (this.loginPath === 'login') {
+      this.onLogin()
+    } else {
+      this.onSignup()
+    }
   },
   watch: {
     signUpMail() {

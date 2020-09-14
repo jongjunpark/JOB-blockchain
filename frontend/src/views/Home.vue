@@ -96,7 +96,7 @@ export default {
 }
 
 .recruit-box .recruit-header {
-  margin: 40px 0 10px 10px;
+  margin: 40px 0 15px 10px;
   font-size: 20px;
   font-weight: 900;
   color: #0088ff;
@@ -109,11 +109,11 @@ export default {
 
 .recruit-card-box .recruit-card {
   width: 220px;
-  height: 280px;
+  height: 250px;
   background-color: #eff0f5;
-  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
-              -6px -6px 10px -1px rgba(255,255,255,0.7);
-  border-radius: 10px;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  border-radius: 20px;
   border: 1px solid rgba(0,0,0,0);
   margin-right: 20px;
   display: flex;
@@ -123,7 +123,9 @@ export default {
 
 .recruit-card-box .recruit-card .recruit-card-img-box {
   display: flex;
-  height: 70%;
+  height: 60%;
+  width: 70%;
+  margin-top: 10px;
   justify-content: center;
   align-items: center;
 }
@@ -133,8 +135,10 @@ export default {
 }
 
 .recruit-card-box .recruit-card p {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
+  margin-top: 10px;
+  color: rgba(0,0,0,0.7);
 }
 
 .schedule-box .test-box {
@@ -143,7 +147,7 @@ export default {
 }
 
 .test-box .test-header {
-  margin: 40px 0 10px 10px;
+  margin: 40px 0 15px 10px;
   font-size: 20px;
   font-weight: 900;
   color: #0088ff;
@@ -155,12 +159,12 @@ export default {
 }
 
 .test-card-box .test-card {
-  min-width: 350px;
+  min-width: 340px;
   height: 180px;
   background-color: #eff0f5;
-  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
-              -6px -6px 10px -1px rgba(255,255,255,0.7);
-  border-radius: 10px;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  border-radius: 20px;
   border: 1px solid rgba(0,0,0,0);
   margin-right: 20px;
   display: flex;
@@ -171,13 +175,9 @@ export default {
   width: 80px;
   height: 50px;
   box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
-            inset -4px -4px 6px -1px rgba(255,255,255,0.1),
-            -0.5px -0.5px 0px rgba(0,0,0,0.05),
-            0.5px 0.5px 0px rgba(0,0,0,0.05),
-            0px 12px 10px -10px rgba(0,0,0,0.1);
-  border: 1px solid rgba(0,0,0,0.01);
+            inset -4px -4px 6px -1px #ffffff;
   border-radius: 20px;
-  margin: 10px;
+  margin: 15px 0 0 15px;
   font-weight: 900;
   display: flex;
   justify-content: center;
@@ -195,11 +195,13 @@ export default {
   align-items: center;
   width: 100%;
   height: 100%;
+  padding-bottom: 10px;
 }
 
 .test-card-content .test-card-head {
-  font-size: 20px;
-  font-weight: 900;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(0,0,0,0.7)
 }
 
 .test-card-content .test-card-footer {
@@ -208,7 +210,7 @@ export default {
 }
 
 .calendar-box .calendar-header {
-  margin: 40px 0 10px 10px;
+  margin: 40px 0 15px 10px;
   font-size: 20px;
   font-weight: 900;
   color: #0088ff;
@@ -216,11 +218,10 @@ export default {
 
 .calendar-box .calendar {
   width: 500px;
-  height: 540px;
+  height: 520px;
   background-color: #eff0f5;
-  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
-              -6px -6px 10px -1px rgba(255,255,255,0.7);
-  border-radius: 10px;
-  border: 1px solid rgba(0,0,0,0);
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  border-radius: 20px;
 }
 </style>

@@ -11,6 +11,7 @@ const state = {
   signUpInput: '',
   mailCode: '',
   mailValid: false,
+  loginPath: '',
 }
 
 Vue.use(Vuex)

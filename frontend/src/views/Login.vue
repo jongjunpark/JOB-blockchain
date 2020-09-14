@@ -11,11 +11,15 @@
       </div>
       <p class='login-logo-text' @click="goHome">MY RESUME</p>
       <form id="login" class="login-input-group">
-        <input v-model="loginMail" type="email" class="login-input-field" placeholder="Email" required>
-        <input v-model="loginPassword" type="password" class="login-input-field" placeholder="Password" required>
-        <div class="login-submit-btn" @click="goLogin">Login</div>
+        <p v-if="!isLoginValid">이메일 또는 비밀번호를 확인하세요.</p>
+        <input v-model="loginMail" type="email" class="login-input-field" placeholder="Email" required @keydown.enter="goLogin">
+        <input v-model="loginPassword" type="password" class="login-input-field" placeholder="Password" required @keydown.enter="goLogin">
+        <div v-show="!isLoginBtn" class="login-submit-btn">Login</div>
+        <div v-show="isLoginBtn" class="login-submit-btn on-login-btn" @click="goLogin">Login</div>
       </form>
       <form id="signup" class="login-input-group">
+        <p v-if='!passwordSchema.validate(signUpPassword) && (signUpPassword.length>0)' class='signup-err-msg'>비밀번호는 영문, 숫자 포함 8자리 이상이어야 합니다.</p>
+        <p v-if='(passwordSchema.validate(signUpPassword)) && (signUpPassword != signUpPasswordConfirm)' class='signup-err-msg'>비밀번호가 일치하지 않습니다.</p>
         <div class="signup-email">
           <input v-model="signUpMail" type="email" class="login-input-field login-input-email" placeholder="Email" required>
           <span @click="onModal">인증받기</span>
@@ -26,7 +30,8 @@
         </div>
         <input v-model="signUpPassword" type="password" class="login-input-field" placeholder="Password" required>
         <input v-model="signUpPasswordConfirm" type="password" class="login-input-field" placeholder="Password Confirm" required>
-        <div class="login-submit-btn">Signup</div>
+        <div v-show="!isSignBtn" class="login-submit-btn">Signup</div>
+        <div v-show="isSignBtn" class="login-submit-btn on-login-btn">Signup</div>
       </form>
     </div>
 
@@ -35,8 +40,9 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import MailValidationModal from '../components/MailValidationModal.vue'
+import PasswordValidator from 'password-validator'
 import axios from 'axios';
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
@@ -53,21 +59,64 @@ export default {
       signUpLast: '',
       signUpPassword: '',
       signUpPasswordConfirm: '',
+      isLoginValid: true,
+      isSignBtn: false,
+      isLoginBtn: false,
+      isPasswordValid: false,
+      passwordSchema: new PasswordValidator(),
     }
   },
   components: {
     MailValidationModal,
   },
+  computed: {
+    ...mapState(['mailValid']),
+  },
+  created() {
+    this.passwordSchema
+      .is().min(8)
+      .is().max(100)
+      .has().digits()
+      .has().letters();
+  },
   mounted() {
     this.setIsLogin(true)
   },
+  watch: {
+    signUpMail() {
+      this.checkSingupForm()
+    },
+    signUpFirst() {
+      this.checkSingupForm()
+    },
+    signUpLast() {
+      this.checkSingupForm()
+    },
+    signUpPassword() {
+      this.checkPassword()
+      this.checkSingupForm()
+    },
+    signUpPasswordConfirm() {
+      this.checkPassword()
+      this.checkSingupForm()
+    },
+    mailValid() {
+      this.checkSingupForm()
+    },
+    loginMail() {
+      this.checkLoginForm()
+    },
+    loginPassword() {
+      this.checkLoginForm()
+    }
+  },
   methods: {
-    ...mapMutations(['setIsLogin', 'setMailInput']),
+    ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken']),
     onLogin() {
       const LOGIN = document.getElementById('login');
       const SIGNUP = document.getElementById('signup');
       const BTN = document.getElementById('login-btn');
-      const FORM = document.querySelector('.login-form-box')
+      const FORM = document.querySelector('.login-form-box');
 
       LOGIN.style.left = "50px";
       SIGNUP.style.left = "450px";
@@ -88,10 +137,6 @@ export default {
     goHome() {
       this.$router.push('/')
     },
-    onModal() {
-      this.showModal = true;
-      this.setMailInput(this.signUpMail)
-    },
     goLogin() {
       const loginData = {
         email: this.loginMail,
@@ -101,17 +146,47 @@ export default {
       axios.post(SERVER_URL + 'rest-auth/login/', loginData)
         .then(res => {
           console.log(res.data)
-          // this.$cookies.set('auth-token', res.data.key)
-          // this.isLoggedIn = true
-          // this.sendUserInfo()
-          // this.goKids()
-          // this.$router.go()
-
-          
+          this.isLoginValid = true
+          this.$cookies.set('auth-token', res.data.key)
+          this.setToken(res.data.key)
+          this.setIsLoggedIn(true)
+          this.$router.push('/')
+        })
+        .catch(() => this.isLoginValid = false)
+    },
+    onModal() {
+      this.showModal = true;
+      this.setMailInput(this.signUpMail)
+      axios.post(SERVER_URL + `accounts/${this.signUpMail}/`)
+        .then(res => {
+          console.log(res.data.result)
+          this.setMailCode(res.data.result)
         })
         .catch((err) =>
           console.log(err.data))
     },
+    checkSingupForm() {
+      if(this.signUpMail && this.signUpFirst && this.signUpLast && this.signUpPassword && 
+      this.signUpPasswordConfirm && this.mailValid && this.isPasswordValid) {
+        this.isSignBtn = true
+      } else {
+        this.isSignBtn = false
+      }
+    },
+    checkLoginForm() {
+      if(this.loginMail && this.loginPassword) {
+        this.isLoginBtn = true
+      } else {
+        this.isLoginBtn = false
+      }
+    },
+    checkPassword() {
+      if((this.signUpPassword == this.signUpPasswordConfirm) && this.passwordSchema.validate(this.signUpPassword)) {
+        this.isPasswordValid = true
+      } else {
+        this.isPasswordValid = false
+      }
+    }
   },
   beforeDestroy() { 
     this.setIsLogin(false)
@@ -228,18 +303,25 @@ export default {
 .login-submit-btn {
   height: 40px;
   line-height: 40px;
-  cursor: pointer;
   display: block;
   margin: auto;
   margin-top: 30px;
-  background: linear-gradient(to right, #0075db, #a3d4ff);
+  /* background: linear-gradient(to right, #0075db, #a3d4ff); */
+  background-color: #eff0f5;
+  color: rgba(0,0,0,0.4);
   box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
             -6px -6px 10px -1px rgba(255,255,255,0.7);
   border: 0;
   outline: none;
   border-radius: 30px;
   text-align: center;
+  /* color: rgba(255,255,255,0.9); */
+}
+
+.on-login-btn {
+  background: linear-gradient(to right, #0075db, #a3d4ff);
   color: rgba(255,255,255,0.9);
+  cursor: pointer;
 }
 
 #login {
@@ -288,5 +370,15 @@ export default {
 .login-input-last {
   width: 70%;
   margin-left: 10px;
+}
+
+.login-input-group .signup-err-msg {
+  position: absolute;
+  top: -15px;
+  font-size: 12px;
+  margin-left: 5px;
+  color:tomato;
+  font-weight: 700;
+  transition: .5s ease;
 }
 </style>

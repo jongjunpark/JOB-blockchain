@@ -6,7 +6,11 @@ import mutations from './mutations'
 
 const state = {
   isLogin: false,
+  authToken: '',
+  isLoggedIn: false,
   signUpInput: '',
+  mailCode: '',
+  mailValid: false,
 }
 
 Vue.use(Vuex)

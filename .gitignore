@@ -214,6 +214,11 @@ ehthumbs_vista.db
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
+#cert
+.cert.pem
+cert.pem
+*.cert.pem
+
 # Windows Installer files
 *.cab
 *.msi

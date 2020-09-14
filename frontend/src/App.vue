@@ -9,8 +9,9 @@
         <div class="menu-bar">검색</div>
       </div>
       <div class="user-box">
-        <div class="user-bar" @click="goLogin">로그인</div>
-        <div class="user-bar">회원가입</div>
+        <div v-show="!isLoggedIn" class="user-bar" @click="goLogin">로그인</div>
+        <div v-show="!isLoggedIn" class="user-bar" @click="goLogin">회원가입</div>
+        <div v-show="isLoggedIn" class="user-bar" @click="goLogout">로그아웃</div>
       </div>
     </div>
     <router-view/>
@@ -19,7 +20,11 @@
 
 <script>
 import "../public/css/common.css";
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
+import axios from 'axios';
+
+const SERVER_URL = 'http://127.0.0.1:8000/';
+
 export default {
   name: 'App',
   data() {
@@ -28,15 +33,37 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setIsLoggedIn', 'setToken']),
     goHome() {
       this.$router.push('/')
     },
     goLogin() {
       this.$router.push('/login')
+    },
+    goLogout() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        },
+      }
+      axios.post(`${SERVER_URL}rest-auth/logout/`, null, config)
+        .then(() => {
+          this.$cookies.remove('auth-token')
+          this.setToken(null)
+          this.setIsLoggedIn(false)
+          if (this.$route.name === 'Home') {
+            this.$router.go(this.$router.currentRoute)
+          } else {
+            this.$router.push('/')
+          }
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
     }
   },
   computed: {
-    ...mapState(['isLogin']),
+    ...mapState(['isLogin', 'isLoggedIn']),
   }
 }
 </script>

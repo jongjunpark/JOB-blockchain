@@ -50,11 +50,33 @@
         <div class="calendar">
           <SingleDatePicker class='test' @selectDate='selectDate'/>
           <div class="calendar-content">
-            <div v-if="!isSelect">오늘의 일정</div>
+            <div v-if="!isSelect">
+              <span>오늘의 일정</span>
+              <div class='calendar-select-box'>
+                <div v-for="recruit in todayRecruits" :key="recruit" class='calendar-recruit-box'>
+                  <div class='calendar-select-type'>채용</div>
+                  {{ recruit }}
+                </div>
+                <div v-for="test in todayTests" :key="test" class='calendar-test-box'>
+                  <div class='calendar-select-type'>시험</div>
+                  {{ test }}
+                </div>
+              </div>
+            </div>
             <div v-if='isSelect'>
               <span>{{ selectYear.substring(0,2) }}.</span>
               <span>{{ selectMonth }}.</span>
               <span>{{ selectDay }} 일정 </span>
+              <div class='calendar-select-box'>
+                <div v-for="recruit in selectRecruits" :key="recruit" class='calendar-recruit-box'>
+                  <div class='calendar-select-type'>채용</div>
+                  {{ recruit }}
+                </div>
+                <div v-for="test in selectTests" :key="test" class='calendar-test-box'>
+                  <div class='calendar-select-type'>시험</div>
+                  {{ test }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -75,10 +97,32 @@ export default {
       selectMonth: '',
       selectDay: '',
       isSelect: false,
+      defaultSchedule: {
+        200915 : {
+          recruit: ['네이버', '삼성전자', '카카오'],
+          test: ['제49회 SQLD', '기사 제4회 실기시험'],
+        },
+        200916 : {
+          recruit: ['삼성전자', '카카오'],
+          test: ['기사 제4회 실기시험'],
+        },
+      },
+      todayRecruits: [],
+      todayTests: [],
+      selectRecruits: [],
+      selectTests: [],
     }
   },
   components: {
     SingleDatePicker
+  },
+  mounted() {
+    let today = new Date();   
+    let year = String(today.getFullYear()).substring(0,2);
+    let month = '0' + String(today.getMonth() + 1);
+    let date = String(today.getDate());
+    let custom_date = Number(year + month + date)
+    this.todatSchedule(custom_date)
   },
   methods: {
     selectDate() {
@@ -92,6 +136,7 @@ export default {
       const Month = event.path[5].childNodes[0].childNodes[1].innerText.split(' ')[0].substring(0,3)
       this.setMonth(Month)
       this.selectYear = event.path[5].childNodes[0].childNodes[1].innerText.split(' ')[1]
+      this.selectSchedule(Number(this.selectYear.substring(0,2)+this.selectMonth+this.selectDay))
     },
     setMonth(month) {
       if (month === 'Jan') {this.selectMonth = '01'} else if (month === 'Feb') {this.selectMonth = '02'}
@@ -100,6 +145,17 @@ export default {
       else if (month === 'Jul') {this.selectMonth = '07'} else if (month === 'Aug') {this.selectMonth = '08'}
       else if (month === 'Sep') {this.selectMonth = '09'} else if (month === 'Oct') {this.selectMonth = '10'}
       else if (month === 'Nov') {this.selectMonth = '11'} else {this.selectMonth = '12'}
+    },
+    selectSchedule(date) {
+      // console.log(this.defaultSchedule[date])
+      // console.log(this.defaultSchedule[date].recruit)
+      // console.log(this.defaultSchedule[date].test)
+      this.selectRecruits = this.defaultSchedule[date].recruit
+      this.selectTests = this.defaultSchedule[date].test
+    },
+    todatSchedule(date) {
+      this.todayRecruits = this.defaultSchedule[date].recruit
+      this.todayTests = this.defaultSchedule[date].test
     }
   }
 }
@@ -263,4 +319,46 @@ export default {
   color: rgba(0,0,0,0.7);
   font-weight: 700;
 }
+
+.calendar-content .calendar-select-box {
+  margin-top: 10px;
+}
+
+.calendar-select-box .calendar-recruit-box {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  font-size: 15px;
+}
+
+.calendar-select-box .calendar-test-box {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  font-size: 15px;
+}
+
+.calendar-select-box .calendar-select-type {
+  background-color: aquamarine;
+  width: 40px;
+  height: 25px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.calendar-test-box .calendar-select-type {
+  background-color: rgb(255, 246, 167);
+}
+
+.calendar-recruit-box > div, .calendar-test-box > div {
+  font-size: 13px;
+}
+
+.calendar-content span {
+  font-weight: 900;
+}
+
 </style>

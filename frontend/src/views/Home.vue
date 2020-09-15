@@ -361,7 +361,7 @@ export default {
 }
 
 .recruit-box .recruit-header {
-  margin: 40px 0 0px 20px;
+  margin: 40px 0 0px 30px;
   font-size: 20px;
   font-weight: 900;
   color: #0088ff;
@@ -412,7 +412,7 @@ export default {
 }
 
 .test-box .test-header {
-  margin: 40px 0 0px 20px;
+  margin: 40px 0 0px 30px;
   font-size: 20px;
   font-weight: 900;
   color: #0088ff;
@@ -517,6 +517,8 @@ export default {
 
 .calendar-select-box .calendar-select-type {
   background-color: aquamarine;
+  box-shadow: 4px 6px 7px -1px rgba(0,0,0,0.2),
+              -5px -5px 7px -1px #ffffff;
   width: 40px;
   height: 25px;
   margin-right: 10px;
@@ -528,6 +530,8 @@ export default {
 
 .calendar-test-box .calendar-select-type {
   background-color: rgb(255, 246, 167);
+  box-shadow: 4px 6px 7px -1px rgba(0,0,0,0.2),
+              -5px -5px 7px -1px #ffffff;
 }
 
 .calendar-recruit-box > div, .calendar-test-box > div {

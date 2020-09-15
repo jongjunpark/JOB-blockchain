@@ -490,6 +490,55 @@ export default {
   border-radius: 20px;
 }
 
+.calendar-box .calendar-content {
+  display: flex;
+  margin-left: 30px;
+  color: rgba(0,0,0,0.7);
+  font-weight: 700;
+}
+
+.calendar-content .calendar-select-box {
+  margin-top: 5px;
+}
+
+.calendar-select-box .calendar-recruit-box {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  font-size: 15px;
+}
+
+.calendar-select-box .calendar-test-box {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  font-size: 15px;
+}
+
+.calendar-select-box .calendar-select-type {
+  background-color: aquamarine;
+  width: 40px;
+  height: 25px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.calendar-test-box .calendar-select-type {
+  background-color: rgb(255, 246, 167);
+}
+
+.calendar-recruit-box > div, .calendar-test-box > div {
+  font-size: 13px;
+}
+
+.calendar-content span {
+  font-weight: 900;
+}
+
+
 #recruit-slider {
   display: flex;
   flex-direction: column;

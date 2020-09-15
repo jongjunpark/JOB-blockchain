@@ -1,89 +1,397 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div id="login-form" class="col-md-6 mx-auto bg-white">
-        <router-link to="/">Escrow | STARMIX</router-link>
-        <div class="mt-4">
-          <div class="form-group">
-            <label for="email">email</label>
-            <input
-              type="text"
-              class="form-control"
-              id="email"
-              v-model="user.email"
-              placeholder="이메일"
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">비밀번호</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              v-model="user.password"
-              placeholder="비밀번호"
-            />
-          </div>
-          <button type="submit" class="btn btn-primary" v-on:click="login">
-            로그인
-          </button>
-        </div>
+  <div class="login-container">
+    <div class="login-form-box">
+      <div class="login-button-box">
+        <div id="login-btn"></div>
+        <div class="login-toggle-btn login-toggle" @click="onLogin">Login</div>
+        <div class="login-toggle-btn signup-toggle" @click="onSignup">Signup</div>
       </div>
+      <div class="login-logo-img" @click="goHome">
+        <img src="@/assets/images/resume.png" alt="">
+      </div>
+      <p class='login-logo-text' @click="goHome">MY RESUME</p>
+      <form id="login" class="login-input-group">
+        <p v-if="!isLoginValid" class='signup-err-msg'>이메일 또는 비밀번호를 확인하세요.</p>
+        <input v-model="loginMail" type="email" class="login-input-field" placeholder="Email" required @keydown.enter="goLogin">
+        <input v-model="loginPassword" type="password" class="login-input-field" placeholder="Password" required @keydown.enter="goLogin">
+        <div v-show="!isLoginBtn" class="login-submit-btn">Login</div>
+        <div v-show="isLoginBtn" class="login-submit-btn on-login-btn" @click="goLogin">Login</div>
+      </form>
+      <form id="signup" class="login-input-group">
+        <p v-if='!passwordSchema.validate(signUpPassword) && (signUpPassword.length>0)' class='signup-err-msg'>비밀번호는 영문, 숫자 포함 8자리 이상이어야 합니다.</p>
+        <p v-if='(passwordSchema.validate(signUpPassword)) && (signUpPassword != signUpPasswordConfirm)' class='signup-err-msg'>비밀번호가 일치하지 않습니다.</p>
+        <div class="signup-email">
+          <input v-model="signUpMail" type="email" class="login-input-field login-input-email" placeholder="Email" required>
+          <span @click="onModal">인증받기</span>
+        </div>
+        <div class='signup-name'>
+          <input v-model="signUpFirst" type="text" class="login-input-field login-input-first" placeholder="First Name" required>
+          <input v-model="signUpLast" type="text" class="login-input-field login-input-last" placeholder="Last Name" required>
+        </div>
+        <input v-model="signUpPassword" type="password" class="login-input-field" placeholder="Password" required>
+        <input v-model="signUpPasswordConfirm" type="password" class="login-input-field" placeholder="Password Confirm" required>
+        <div v-show="!isSignBtn" class="login-submit-btn">Signup</div>
+        <div v-show="isSignBtn" class="login-submit-btn on-login-btn">Signup</div>
+      </form>
     </div>
+
+    <MailValidationModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
-import { login } from "../api/user.js";
-import { findByUserId as findWallet } from "../api/wallet.js";
+import { mapState, mapMutations } from 'vuex';
+import MailValidationModal from '../components/MailValidationModal.vue'
+import PasswordValidator from 'password-validator'
+import axios from 'axios';
+
+const SERVER_URL = 'http://127.0.0.1:8000/'
 
 export default {
+  name: 'Login',
   data() {
     return {
-      user: {
-        email: "",
-        password: ""
-      }
-    };
+      showModal: false,
+      loginMail: '',
+      loginPassword: '',
+      signUpMail: '',
+      signUpFirst: '',
+      signUpLast: '',
+      signUpPassword: '',
+      signUpPasswordConfirm: '',
+      isLoginValid: true,
+      isSignBtn: false,
+      isLoginBtn: false,
+      isPasswordValid: false,
+      passwordSchema: new PasswordValidator(),
+    }
+  },
+  components: {
+    MailValidationModal,
+  },
+  computed: {
+    ...mapState(['mailValid', 'loginPath']),
+  },
+  created() {
+    this.passwordSchema
+      .is().min(8)
+      .is().max(100)
+      .has().digits()
+      .has().letters();
+  },
+  mounted() {
+    this.setIsLogin(true)
+    if (this.loginPath === 'login') {
+      this.onLogin()
+    } else {
+      this.onSignup()
+    }
+  },
+  watch: {
+    signUpMail() {
+      this.checkSingupForm()
+    },
+    signUpFirst() {
+      this.checkSingupForm()
+    },
+    signUpLast() {
+      this.checkSingupForm()
+    },
+    signUpPassword() {
+      this.checkPassword()
+      this.checkSingupForm()
+    },
+    signUpPasswordConfirm() {
+      this.checkPassword()
+      this.checkSingupForm()
+    },
+    mailValid() {
+      this.checkSingupForm()
+    },
+    loginMail() {
+      this.checkLoginForm()
+    },
+    loginPassword() {
+      this.checkLoginForm()
+    }
   },
   methods: {
-    login() {
-      const scope = this;
+    ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken']),
+    onLogin() {
+      const LOGIN = document.getElementById('login');
+      const SIGNUP = document.getElementById('signup');
+      const BTN = document.getElementById('login-btn');
+      const FORM = document.querySelector('.login-form-box');
+      const LOGIN_TOGGLE = document.querySelector('.login-toggle');
+      const SIGNUP_TOGGLE = document.querySelector('.signup-toggle');
 
-      login(
-        this.user.email,
-        this.user.password,
-        function(response) {
-          scope.$store.commit("setIsSigned", true);
-          scope.$store.commit("setUserId", response.data.id);
+      LOGIN.style.left = "50px";
+      SIGNUP.style.left = "450px";
+      BTN.style.left = "0";
+      FORM.style.height = "480px";
+      LOGIN_TOGGLE.style.color = 'rgba(0,0,0,0.8)'
+      SIGNUP_TOGGLE.style.color = 'rgba(0,0,0,0.3)'
+    },
+    onSignup() {
+      const LOGIN = document.getElementById('login');
+      const SIGNUP = document.getElementById('signup');
+      const BTN = document.getElementById('login-btn');
+      const FORM = document.querySelector('.login-form-box');
+      const LOGIN_TOGGLE = document.querySelector('.login-toggle');
+      const SIGNUP_TOGGLE = document.querySelector('.signup-toggle');
 
-          findWallet(
-            response.data.id,
-            function(response) {
-              if (response.status == 200) {
-                scope.$store.commit("setWalletAddress", response.data.address);
-              } else {
-                alert("Unexpected status code: " + response.status);
-              }
-            },
-            function(err) {
-              if (err.response != 404) {
-                console.error(err);
-                //alert("지갑 정보를 찾지 못했습니다.");
-              }
-            }
-          );
+      LOGIN.style.left = "-400px";
+      SIGNUP.style.left = "50px";
+      BTN.style.left = "50%";
+      FORM.style.height = "590px";
+      LOGIN_TOGGLE.style.color = 'rgba(0,0,0,0.3)'
+      SIGNUP_TOGGLE.style.color = 'rgba(0,0,0,0.8)'
+    },
+    goHome() {
+      this.$router.push('/')
+    },
+    goLogin() {
+      const loginData = {
+        email: this.loginMail,
+        password: this.loginPassword
+      }
 
-          scope.$router.push("/");
-        },
-        function(error) {
-          console.error(error);
-          alert("유저 이메일 혹은 비밀번호가 일치하지 않습니다.");
-        }
-      );
+      axios.post(SERVER_URL + 'rest-auth/login/', loginData)
+        .then(res => {
+          console.log(res.data)
+          this.isLoginValid = true
+          this.$cookies.set('auth-token', res.data.key)
+          this.setToken(res.data.key)
+          this.setIsLoggedIn(true)
+          this.$router.push('/')
+        })
+        .catch(() => this.isLoginValid = false)
+    },
+    onModal() {
+      this.showModal = true;
+      this.setMailInput(this.signUpMail)
+      axios.post(SERVER_URL + `accounts/${this.signUpMail}/`)
+        .then(res => {
+          console.log(res.data.result)
+          this.setMailCode(res.data.result)
+        })
+        .catch((err) =>
+          console.log(err.data))
+    },
+    checkSingupForm() {
+      if(this.signUpMail && this.signUpFirst && this.signUpLast && this.signUpPassword && 
+      this.signUpPasswordConfirm && this.mailValid && this.isPasswordValid) {
+        this.isSignBtn = true
+      } else {
+        this.isSignBtn = false
+      }
+    },
+    checkLoginForm() {
+      if(this.loginMail && this.loginPassword) {
+        this.isLoginBtn = true
+      } else {
+        this.isLoginBtn = false
+      }
+    },
+    checkPassword() {
+      if((this.signUpPassword == this.signUpPasswordConfirm) && this.passwordSchema.validate(this.signUpPassword)) {
+        this.isPasswordValid = true
+      } else {
+        this.isPasswordValid = false
+      }
     }
+  },
+  beforeDestroy() { 
+    this.setIsLogin(false)
   }
-};
+}
 </script>
 
-<style></style>
+<style>
+.login-form-box {
+  width: 380px;
+  height: 480px;
+  position: relative;
+  margin: 3.5% auto;
+  background-color: #eff0f5;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  border: 1px solid rgba(0,0,0,0);
+  border-radius: 30px;
+  padding: 5px;
+  overflow: hidden;
+  transition: .5s;
+}
+
+.login-form-box .login-logo-img {
+  width: 100px;
+  height: 100px;
+  background-color: #80c3ff;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.login-form-box .login-logo-img img {
+  width: 70%;
+  height: 70%;
+}
+
+.login-form-box .login-logo-text {
+  margin: 0 auto;
+  width: 130px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 50px;
+  cursor: pointer;
+}
+
+.login-button-box {
+  width: 230px;
+  margin: 35px auto;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  background-color: #eff0f5;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  border-radius: 30px;
+}
+
+.login-toggle-btn {
+  width: 50%;
+  padding: 10px 0;
+  text-align: center;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  outline: none;
+  position: relative;
+  transition: .5s;
+}
+
+#login-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, #0088ff, #b9deff);
+  box-shadow: inset 6px 6px 10px -1px rgba(0,0,0,0.4),
+            inset -3px -3px 10px -1px #ffffff;
+  border-radius: 30px;
+  transition: .5s;
+}
+
+.login-input-group {
+  position: absolute;
+  top: 280px;
+  width: 280px;
+  transition: .5s;
+}
+
+.login-input-field {
+  width: 94%;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 6%;
+  margin: 5px 0;
+  box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
+            inset -4px -4px 6px -1px #ffffff;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  background: transparent;
+}
+
+.login-submit-btn {
+  height: 40px;
+  line-height: 40px;
+  display: block;
+  margin: auto;
+  margin-top: 30px;
+  /* background: linear-gradient(to right, #0075db, #a3d4ff); */
+  background-color: #eff0f5;
+  color: rgba(0,0,0,0.4);
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  border: 0;
+  outline: none;
+  border-radius: 30px;
+  text-align: center;
+  /* color: rgba(255,255,255,0.9); */
+}
+
+.on-login-btn {
+  background: linear-gradient(to right, #0075db, #a3d4ff);
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+  transition: .3s;
+}
+
+.on-login-btn:active {
+  opacity: 0.8;
+}
+
+#login {
+  left: 50px;
+}
+
+#signup {
+  left: 450px;
+}
+
+.signup-email {
+  position: relative;
+}
+
+.signup-email span {
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  transform: translate(0, -50%);
+  font-size: 12px;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  padding: 5px 10px;
+  border-radius: 30px;
+  color: rgba(0,0,0,0.5);
+  transition: .5s;
+  cursor: pointer;
+}
+
+.signup-email span:hover {
+  background: #0088ff;
+  color: #fff;
+  font-weight: 700;
+}
+
+.login-input-email {
+  width: 70%;
+  padding-right: 24%;
+}
+
+.signup-name {
+  width: 100%;
+  display: flex;
+}
+
+.login-input-last {
+  width: 70%;
+  margin-left: 10px;
+}
+
+.login-input-group .signup-err-msg {
+  position: absolute;
+  top: -15px;
+  font-size: 12px;
+  margin-left: 5px;
+  color:tomato;
+  font-weight: 700;
+  transition: .5s ease;
+}
+</style>

@@ -6,9 +6,9 @@
         <div class="resume-user-content">
           <label for="resume-user-img-edit">
             <div class='resume-user-img-box'>
-                <i class="far fa-images"><i class="fas fa-plus"></i></i>
+                <i v-if="!profileImg" class="far fa-images"><i class="fas fa-plus"></i></i>
                 <input type="file" id="resume-user-img-edit" accept="image/*" @change="setProfileImg">
-              <p>프로필 사진을 등록해주세요</p>
+              <p v-if="!profileImg">프로필 사진을 등록해주세요</p>
               <img v-if='profileImg' class="resume-user-img" :src="profileImg" alt="#">
             </div>
           </label>
@@ -98,6 +98,9 @@ export default {
   position: relative;
   border-radius: 20px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .resume-user-img-box input[type="file"] {
@@ -142,6 +145,11 @@ export default {
   width: 100%;
   text-align: center;
   transition: .3s;
+}
+
+.resume-user-img-box > img {
+  width: 80%;
+  height: 80%;
 }
 
 .resume-user-content .resume-user-img-box:hover .fa-images,

@@ -35,10 +35,10 @@ export default {
   methods: {
     ...mapMutations(['setIsLoggedIn', 'setToken', 'setLoginPath']),
     goHome() {
-      this.$router.push('/')
+      this.$router.push('/').catch(()=>{})
     },
     goResume() {
-      this.$router.push('/resume')
+      this.$router.push('/resume').catch(()=>{})
     },
     goLogin(path) {
       if(path === 'login') {
@@ -46,7 +46,7 @@ export default {
       } else {
         this.setLoginPath(path)
       }
-      this.$router.push('/login')
+      this.$router.push('/login').catch(()=>{})
     },
     goLogout() {
       const config = {
@@ -59,11 +59,12 @@ export default {
           this.$cookies.remove('auth-token')
           this.setToken(null)
           this.setIsLoggedIn(false)
-          if (this.$route.name === 'Home') {
-            this.$router.go(this.$router.currentRoute)
-          } else {
-            this.$router.push('/')
-          }
+          // if (this.$route.name === 'Home') {
+          //   this.$router.go(this.$router.currentRoute)
+          // } else {
+          //   this.$router.push('/')
+          // }
+          this.$router.push('/').catch(()=>{})
         })
         .catch(err => {
           console.log(err.response)

@@ -1,0 +1,7 @@
+mine.start()
+miner.start()
+mine.start()
+miner.start()
+miner.stop()
+eth.getBalance(eth.accounts[0])
+pip install web3

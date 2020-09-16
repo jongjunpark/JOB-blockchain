@@ -31,7 +31,7 @@
         <input v-model="signUpPassword" type="password" class="login-input-field" placeholder="Password" required>
         <input v-model="signUpPasswordConfirm" type="password" class="login-input-field" placeholder="Password Confirm" required>
         <div v-show="!isSignBtn" class="login-submit-btn">Signup</div>
-        <div v-show="isSignBtn" class="login-submit-btn on-login-btn">Signup</div>
+        <div v-show="isSignBtn" class="login-submit-btn on-login-btn" @click="setSignup">Signup</div>
       </form>
     </div>
 
@@ -44,6 +44,7 @@ import { mapState, mapMutations } from 'vuex';
 import MailValidationModal from '../components/MailValidationModal.vue'
 import PasswordValidator from 'password-validator'
 import axios from 'axios';
+import Swal from 'sweetalert2'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -199,6 +200,32 @@ export default {
       } else {
         this.isPasswordValid = false
       }
+    },
+    setSignup() {
+      const signupData = {
+        email: this.signUpMail,
+        password1: this.signUpPassword,
+        password2: this.signUpPasswordConfirm,
+        first_name: this.signUpFirst,
+        last_name: this.signUpLast
+      }
+      axios.post(SERVER_URL + 'rest-auth/signup/', signupData)
+        .then(res => {
+          console.log(res.data)
+          this.$cookies.set('auth-token', res.data.key)
+          this.setToken(res.data.key)
+          this.setIsLoggedIn(true)
+          Swal.fire({
+            icon: 'success',
+            title: '환영합니다',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.value) {
+              this.$router.push('/')
+            }
+          })
+        })
+        .catch((err) => console.log(err))
     }
   },
   beforeDestroy() { 

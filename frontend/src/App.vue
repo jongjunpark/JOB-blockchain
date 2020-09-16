@@ -3,7 +3,7 @@
     <div id="nav" v-show="!isLogin">
       <div class="logo-box" @click="goHome">MY RESUME</div>
       <div class="menu-bar-box">
-        <div class="menu-bar">이력서</div>
+        <div class="menu-bar" @click="goResume">이력서</div>
         <div class="menu-bar">취업달력</div>
         <div class="menu-bar">교육</div>
         <div class="menu-bar">검색</div>
@@ -36,6 +36,9 @@ export default {
     ...mapMutations(['setIsLoggedIn', 'setToken', 'setLoginPath']),
     goHome() {
       this.$router.push('/')
+    },
+    goResume() {
+      this.$router.push('/resume')
     },
     goLogin(path) {
       if(path === 'login') {

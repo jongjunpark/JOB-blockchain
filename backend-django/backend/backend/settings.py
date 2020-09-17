@@ -25,7 +25,7 @@ SECRET_KEY = '5%(_1$d!z_zw(62q=$#0cyer%2qz3(h)kb6t%)#guxk+5-r=ni'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['j3b104.p.ssafy.io', '*']
 
 
 # Application definition
@@ -142,7 +142,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+
+# static files
 STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, "collect_static")
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'accounts.serializers.UserSerializer',
@@ -174,8 +177,10 @@ env = environ.Env()
 environ.Env.read_env()
 SECRET_KEY = env('SECRET_KEY')
 
+DEFAULT_FROM_EMAIL = env("DJANGO_DB_USERNAME")
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SERVER_EMAIL = env("DJANGO_DB_USERNAME")
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = env("DJANGO_DB_USERNAME")

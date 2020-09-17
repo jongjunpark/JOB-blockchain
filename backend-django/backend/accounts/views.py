@@ -27,6 +27,6 @@ def email(request, email):
     result = email.send()
 
     if result == 1:
-        return Response({"result": number}) 
+        return Response({"result": number, "1":result}) 
     else:
         return Response({"result": mqwmenjkcjxzkjqwnebmnsdbhqwbhqkbbxjcbkqjkcxzcq})

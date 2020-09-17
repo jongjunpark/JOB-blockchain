@@ -59,7 +59,7 @@ INSTALLED_APPS = [
 
     # My apps
     'accounts',
-
+    'articles',
 ]
 
 MIDDLEWARE = [
@@ -181,3 +181,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = env("DJANGO_DB_USERNAME")
 EMAIL_HOST_PASSWORD = env("DJANGO_DB_PASSWORD")
 EMAIL_USE_TLS = True
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

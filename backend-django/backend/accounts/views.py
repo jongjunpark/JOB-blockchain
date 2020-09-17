@@ -25,6 +25,7 @@ def email(request, email):
 
     email = EmailMessage(subject_text, body_text, to=[email])
     result = email.send()
+
     if result == 1:
         return Response({"result": number}) 
     else:

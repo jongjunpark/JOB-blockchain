@@ -31,7 +31,7 @@
         <input v-model="signUpPassword" type="password" class="login-input-field" placeholder="Password" required>
         <input v-model="signUpPasswordConfirm" type="password" class="login-input-field" placeholder="Password Confirm" required>
         <div v-show="!isSignBtn" class="login-submit-btn">Signup</div>
-        <div v-show="isSignBtn" class="login-submit-btn on-login-btn">Signup</div>
+        <div v-show="isSignBtn" class="login-submit-btn on-login-btn" @click="setSignup">Signup</div>
       </form>
     </div>
 
@@ -44,6 +44,7 @@ import { mapState, mapMutations } from 'vuex';
 import MailValidationModal from '../components/MailValidationModal.vue'
 import PasswordValidator from 'password-validator'
 import axios from 'axios';
+import Swal from 'sweetalert2'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -122,22 +123,30 @@ export default {
       const SIGNUP = document.getElementById('signup');
       const BTN = document.getElementById('login-btn');
       const FORM = document.querySelector('.login-form-box');
+      const LOGIN_TOGGLE = document.querySelector('.login-toggle');
+      const SIGNUP_TOGGLE = document.querySelector('.signup-toggle');
 
       LOGIN.style.left = "50px";
       SIGNUP.style.left = "450px";
       BTN.style.left = "0";
       FORM.style.height = "480px";
+      LOGIN_TOGGLE.style.color = 'rgba(0,0,0,0.8)'
+      SIGNUP_TOGGLE.style.color = 'rgba(0,0,0,0.3)'
     },
     onSignup() {
       const LOGIN = document.getElementById('login');
       const SIGNUP = document.getElementById('signup');
       const BTN = document.getElementById('login-btn');
-      const FORM = document.querySelector('.login-form-box')
+      const FORM = document.querySelector('.login-form-box');
+      const LOGIN_TOGGLE = document.querySelector('.login-toggle');
+      const SIGNUP_TOGGLE = document.querySelector('.signup-toggle');
 
       LOGIN.style.left = "-400px";
       SIGNUP.style.left = "50px";
       BTN.style.left = "50%";
       FORM.style.height = "590px";
+      LOGIN_TOGGLE.style.color = 'rgba(0,0,0,0.3)'
+      SIGNUP_TOGGLE.style.color = 'rgba(0,0,0,0.8)'
     },
     goHome() {
       this.$router.push('/')
@@ -191,6 +200,32 @@ export default {
       } else {
         this.isPasswordValid = false
       }
+    },
+    setSignup() {
+      const signupData = {
+        email: this.signUpMail,
+        password1: this.signUpPassword,
+        password2: this.signUpPasswordConfirm,
+        first_name: this.signUpFirst,
+        last_name: this.signUpLast
+      }
+      axios.post(SERVER_URL + 'rest-auth/signup/', signupData)
+        .then(res => {
+          console.log(res.data)
+          this.$cookies.set('auth-token', res.data.key)
+          this.setToken(res.data.key)
+          this.setIsLoggedIn(true)
+          Swal.fire({
+            icon: 'success',
+            title: '환영합니다',
+            confirmButtonText: '확인'
+          }).then((result) => {
+            if (result.value) {
+              this.$router.push('/')
+            }
+          })
+        })
+        .catch((err) => console.log(err))
     }
   },
   beforeDestroy() { 
@@ -206,10 +241,10 @@ export default {
   position: relative;
   margin: 3.5% auto;
   background-color: #eff0f5;
-  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
-              -6px -6px 10px -1px rgba(255,255,255,0.7);
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
   border: 1px solid rgba(0,0,0,0);
-  border-radius: 10px;
+  border-radius: 30px;
   padding: 5px;
   overflow: hidden;
   transition: .5s;
@@ -249,8 +284,8 @@ export default {
   display: flex;
   justify-content: space-between;
   background-color: #eff0f5;
-  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
-              -6px -6px 10px -1px rgba(255,255,255,0.7);
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
   border-radius: 30px;
 }
 
@@ -263,6 +298,7 @@ export default {
   border: 0;
   outline: none;
   position: relative;
+  transition: .5s;
 }
 
 #login-btn {
@@ -272,11 +308,8 @@ export default {
   width: 50%;
   height: 100%;
   background: linear-gradient(to right, #0088ff, #b9deff);
-  box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
-            inset -4px -4px 6px -1px rgba(255,255,255,0.1),
-            -0.5px -0.5px 0px rgba(0,0,0,0.05),
-            0.5px 0.5px 0px rgba(0,0,0,0.05),
-            0px 12px 10px -10px rgba(0,0,0,0.1);
+  box-shadow: inset 6px 6px 10px -1px rgba(0,0,0,0.4),
+            inset -3px -3px 10px -1px #ffffff;
   border-radius: 30px;
   transition: .5s;
 }
@@ -295,11 +328,8 @@ export default {
   padding-left: 6%;
   margin: 5px 0;
   box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
-            inset -4px -4px 6px -1px rgba(255,255,255,0.1),
-            -0.5px -0.5px 0px rgba(0,0,0,0.05),
-            0.5px 0.5px 0px rgba(0,0,0,0.05),
-            0px 12px 10px -10px rgba(0,0,0,0.1);
-  border: 1px solid rgba(0,0,0,0.01);
+            inset -4px -4px 6px -1px #ffffff;
+  border: none;
   border-radius: 20px;
   outline: none;
   background: transparent;
@@ -314,8 +344,8 @@ export default {
   /* background: linear-gradient(to right, #0075db, #a3d4ff); */
   background-color: #eff0f5;
   color: rgba(0,0,0,0.4);
-  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
-            -6px -6px 10px -1px rgba(255,255,255,0.7);
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
   border: 0;
   outline: none;
   border-radius: 30px;
@@ -327,6 +357,11 @@ export default {
   background: linear-gradient(to right, #0075db, #a3d4ff);
   color: rgba(255,255,255,0.9);
   cursor: pointer;
+  transition: .3s;
+}
+
+.on-login-btn:active {
+  opacity: 0.8;
 }
 
 #login {
@@ -347,8 +382,8 @@ export default {
   right: 2%;
   transform: translate(0, -50%);
   font-size: 12px;
-  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
-            -6px -6px 10px -1px rgba(255,255,255,0.7);
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
   padding: 5px 10px;
   border-radius: 30px;
   color: rgba(0,0,0,0.5);

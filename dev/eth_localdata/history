@@ -1,0 +1,36 @@
+mine.start()
+miner.start()
+mine.start()
+miner.start()
+miner.stop()
+eth.getBalance(eth.accounts[0])
+pip install web3
+miner.start()
+miner.stop()
+web3.eth.accounts
+miner.start()
+miner.stop()
+miner.start()
+miner.stop()
+web3.eth.accounts
+personal.Unlockaccount
+miner.start()
+```bash
+npm install -g truffle
+truffle init
+-----Unlock Accounts, Strat Mining-----
+-----Edit truffle-config.js networks & version -----
+-----Create solidity file -----
+truffle compile
+truffle migrate
+``````bash
+npm install -g truffle
+truffle init
+-----Unlock Accounts, Strat Mining-----
+-----Edit truffle-config.js networks & version -----
+-----Create solidity file -----
+truffle compile
+truffle migrate
+```eth.getBalance(eth.accounts[0])
+miner.stop()
+eth.getBalance(eth.accounts[0])

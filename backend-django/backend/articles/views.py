@@ -9,19 +9,34 @@ from .serializers import ArticleListSerializer, ArticleSerializer
 
 # article_list
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def index(request):
     articles = Article.objects.all()
     serializer = ArticleListSerializer(articles, many=True)
     return Response(serializer.data)
 
-# article_detail
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def detail(request, article_pk):
-    article = get_object_or_404(Article, pk=article_pk)
-    serializer = ArticleSerializer(article)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        article = get_object_or_404(Article, pk=article_pk)
+        serializer = ArticleSerializer(article)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = ArticleSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        article = get_object_or_404(Article, pk=article_pk)
+        serializer = ArticleSerializer(data=request.data, instance=article)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user)
+            return Response({'message': '성공적으로 수정'})
+    elif request.method == 'DELETE':
+        article = get_object_or_404(Article, pk=article_pk)
+        article.delete()
+        return Response({'message': '성공적으로 삭제'})
 
 # article_create
 @api_view(['POST'])
@@ -31,22 +46,3 @@ def create(request):
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
     return Response(serializer.data)
-
-# article_delete
-@api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
-def detail(request, article_pk):
-    article = get_object_or_404(Article, pk=article_pk)
-    article.delete()
-    return Response({'message': '성공적으로 삭제'})
-
-# article_update
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def detail(request, article_pk):
-    article = get_object_or_404(Article, pk=article_pk)
-    serializer = ArticleSerializer(data=request.data, instance=article)
-
-    if serializer.is_valid(raise_exception=True):
-        serializer.save(user=request.user)
-        return Response({'message': '성공적으로 수정'})

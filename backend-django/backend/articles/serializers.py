@@ -7,7 +7,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Article
-        fields = ('id', 'user')
+        fields = ('user_id', 'user')
 
 class ArticleSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)

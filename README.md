@@ -64,7 +64,8 @@
     - HTML5
     - CSS
     - SCSS
-- WEB3.js
+    - WEB3.js
+
 - Back End
     - Django
     - SQLITE3

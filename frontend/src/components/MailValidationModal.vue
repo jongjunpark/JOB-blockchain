@@ -120,8 +120,13 @@ export default {
   top: 15px;
   right: 15px;
   cursor: pointer;
-  color: rgba(0,0,0,0.8);
+  color: rgba(0,0,0,0.7);
   font-size: 25px;
+  transition: all .3s;
+}
+
+.mail-modal-mask .fa-times:hover {
+  color: #0088ff;
 }
 
 .modal-enter .mail-modal-wrapper,
@@ -178,11 +183,8 @@ export default {
   height: 40px;
   padding-left: 6%;
   box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
-            inset -4px -4px 6px -1px rgba(255,255,255,0.1),
-            -0.5px -0.5px 0px rgba(0,0,0,0.05),
-            0.5px 0.5px 0px rgba(0,0,0,0.05),
-            0px 12px 10px -10px rgba(0,0,0,0.1);
-  border: 1px solid rgba(0,0,0,0.01);
+              inset -4px -4px 6px -1px #ffffff;
+  border: 0px solid rgba(0,0,0,0);
   border-radius: 20px;
   outline: none;
   margin-bottom: 20px;
@@ -192,10 +194,9 @@ export default {
   width: 100%;
   height: 40px;
   margin-bottom: 20px;
-  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
-              -6px -6px 10px -1px rgba(255,255,255,0.7);
-  border: 1px solid rgba(0,0,0,0);
-  border-radius: 10px;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;

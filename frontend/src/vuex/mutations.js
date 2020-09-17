@@ -19,5 +19,23 @@ export default {
   },
   setLoginPath(state, data) {
     state.loginPath = data
+  },
+  setSchoolType(state, data) {
+    state.schoolType = data
+  },
+  setSchoolName(state, data) {
+    state.schoolName = data
+  },
+  setSchoolDetail(state, data) {
+    state.schoolDetail = data
+  },
+  setSchoolType2(state, data) {
+    state.schoolType2 = data
+  },
+  selectSchool(state, data) {
+    state.selectedSchool = data
+  },
+  selectSchoolType(state, data) {
+    state.selectedSchoolType = data
   }
 }

@@ -12,6 +12,12 @@ const state = {
   mailCode: '',
   mailValid: false,
   loginPath: '',
+  schoolName: '',
+  schoolType: '',
+  schoolTypr2: '',
+  schoolDetail: '',
+  selectedSchool: '',
+  selectedSchoolType: '',
 }
 
 Vue.use(Vuex)

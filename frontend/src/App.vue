@@ -3,7 +3,7 @@
     <div id="nav" v-show="!isLogin">
       <div class="logo-box" @click="goHome">MY RESUME</div>
       <div class="menu-bar-box">
-        <div class="menu-bar">이력서</div>
+        <div class="menu-bar" @click="goResume">이력서</div>
         <div class="menu-bar">취업달력</div>
         <div class="menu-bar">교육</div>
         <div class="menu-bar">검색</div>
@@ -35,7 +35,10 @@ export default {
   methods: {
     ...mapMutations(['setIsLoggedIn', 'setToken', 'setLoginPath']),
     goHome() {
-      this.$router.push('/')
+      this.$router.push('/').catch(()=>{})
+    },
+    goResume() {
+      this.$router.push('/resume').catch(()=>{})
     },
     goLogin(path) {
       if(path === 'login') {
@@ -43,7 +46,7 @@ export default {
       } else {
         this.setLoginPath(path)
       }
-      this.$router.push('/login')
+      this.$router.push('/login').catch(()=>{})
     },
     goLogout() {
       const config = {
@@ -56,11 +59,12 @@ export default {
           this.$cookies.remove('auth-token')
           this.setToken(null)
           this.setIsLoggedIn(false)
-          if (this.$route.name === 'Home') {
-            this.$router.go(this.$router.currentRoute)
-          } else {
-            this.$router.push('/')
-          }
+          // if (this.$route.name === 'Home') {
+          //   this.$router.go(this.$router.currentRoute)
+          // } else {
+          //   this.$router.push('/')
+          // }
+          this.$router.push('/').catch(()=>{})
         })
         .catch(err => {
           console.log(err.response)

@@ -47,21 +47,21 @@
                       <div class="recruit-card-box">
                         <div class="recruit-card">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/samsung.png" alt="">
+                            <img src="@/assets/images/SK.png" alt="">
                           </div>
-                          <p>삼성SDI</p>
+                          <p>SK그룹</p>
                         </div>
                         <div class="recruit-card">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/naver.png" alt="">
+                            <img src="@/assets/images/LG.png" alt="">
                           </div>
-                          <p>네이버</p>
+                          <p>LG그룹</p>
                         </div>
                         <div class="recruit-card">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/kakao.png" alt="">
+                            <img src="@/assets/images/cj.png" alt="">
                           </div>
-                          <p>카카오</p>
+                          <p>CJ그룹</p>
                         </div>
                       </div>
                     </div>
@@ -71,21 +71,21 @@
                       <div class="recruit-card-box">
                         <div class="recruit-card">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/samsung.png" alt="">
+                            <img src="@/assets/images/doosan.png" alt="">
                           </div>
-                          <p>삼성SDI</p>
+                          <p>두산그룹</p>
                         </div>
                         <div class="recruit-card">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/naver.png" alt="">
+                            <img src="@/assets/images/hyundai.png" alt="">
                           </div>
-                          <p>네이버</p>
+                          <p>현대자동차</p>
                         </div>
                         <div class="recruit-card">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/kakao.png" alt="">
+                            <img src="@/assets/images/kia.png" alt="">
                           </div>
-                          <p>카카오</p>
+                          <p>기아자동차</p>
                         </div>
                       </div>
                     </div>
@@ -95,21 +95,21 @@
                       <div class="recruit-card-box">
                         <div class="recruit-card">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/samsung.png" alt="">
+                            <img src="@/assets/images/apm.png" alt="">
                           </div>
-                          <p>삼성SDI</p>
+                          <p>Applied Materials</p>
                         </div>
                         <div class="recruit-card">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/naver.png" alt="">
+                            <img src="@/assets/images/asml.png" alt="">
                           </div>
-                          <p>네이버</p>
+                          <p>ASML</p>
                         </div>
                         <div class="recruit-card">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/kakao.png" alt="">
+                            <img src="@/assets/images/gs.png" alt="">
                           </div>
-                          <p>카카오</p>
+                          <p>GS그룹</p>
                         </div>
                       </div>
                     </div>
@@ -159,17 +159,17 @@
                     <div class="test-slide-content">
                       <div class="test-card-box">
                         <div class="test-card">
-                          <div class="test-card-countdown countdown-lastday">D - 1</div>
+                          <div class="test-card-countdown">D - 6</div>
                           <div class="test-card-content">
-                            <p class="test-card-head">2020 기사 제4회 실기시험</p>
+                            <p class="test-card-head">2020 기사 제5회 필기시험</p>
                             <p class="test-card-footer">한국산업인력공단</p>
                           </div>
                         </div>
                         <div class="test-card">
-                          <div class="test-card-countdown">D - 3</div>
+                          <div class="test-card-countdown">D - 7</div>
                           <div class="test-card-content">
-                            <p class="test-card-head">제49회 SQLD</p>
-                            <p class="test-card-footer">한국데이터산업진흥원</p>
+                            <p class="test-card-head">OPIC</p>
+                            <p class="test-card-footer">ACTFL</p>
                           </div>
                         </div>
                       </div>
@@ -179,16 +179,16 @@
                     <div class="test-slide-content">
                       <div class="test-card-box">
                         <div class="test-card">
-                          <div class="test-card-countdown countdown-lastday">D - 1</div>
+                          <div class="test-card-countdown">D - 11</div>
                           <div class="test-card-content">
-                            <p class="test-card-head">2020 기사 제4회 실기시험</p>
-                            <p class="test-card-footer">한국산업인력공단</p>
+                            <p class="test-card-head">제 129회 TOEIC</p>
+                            <p class="test-card-footer">한국 토익 위원회</p>
                           </div>
                         </div>
                         <div class="test-card">
-                          <div class="test-card-countdown">D - 3</div>
+                          <div class="test-card-countdown">D - 14</div>
                           <div class="test-card-content">
-                            <p class="test-card-head">제49회 SQLD</p>
+                            <p class="test-card-head">제50회 SQLD</p>
                             <p class="test-card-footer">한국데이터산업진흥원</p>
                           </div>
                         </div>
@@ -199,17 +199,17 @@
                     <div class="test-slide-content">
                       <div class="test-card-box">
                         <div class="test-card">
-                          <div class="test-card-countdown countdown-lastday">D - 1</div>
+                          <div class="test-card-countdown">D - 17</div>
                           <div class="test-card-content">
-                            <p class="test-card-head">2020 기사 제4회 실기시험</p>
+                            <p class="test-card-head">2020 기능사 제4회 필기시험</p>
                             <p class="test-card-footer">한국산업인력공단</p>
                           </div>
                         </div>
                         <div class="test-card">
-                          <div class="test-card-countdown">D - 3</div>
+                          <div class="test-card-countdown">D - 20</div>
                           <div class="test-card-content">
-                            <p class="test-card-head">제49회 SQLD</p>
-                            <p class="test-card-footer">한국데이터산업진흥원</p>
+                            <p class="test-card-head">제215회 워드프로세서</p>
+                            <p class="test-card-footer">대한상공회의소</p>
                           </div>
                         </div>
                       </div>
@@ -274,11 +274,19 @@ export default {
       selectDay: '',
       isSelect: false,
       defaultSchedule: {
-        200915 : {
+        200916 : {
           recruit: ['네이버', '삼성전자', '카카오'],
           test: ['제49회 SQLD', '기사 제4회 실기시험'],
         },
-        200916 : {
+        200917 : {
+          recruit: ['네이버', '삼성전자', '카카오'],
+          test: ['제49회 SQLD', '기사 제4회 실기시험'],
+        },
+        200918 : {
+          recruit: ['네이버', '삼성전자', '카카오'],
+          test: ['제49회 SQLD', '기사 제4회 실기시험'],
+        },
+        200919 : {
           recruit: ['삼성전자', '카카오'],
           test: ['기사 제4회 실기시험'],
         },

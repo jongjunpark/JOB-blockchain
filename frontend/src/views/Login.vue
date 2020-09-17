@@ -222,7 +222,7 @@ export default {
             confirmButtonText: '확인'
           }).then((result) => {
             if (result.value) {
-              this.$router.push('/')
+              this.$router.push('/resume')
             }
           })
         })

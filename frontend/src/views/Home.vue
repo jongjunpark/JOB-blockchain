@@ -279,15 +279,15 @@ export default {
       isSelect: false,
       defaultSchedule: {
         200916 : {
-          recruit: ['네이버', '삼성전자', '카카오'],
+          recruit: ['네이버', '삼성전자'],
           test: ['제49회 SQLD', '기사 제4회 실기시험'],
         },
         200917 : {
-          recruit: ['네이버', '삼성전자', '카카오'],
+          recruit: ['네이버', '삼성전자'],
           test: ['제49회 SQLD', '기사 제4회 실기시험'],
         },
         200918 : {
-          recruit: ['네이버', '삼성전자', '카카오'],
+          recruit: ['네이버', '삼성전자'],
           test: ['제49회 SQLD', '기사 제4회 실기시험'],
         },
         200919 : {

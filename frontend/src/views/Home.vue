@@ -262,9 +262,12 @@
 </template>
 
 <script>
+import axios from 'axios'
 import SingleDatePicker from 'vue-single-date-picker';
 import 'vue-single-date-picker/dist/vue-single-date-picker.css';
 import '../components/css/home.css'
+
+const API_KEY = process.env.WORK_APP_API_KEY
 
 export default {
   name: 'Home',
@@ -308,6 +311,7 @@ export default {
     let date = String(today.getDate());
     let custom_date = Number(year + month + date)
     this.todatSchedule(custom_date)
+    this.getRecruitInform()
   },
   methods: {
     selectDate() {
@@ -341,6 +345,24 @@ export default {
     todatSchedule(date) {
       this.todayRecruits = this.defaultSchedule[date].recruit
       this.todayTests = this.defaultSchedule[date].test
+    },
+    getRecruitInform() {
+      console.log(API_KEY)
+      axios.get('http://openapi.work.go.kr/opi/opi/opia/wantedApi.do', {
+        params: {
+          authKey: API_KEY,
+          callTp: 'L',
+          returnType: 'XML',
+          startPage: 1,
+          display: 10,
+          coTp: '01'
+        }
+      }).then(res => {
+        console.log(res)
+      })
+      .catch(err =>{
+        console.log(err.response)
+      })
     }
   }
 }

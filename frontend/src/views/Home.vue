@@ -267,7 +267,7 @@ import SingleDatePicker from 'vue-single-date-picker';
 import 'vue-single-date-picker/dist/vue-single-date-picker.css';
 import '../components/css/home.css'
 
-const API_KEY = process.env.WORK_APP_API_KEY
+const WORK_API_KEY = process.env.VUE_APP_WORK_API_KEY
 
 export default {
   name: 'Home',
@@ -290,7 +290,7 @@ export default {
           recruit: ['네이버', '삼성전자'],
           test: ['제49회 SQLD', '기사 제4회 실기시험'],
         },
-        200919 : {
+        200921 : {
           recruit: ['삼성전자', '카카오'],
           test: ['기사 제4회 실기시험'],
         },
@@ -347,17 +347,21 @@ export default {
       this.todayTests = this.defaultSchedule[date].test
     },
     getRecruitInform() {
-      console.log(API_KEY)
+      console.log(process.env)
+      console.log(WORK_API_KEY)
       axios.get('http://openapi.work.go.kr/opi/opi/opia/wantedApi.do', {
         params: {
-          authKey: API_KEY,
+          authKey: 'WNKF6AU27PGCKGIJNMWV62VR1HJ',
           callTp: 'L',
           returnType: 'XML',
           startPage: 1,
           display: 10,
           coTp: '01'
-        }
-      }).then(res => {
+        },
+      },{
+    /** 가장 중요한 부분 */
+    withCredentials: true,
+}).then(res => {
         console.log(res)
       })
       .catch(err =>{

@@ -37,5 +37,23 @@ export default {
   },
   selectSchoolType(state, data) {
     state.selectedSchoolType = data
+  },
+  setMajorName(state, data) {
+    state.majorName = data
+  },
+  setMajorType(state, data) {
+    state.majorType = data
+  },
+  setMajorType2(state, data) {
+    state.majorType2 = data
+  },
+  selectMajor(state, data) {
+    state.selectedMajor = data
+  },
+  selectMajorType(state, data) {
+    state.selectedMajorType = data
+  },
+  selectMajorType2(state, data) {
+    state.selectedMajorType2 = data
   }
 }

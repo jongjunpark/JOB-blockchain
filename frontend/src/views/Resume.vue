@@ -132,10 +132,14 @@
             </div>
             <div class="resume-input-inner-box">
               <div class="inner-box major-name-input">
-                <label for="">전공</label><input type="text" v-model="tecUniv.major" v-on:input="tecUniv.major = $event.target.value">
+                <label for="">전공</label>
+                <input type="text" v-model="tecUniv.major" v-on:input="tecUniv.major = $event.target.value" @keydown.enter="onModal2(tecUniv.major, 'tecUniv', 'major')">
+                <i class="fab fa-sistrix" @click="onModal2(tecUniv.major, 'tecUniv', 'major')"></i>
               </div>
               <div class="inner-box minor-name-input">
-                <label for="">부전공</label><input type="text" v-model="tecUniv.minor" v-on:input="tecUniv.minor = $event.target.value">
+                <label for="">부전공</label>
+                <input type="text" v-model="tecUniv.minor" v-on:input="tecUniv.minor = $event.target.value" @keydown.enter="onModal2(tecUniv.minor, 'tecUniv', 'minor')">
+                <i class="fab fa-sistrix" @click="onModal2(tecUniv.minor, 'tecUniv', 'minor')"></i>
               </div>
               <div class="inner-box grade-input">
                 <label for="">학점</label>
@@ -184,10 +188,14 @@
             </div>
             <div class="resume-input-inner-box">
               <div class="inner-box major-name-input">
-                <label for="">전공</label><input type="text" v-model="univ.major" v-on:input="univ.major = $event.target.value">
+                <label for="">전공</label>
+                <input type="text" v-model="univ.major" v-on:input="univ.major = $event.target.value" @keydown.enter="onModal2(univ.major, 'univ', 'major')">
+                <i class="fab fa-sistrix" @click="onModal2(univ.major, 'univ', 'major')"></i>
               </div>
               <div class="inner-box minor-name-input">
-                <label for="">부전공</label><input type="text" v-model="univ.minor" v-on:input="univ.minor = $event.target.value">
+                <label for="">부전공</label>
+                <input type="text" v-model="univ.minor" v-on:input="univ.minor = $event.target.value" @keydown.enter="onModal2(univ.minor, 'univ', 'minor')">
+                <i class="fab fa-sistrix" @click="onModal2(univ.minor, 'univ', 'minor')"></i>
               </div>
               <div class="inner-box grade-input">
                 <label for="">학점</label>
@@ -236,10 +244,14 @@
             </div>
             <div class="resume-input-inner-box">
               <div class="inner-box major-name-input">
-                <label for="">전공</label><input type="text" v-model="master.major" v-on:input="master.major = $event.target.value">
+                <label for="">전공</label>
+                <input type="text" v-model="master.major" v-on:input="master.major = $event.target.value" @keydown.enter="onModal2(master.major, 'master', 'major')">
+                <i class="fab fa-sistrix" @click="onModal2(master.major, 'master', 'major')"></i>
               </div>
               <div class="inner-box minor-name-input">
-                <label for="">부전공</label><input type="text" v-model="master.minor" v-on:input="master.minor = $event.target.value">
+                <label for="">부전공</label>
+                <input type="text" v-model="master.minor" v-on:input="master.minor = $event.target.value" @keydown.enter="onModal2(master.minor, 'master', 'minor')">
+                <i class="fab fa-sistrix" @click="onModal2(master.minor, 'master', 'minor')"></i>
               </div>
               <div class="inner-box grade-input">
                 <label for="">학점</label>
@@ -288,10 +300,14 @@
             </div>
             <div class="resume-input-inner-box">
               <div class="inner-box major-name-input">
-                <label for="">전공</label><input type="text" v-model="doctor.major" v-on:input="doctor.major = $event.target.value">
+                <label for="">전공</label>
+                <input type="text" v-model="doctor.major" v-on:input="doctor.major = $event.target.value" @keydown.enter="onModal2(doctor.major, 'doctor', 'major')">
+                <i class="fab fa-sistrix" @click="onModal2(doctor.major, 'doctor', 'major')"></i>
               </div>
               <div class="inner-box minor-name-input">
-                <label for="">부전공</label><input type="text" v-model="doctor.minor" v-on:input="doctor.minor = $event.target.value">
+                <label for="">부전공</label>
+                <input type="text" v-model="doctor.minor" v-on:input="doctor.minor = $event.target.value" @keydown.enter="onModal2(doctor.minor, 'doctor', 'minor')">
+                <i class="fab fa-sistrix" @click="onModal2(doctor.minor, 'doctor', 'minor')"></i>
               </div>
               <div class="inner-box grade-input">
                 <label for="">학점</label>
@@ -322,12 +338,14 @@
     </div>
 
     <SchoolSearch v-if="showModal" @close="showModal= false"/>
+    <MajorSearch v-if="showModal2" @close="showModal2= false"/>
   </div>
 </template>
 
 <script>
 import { mapState,mapMutations } from 'vuex';
 import SchoolSearch from '../components/SchoolSearch.vue'
+import MajorSearch from '../components/MajorSearch.vue'
 import '../components/css/resume.css'
 
 export default {
@@ -335,6 +353,7 @@ export default {
   data() {
     return {
       showModal: false,
+      showModal2: false,
       profileImg: '',
       isResume: false,
       isHighSchool: false,
@@ -403,6 +422,7 @@ export default {
   },
   components: {
     SchoolSearch,
+    MajorSearch,
   },
   watch: {
     selectedSchool() {
@@ -411,6 +431,19 @@ export default {
       else if (this.selectedSchoolType==='univ') {this.univ.name = this.selectedSchool}
       else if (this.selectedSchoolType==='master') {this.master.name = this.selectedSchool}
       else if (this.selectedSchoolType==='doctor') {this.doctor.name = this.selectedSchool}      
+    },
+    selectedMajor() {
+      if (this.selectedMajorType2==='major') {
+        if (this.selectedMajorType==='tecUniv') {this.tecUniv.major = this.selectedMajor}
+        else if (this.selectedMajorType==='univ') {this.univ.major = this.selectedMajor}
+        else if (this.selectedMajorType==='master') {this.master.major = this.selectedMajor}
+        else if (this.selectedMajorType==='doctor') {this.doctor.major = this.selectedMajor}      
+      } else {
+        if (this.selectedMajorType==='tecUniv') {this.tecUniv.minor = this.selectedMajor}
+        else if (this.selectedMajorType==='univ') {this.univ.minor = this.selectedMajor}
+        else if (this.selectedMajorType==='master') {this.master.minor = this.selectedMajor}
+        else if (this.selectedMajorType==='doctor') {this.doctor.minor = this.selectedMajor} 
+      }
     },
     highSchool: {
       handler() {
@@ -442,10 +475,10 @@ export default {
     this.onHighSchool()
   },
   computed: {
-    ...mapState(['selectedSchool', 'selectedSchoolType']),
+    ...mapState(['selectedSchool', 'selectedSchoolType', 'selectedMajor', 'selectedMajorType', 'selectedMajorType2']),
   },
   methods: {
-    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2']),
+    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2', 'setMajorName', 'setMajorType', 'setMajorType2']),
     setProfileImg() {
       const photoFile = document.getElementById("resume-user-img-edit");
       this.profileImg = URL.createObjectURL(photoFile.files[0]);
@@ -536,6 +569,12 @@ export default {
       this.setSchoolDetail(num);
       this.setSchoolType2(school);
       this.showModal = true;
+    },
+    onModal2(name, type, type2) {
+      this.showModal2 = true;
+      this.setMajorName(name);
+      this.setMajorType(type);
+      this.setMajorType2(type2);
     },
     checkResumeForm() {
       if ((this.highSchool.graduate && this.highSchool.graduate != '선택') && (this.highSchool.location && this.highSchool.location != '선택')

@@ -10,8 +10,9 @@
 }
 
 .resume-box > p {
+  font-family: 'BMJUA';
   margin-bottom: 30px;
-  font-weight: 900;
+  font-weight: 500;
   font-size: 30px;
 }
 
@@ -21,7 +22,7 @@
 
 .resume-user-content label {
   width: 30%;
-  margin: 0 50px;
+  margin: 0 30px 0 70px;
 }
 
 .resume-user-content .resume-user-img-box {
@@ -99,7 +100,7 @@
 }
 
 .resume-user-profile .resume-user-input {
-  width: 68%;
+  width: 65%;
   outline: none;
   background: transparent;
   box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
@@ -134,7 +135,7 @@
 }
 
 .resume-school-box .resume-license-certify-box {
-  width: 90%;
+  width: 80%;
   padding: 20px 30px;
   box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
             inset -4px -4px 6px -1px #ffffff;
@@ -151,7 +152,7 @@
 }
 
 .resume-license-content .resume-license-school-box {
-  width: calc(90% + 60px);
+  width: calc(80% + 40px);
   display: flex;
   justify-content: space-between;
   padding: 20px 0;

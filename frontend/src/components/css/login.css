@@ -70,9 +70,9 @@
   left: 0;
   width: 50%;
   height: 100%;
-  background: linear-gradient(to right, #0088ff, #b9deff);
-  box-shadow: inset 6px 6px 10px -1px rgba(0,0,0,0.4),
-            inset -3px -3px 10px -1px #ffffff;
+  background: #80c3ff;
+  box-shadow: inset 3px 3px 8px -1px rgba(0,0,0,0.4),
+            inset -3px -3px 8px -1px #ffffff;
   border-radius: 30px;
   transition: .5s;
 }

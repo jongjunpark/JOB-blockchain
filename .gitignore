@@ -235,3 +235,5 @@ cert.ppk
 # End of https://www.toptal.com/developers/gitignore/api/vagrant,vue,python,java,linux,windows
 
 Vagrantfile
+
+s03p23b104.git/

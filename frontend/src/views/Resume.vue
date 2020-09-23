@@ -325,15 +325,115 @@
             <div v-if="formUniv" class="resume-license-btn  on-license-btn" @click="addSchool('univ')">인증하기</div>
             <div v-if="formMaster" class="resume-license-btn  on-license-btn" @click="addSchool('master')">인증하기</div>
             <div v-if="formDoctor" class="resume-license-btn  on-license-btn" @click="addSchool('doctor')">인증하기</div>
-            <div v-if="!isResume" class="resume-license-btn">인증하기</div>
+            <div v-if="!isSchool" class="resume-license-btn">인증하기</div>
           </div>
         </div>
       </div>
+
+      
       <div class="resume-box resume-license-box">
         <p>자격사항</p>
+        <div class="resume-license-content">
+          <div class="resume-license-certify-box">
+            <p v-if="certifiedLicense.length===0">인증된 자격증이 없습니다.</p>
+            <div class="resume-license-certified-list" v-for='(license, index) in certifiedLicense' :key='`license-${index}`'>
+              <div class="certified-detail certified-type">{{ license[0] }}</div>
+              <div class="certified-detail">{{ license[1] }}</div><div class="certified-detail">{{ license[2] }}</div>
+              <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+            </div>
+          </div>
+          <div class="resume-license-input-box resume-input-box">
+            <div class="resume-input-inner-box resume-license-inner-box">
+              <div class="inner-box license-name-input">
+                <label for="">자격증명</label>
+                <input v-model="license.name" type="text" v-on:input="license.name = $event.target.value">
+              </div>
+              <div class="inner-box graduate-select-input">
+                <label for="gradu-combo">발행처</label>
+                <input v-model="license.institute" type="text" v-on:input="license.institute = $event.target.value">
+              </div>
+              <div class="inner-box entrance-date-input">
+                <label for="">취득일</label><input type="text" v-model='license.date' placeholder="YYYY . MM">
+              </div>
+            </div>
+          </div>
+          <div class="resume-license-btn-box resume-input-box">
+            <div v-if="isLicense" class="resume-license-btn  on-license-btn" @click="addLicense">인증하기</div>
+            <div v-if="!isLicense" class="resume-license-btn">인증하기</div>
+          </div>
+        </div>
       </div>
+
+
       <div class="resume-box resume-career-box">
         <p>경력사항</p>
+        <div class="resume-license-content">
+          <div class="resume-license-certify-box">
+            <p v-if="certifiedCareer.length===0">인증된 경력이 없습니다.</p>
+            <div class="resume-license-certified-list" v-for='(career, index) in certifiedCareer' :key='`career-${index}`'>
+              <div class="certified-detail certified-type">{{ career[0] }}</div>
+              <div class="certified-detail certified-detail-non-margin">{{ career[1] }}</div>
+              <div class="certified-detail certified-detail-non-margin">~</div>
+              <div class="certified-detail">{{ career[2] }}</div>
+              <div class="certified-detail">{{ career[3] }}</div><div class="certified-detail">{{ career[4] }}</div>
+              <div class="certified-detail">{{ career[5] }}</div><div class="certified-detail">{{ career[6] }}</div>
+              <div class="certified-detail certified-detail-career-text" @mouseenter="onCareerText('on')" @mouseleave="onCareerText('off')">
+                경력기술서
+                <div v-if="isCareerText">{{ career[7] }}</div>
+              </div>
+              <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+            </div>
+          </div>
+          <div class="resume-career-input-box resume-input-box">
+            <div class="resume-input-inner-box resume-career-inner-box">
+              <div class="inner-box career-name-input">
+                <label for="">회사명</label>
+                <input v-model="career.name" type="text" v-on:input="career.name = $event.target.value">
+              </div>
+              <div class="inner-box career-date-input">
+                <label for="">근무기간</label>
+                <input type="text" v-model='career.startDate' placeholder="YYYY . MM">
+                <span>~</span>
+                <input type="text" v-model='career.endDate' placeholder="YYYY . MM">
+              </div>
+              <div class="inner-box reson-input">
+                <label for="career-reason">퇴직사유</label>
+                <select v-model='career.reason' name="reson" id="career-reason">
+                  <option disabled selected>선택</option>
+                  <option>이직</option><option>학업</option><option>건강</option>
+                  <option>해고</option><option>명퇴</option><option>만료</option>
+                  <option>기타</option>
+                </select>
+              </div>
+            </div>
+            <div class="resume-input-inner-box resume-career-inner-box">
+              <div class="inner-box career-department-input">
+                <label for="">부서명</label>
+                <input v-model="career.department" type="text" v-on:input="career.department = $event.target.value">
+              </div>
+              <div class="inner-box career-position-input">
+                <label for="">직급</label>
+                <input v-model="career.position" type="text" v-on:input="career.position = $event.target.value">
+              </div>
+              <div class="inner-box career-duties-input">
+                <label for="">직무</label>
+                <input v-model="career.duties" type="text" v-on:input="career.duties = $event.target.value">
+              </div>
+            </div>
+            <div class="resume-input-inner-box resume-career-inner-text-box">
+              <div class="resume-career-text-head">
+                <p>경력기술서 (500자)</p>
+                <p>({{ career.text.length }}/500)</p>
+              </div>
+              <textarea name="" id="career-text" cols="30" rows="5"
+              v-model="career.text" v-on:input="career.text = $event.target.value"></textarea>
+            </div>
+          </div>
+          <div class="resume-license-btn-box resume-input-box">
+            <div v-if="isCareer" class="resume-license-btn  on-license-btn" @click="addCareer">인증하기</div>
+            <div v-if="!isCareer" class="resume-license-btn">인증하기</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -355,7 +455,10 @@ export default {
       showModal: false,
       showModal2: false,
       profileImg: '',
-      isResume: false,
+      isSchool: false,
+      isLicense: false,
+      isCareer: false,
+      isCareerText: false,
       isHighSchool: false,
       isTecUniv: false,
       isUniv: false,
@@ -417,7 +520,24 @@ export default {
         grade: '',
         totalGrade: '선택',
       },
+      license: {
+        name: '',
+        institute: '',
+        date: '',
+      },
+      career: {
+        name: '',
+        startDate: '',
+        endDate: '',
+        reason: '선택',
+        department: '',
+        position: '',
+        duties: '',
+        text: '',
+      },
       certifiedSchool: [],
+      certifiedLicense: [],
+      certifiedCareer: [],
     }
   },
   components: {
@@ -447,29 +567,42 @@ export default {
     },
     highSchool: {
       handler() {
-        this.checkResumeForm();
+        this.checkSchoolForm();
       }, deep:true
     },
     tecUniv: {
       handler() {
-        this.checkResumeForm();
+        this.checkSchoolForm();
       }, deep:true
     },
     univ: {
       handler() {
-        this.checkResumeForm();
+        this.checkSchoolForm();
       }, deep:true
     },
     master: {
       handler() {
-        this.checkResumeForm();
+        this.checkSchoolForm();
       }, deep:true
     },
     doctor: {
       handler() {
-        this.checkResumeForm();
+        this.checkSchoolForm();
       }, deep:true
     },
+    license: {
+      handler() {
+        this.checkLicenseForm();
+      }, deep:true
+    },
+    career: {
+      handler() {
+        this.checkCareerForm();
+      }, deep:true
+    },
+    'career.text'() {
+      this.setCareerText();
+    }
   },
   mounted() {
     this.onHighSchool()
@@ -497,7 +630,7 @@ export default {
       DOCTOR.classList.remove('on-school-btn')
       this.isHighSchool = true; this.isTecUniv = false; this.isUniv = false; 
       this.isMaster = false; this.isDoctor = false;
-      this.checkResumeForm()
+      this.checkSchoolForm()
     },
     onTecUniv() {
       const HIGH_SCHOOL = document.querySelector('.high-school-btn')
@@ -513,7 +646,7 @@ export default {
       DOCTOR.classList.remove('on-school-btn')
       this.isHighSchool = false; this.isTecUniv = true; this.isUniv = false; 
       this.isMaster = false; this.isDoctor = false;
-      this.checkResumeForm()
+      this.checkSchoolForm()
     },
     onUniv() {
       const HIGH_SCHOOL = document.querySelector('.high-school-btn')
@@ -529,7 +662,7 @@ export default {
       DOCTOR.classList.remove('on-school-btn')
       this.isHighSchool = false; this.isTecUniv = false; this.isUniv = true; 
       this.isMaster = false; this.isDoctor = false;
-      this.checkResumeForm()
+      this.checkSchoolForm()
     },
     onMaster() {
       const HIGH_SCHOOL = document.querySelector('.high-school-btn')
@@ -545,7 +678,7 @@ export default {
       DOCTOR.classList.remove('on-school-btn')
       this.isHighSchool = false; this.isTecUniv = false; this.isUniv = false; 
       this.isMaster = true; this.isDoctor = false;
-      this.checkResumeForm()
+      this.checkSchoolForm()
     },
     onDoctor() {
       const HIGH_SCHOOL = document.querySelector('.high-school-btn')
@@ -561,7 +694,7 @@ export default {
       DOCTOR.classList.add('on-school-btn')
       this.isHighSchool = false; this.isTecUniv = false; this.isUniv = false; 
       this.isMaster = false; this.isDoctor = true;
-      this.checkResumeForm()
+      this.checkSchoolForm()
     },
     onModal(type, name, num, school) {
       this.setSchoolType(type);
@@ -576,34 +709,50 @@ export default {
       this.setMajorType(type);
       this.setMajorType2(type2);
     },
-    checkResumeForm() {
+    checkSchoolForm() {
       if ((this.highSchool.graduate && this.highSchool.graduate != '선택') && (this.highSchool.location && this.highSchool.location != '선택')
       && this.highSchool.name && this.highSchool.entranceDate && this.highSchool.graduDate && this.isHighSchool) {
         this.formHighSchool = true; this.formTecUniv =  false; this.formUniv = false; this.formMaster = false; this.formDoctor = false;
-        this.isResume = true
+        this.isSchool = true
       } else if ((this.tecUniv.graduate && this.tecUniv.graduate != '선택') && (this.tecUniv.location && this.tecUniv.location != '선택')
       && this.tecUniv.name && this.tecUniv.entranceDate && this.tecUniv.graduDate && this.tecUniv.major
       && this.tecUniv.grade && (this.tecUniv.totalGrade && this.tecUniv.totalGrade != '선택') && this.isTecUniv) {
         this.formHighSchool = false; this.formTecUniv =  true; this.formUniv = false; this.formMaster = false; this.formDoctor = false;
-        this.isResume = true
+        this.isSchool = true
       } else if ((this.univ.graduate && this.univ.graduate != '선택') && (this.univ.location && this.univ.location != '선택')
       && this.univ.name && this.univ.entranceDate && this.univ.graduDate && this.univ.major
       && this.univ.grade && (this.univ.totalGrade && this.univ.totalGrade != '선택') && this.isUniv){
         this.formHighSchool = false; this.formTecUniv =  false; this.formUniv = true; this.formMaster = false; this.formDoctor = false;
-        this.isResume = true
+        this.isSchool = true
       } else if ((this.master.graduate && this.master.graduate != '선택') && (this.master.location && this.master.location != '선택')
       && this.master.name && this.master.entranceDate && this.master.graduDate && this.master.major
       && this.master.grade && (this.master.totalGrade && this.master.totalGrade != '선택') && this.isMaster){
         this.formHighSchool = false; this.formTecUniv =  false; this.formUniv = false; this.formMaster = true; this.formDoctor = false;
-        this.isResume = true
+        this.isSchool = true
       } else if ((this.doctor.graduate && this.doctor.graduate != '선택') && (this.doctor.location && this.doctor.location != '선택')
       && this.doctor.name && this.doctor.entranceDate && this.doctor.graduDate && this.doctor.major
       && this.doctor.grade && (this.doctor.totalGrade && this.doctor.totalGrade != '선택') && this.isDoctor){
         this.formHighSchool = false; this.formTecUniv =  false; this.formUniv = false; this.formMaster = false; this.formDoctor = true;
-        this.isResume = true
+        this.isSchool = true
       } else {
         this.formHighSchool = false; this.formTecUniv =  false; this.formUniv = false; this.formMaster = false; this.formDoctor = false;
-        this.isResume = false
+        this.isSchool = false
+      }
+    },
+    checkLicenseForm() {
+      if (this.license.name && this.license.institute && this.license.date) {
+        this.isLicense = true
+      } else {
+        this.isLicense = false
+      }
+    },
+    checkCareerForm() {
+      if (this.career.name && this.career.startDate && this.career.endDate
+      && (this.career.reason && this.career.reason != '선택') && this.career.department
+      && this.career.position && this.career.duties && this.career.text) {
+        this.isCareer = true
+      } else {
+        this.isCareer = false
       }
     },
     addSchool(type) {
@@ -650,6 +799,32 @@ export default {
         this.doctor.name = ''; this.doctor.graduate = '선택'; this.doctor.location = '선택';
         this.doctor.entranceDate = ''; this.doctor.graduDate = ''; this.doctor.major = ''; this.doctor.minor = '';
         this.doctor.grade = ''; this.doctor.totalGrade = '선택'; 
+      }
+    },
+    addLicense() {
+      let ARR = []
+      ARR.push(this.license.name); ARR.push(this.license.institute); ARR.push(this.license.date);
+      this.certifiedLicense.push(ARR)
+      this.license.name = ''; this.license.institute = ''; this.license.date = '';
+    },
+    addCareer() {
+      let ARR = []
+      ARR.push(this.career.name); ARR.push(this.career.startDate); ARR.push(this.career.endDate); ARR.push(this.career.reason); 
+      ARR.push(this.career.department); ARR.push(this.career.position); ARR.push(this.career.duties); ARR.push(this.career.text)
+      this.certifiedCareer.push(ARR)
+      this.career.name = ''; this.career.startDate = ''; this.career.endDate = ''; this.career.reason = '선택'; 
+      this.career.department = ''; this.career.position = ''; this.career.duties = ''; this.career.text = '';
+    },
+    setCareerText() {
+      if (this.career.text.length > 500) {
+        this.career.text = this.career.text.substring(0,500)
+      }
+    },
+    onCareerText(text) {
+      if (text === 'on') {
+        this.isCareerText = true
+      } else {
+        this.isCareerText = false
       }
     }
   }

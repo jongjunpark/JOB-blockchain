@@ -21,9 +21,10 @@
 }
 
 .recruit-box .recruit-header {
+  font-family: 'TmonMonsori';
   margin: 40px 0 0px 30px;
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 500;
   color: #0088ff;
 }
 
@@ -72,9 +73,10 @@
 }
 
 .test-box .test-header {
+  font-family: 'TmonMonsori';
   margin: 40px 0 0px 30px;
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 500;
   color: #0088ff;
 }
 
@@ -135,9 +137,10 @@
 }
 
 .calendar-box .calendar-header {
+  font-family: 'TmonMonsori';
   margin: 30px 0 15px 10px;
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 500;
   color: #0088ff;
 }
 

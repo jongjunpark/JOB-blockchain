@@ -10,10 +10,10 @@
 }
 
 .resume-box > p {
-  font-family: 'BMJUA';
+  font-family: 'TmonMonsori';
   margin-bottom: 30px;
   font-weight: 500;
-  font-size: 30px;
+  font-size: 28px;
 }
 
 .resume-user-box .resume-user-content {
@@ -127,14 +127,14 @@
   height: 40px;
 }
 
-.resume-school-box .resume-license-content {
+.resume-box .resume-license-content {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.resume-school-box .resume-license-certify-box {
+.resume-box .resume-license-certify-box {
   width: 80%;
   padding: 20px;
   box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
@@ -233,9 +233,10 @@
 
 .resume-license-content .resume-input-box > div > div > input,
 .resume-license-content .resume-input-box > div > div > select {
-  width: 150px;
+  width: 120px;
   height: 30px;
-  padding-left: 20px;
+  padding-left: 25px;
+  padding-right: 25px;
   box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
             inset -4px -4px 6px -1px #ffffff;
   border: none;
@@ -316,6 +317,27 @@
   margin-right: 5px;
 }
 
+.resume-license-certified-list .certified-detail-career-text {
+  color: #0088ff;
+  position: relative;
+  cursor: pointer;
+}
+
+.certified-detail-career-text > div {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 300px;
+  padding: 10px;
+  background-color: #eff0f5;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  border-radius: 20px;
+  cursor: auto;
+  color: rgba(0,0,0,0.7);
+  z-index: 100;
+}
+
 .resume-license-certified-list .certified-mark-box {
   width: 80px;
   height: 30px;
@@ -335,7 +357,7 @@
 
 .resume-license-certified-list .certified-type {
   margin-right: 20px;
-  width: 70px;
+  padding: 0 10px;
   height: 30px;
   display: flex;
   justify-content: center;
@@ -343,4 +365,83 @@
   box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
               -6px -6px 10px -1px #ffffff;
   border-radius: 20px;
+}
+
+.resume-license-content .resume-license-input-box,
+.resume-license-content .resume-career-input-box {
+  margin: 20px 0;
+}
+
+.resume-license-input-box .resume-license-inner-box,
+.resume-career-input-box .resume-career-inner-box {
+  justify-content: space-between;
+}
+
+.resume-license-inner-box .inner-box,
+.resume-career-inner-box .inner-box {
+  margin-right: 0 !important;
+  width: 270px !important; 
+}
+
+.resume-input-box .career-date-input, 
+.resume-input-box .reson-input {
+  margin-left: 30px !important;
+}
+
+.resume-career-inner-box .career-date-input {
+  width: 370px !important;
+}
+
+.career-date-input input {
+  width: 70px !important;
+}
+
+.career-date-input span {
+  margin: 0 10px;
+}
+
+#career-reason {
+  width: 100px;
+}
+
+.resume-career-inner-text-box {
+  flex-direction: column;
+  margin-left: 18px;
+}
+
+.resume-career-inner-text-box .resume-career-text-head {
+  width: calc(100% - 40px);
+  display: flex;
+  justify-content: space-between;
+}
+
+.resume-career-text-head > p:nth-child(1) {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.resume-career-text-head > p:nth-child(2) {
+  font-weight: 500;
+  font-size: 13px;
+  color: rgba(0,0,0,0.5)
+}
+
+.resume-career-inner-text-box > textarea {
+  resize: none;
+  width: calc(96% - 40px);
+  margin-top: 5px;
+  border-radius: 20px;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
+              inset -4px -4px 6px -1px #ffffff;
+}
+
+.resume-career-inner-text-box > textarea:focus {
+  outline: none;
+}
+
+#grade-combo {
+  padding-right: 0 !important;
 }

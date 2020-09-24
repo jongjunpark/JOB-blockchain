@@ -15,8 +15,10 @@
 	<description>Blockchain based E-Commerce Service</description>
 
 	<properties>
-		<java.version>12</java.version>
-	</properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
 
 	<dependencies>
 		<dependency>

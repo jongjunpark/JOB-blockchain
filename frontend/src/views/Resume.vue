@@ -1,6 +1,9 @@
 <template>
   <div class="wrap">
     <div class="wrap-container">
+      <div class="resume-save-btn-box">
+        <div class="resume-save-btn">저장하기</div>
+      </div>
       <div class="resume-box resume-user-box">
         <p>개인정보</p>
         <div class="resume-user-content">
@@ -604,6 +607,9 @@ export default {
       this.setCareerText();
     }
   },
+  created() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
   mounted() {
     this.onHighSchool()
   },
@@ -826,7 +832,15 @@ export default {
       } else {
         this.isCareerText = false
       }
+    },
+    handleScroll() {
+      const ORIGIN = -600
+      let TOP = window.scrollY
+      document.querySelector('.resume-save-btn').style.bottom = (ORIGIN - TOP) + 'px';
     }
-  }
+  },
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
 }
 </script>

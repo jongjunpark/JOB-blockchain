@@ -44,6 +44,12 @@ q:before, q:after {
 
 /* reset CSS end */
 @import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css);
+@font-face { 
+  font-family: 'BMJUA'; 
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff'); 
+  font-weight: normal; 
+  font-style: normal; 
+}
 @font-face {
   font-family: 'BBTreeTL';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_nine_@1.1/BBTreeTL.woff') format('woff');

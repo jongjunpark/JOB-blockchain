@@ -7,7 +7,7 @@
       <div class="menu-bar-box">
         <div class="menu-bar" @click="goResume">이력서</div>
         <div class="menu-bar">취업달력</div>
-        <div class="menu-bar">교육</div>
+        <div class="menu-bar" @click="goVideo">교육</div>
         <div class="menu-bar">검색</div>
       </div>
       <div class="user-box">
@@ -41,6 +41,9 @@ export default {
     },
     goResume() {
       this.$router.push('/resume').catch(()=>{})
+    },
+    goVideo() {
+      this.$router.push('/video').catch(()=>{})
     },
     goLogin(path) {
       if(path === 'login') {
@@ -78,7 +81,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  
-</style>

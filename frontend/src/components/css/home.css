@@ -21,9 +21,10 @@
 }
 
 .recruit-box .recruit-header {
+  font-family: 'TmonMonsori';
   margin: 40px 0 0px 30px;
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 500;
   color: #0088ff;
 }
 
@@ -72,9 +73,10 @@
 }
 
 .test-box .test-header {
+  font-family: 'TmonMonsori';
   margin: 40px 0 0px 30px;
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 500;
   color: #0088ff;
 }
 
@@ -135,9 +137,10 @@
 }
 
 .calendar-box .calendar-header {
+  font-family: 'TmonMonsori';
   margin: 30px 0 15px 10px;
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 500;
   color: #0088ff;
 }
 
@@ -155,10 +158,11 @@
   margin-left: 30px;
   color: rgba(0,0,0,0.7);
   font-weight: 700;
+  margin-top: 10px;
 }
 
 .calendar-content .calendar-select-box {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .calendar-select-box .calendar-recruit-box {
@@ -176,7 +180,7 @@
 }
 
 .calendar-select-box .calendar-select-type {
-  background-color: aquamarine;
+  background-color: rgba(255, 149, 0, 0.6);
   box-shadow: 4px 6px 7px -1px rgba(0,0,0,0.2),
               -5px -5px 7px -1px #ffffff;
   width: 40px;

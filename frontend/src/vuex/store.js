@@ -18,6 +18,12 @@ const state = {
   schoolDetail: '',
   selectedSchool: '',
   selectedSchoolType: '',
+  majorName: '',
+  majorType: '',
+  majorType2: '',
+  selectedMajor: '',
+  selectedMajorType: '',
+  selectedMajorType2: '',
 }
 
 Vue.use(Vuex)

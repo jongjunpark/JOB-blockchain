@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div id="nav" v-show="!isLogin">
-      <div class="logo-box" @click="goHome">MY RESUME</div>
+      <div class="logo-box" @click="goHome">
+        <img class="logo-img" src="./assets/logo/B104_logo_basic_skyblue.png" alt="">
+      </div>
       <div class="menu-bar-box">
         <div class="menu-bar" @click="goResume">이력서</div>
         <div class="menu-bar">취업달력</div>

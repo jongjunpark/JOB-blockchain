@@ -6,6 +6,7 @@
 */
 
 
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -49,6 +50,9 @@ q:before, q:after {
   font-weight: normal;
   font-style: normal;
 }
+@font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'GmarketSansMedium'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'GmarketSansLight'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff'); font-weight: normal; font-style: normal; }
 
 
 html {
@@ -86,9 +90,9 @@ body {
 }
 
 #nav {
-  height: 7vh;
+  height: 8vh;
   min-height: 30px;
-  background-color: #eff0f5;
+  background-color:#0088ff ;
   position: fixed;
   top: 0;
   left: 0;
@@ -109,9 +113,12 @@ body {
   font-size: calc(0.7vw + 10.5px);
   letter-spacing: -1px;
   cursor: pointer;
-  margin: 0 1vw 0 2vw;
-  color: #0088ff;
+  margin: 0 1vw 0 4vw;
+  color: white;
   min-width: 110px;
+}
+#nav .logo-img {
+  width:100px;
 }
 
 #nav .menu-bar-box {
@@ -119,6 +126,8 @@ body {
   /* background-color: bisque; */
   display: flex;
   align-items: center;
+  font-family: 'GmarketSansMedium';
+  
 }
 
 #nav .user-box {
@@ -127,6 +136,7 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  font-family: 'GmarketSansMedium';
 }
 
 .menu-bar-box .menu-bar {
@@ -137,9 +147,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.8vw;
+  font-size: 1.1vw;
   border-radius: 20px;
-  color: rgba(0,0,0,0.8);
+  color:white;
   cursor: pointer;
   transition: .3s;
 }
@@ -158,9 +168,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.8vw;
+  font-size: 1.1vw;
   border-radius: 20px;
-  color: rgba(0,0,0,0.8);
+  color: white;
   cursor: pointer;
   transition: .3s;
 }

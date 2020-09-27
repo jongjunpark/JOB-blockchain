@@ -12,24 +12,29 @@
       <p class='login-logo-text' @click="goHome">MY RESUME</p>
       <form id="login" class="login-input-group">
         <p v-if="!isLoginValid" class='signup-err-msg'>이메일 또는 비밀번호를 확인하세요.</p>
-        <input v-model="loginMail" type="email" class="login-input-field" placeholder="Email" required @keydown.enter="goLogin">
-        <input v-model="loginPassword" type="password" class="login-input-field" placeholder="Password" required @keydown.enter="goLogin">
+        <input v-model="loginMail" type="email" class="login-input-field" placeholder="이메일" required @keydown.enter="goLogin">
+        <input v-model="loginPassword" type="password" class="login-input-field" placeholder="비밀번호" required @keydown.enter="goLogin">
         <div v-show="!isLoginBtn" class="login-submit-btn">Login</div>
         <div v-show="isLoginBtn" class="login-submit-btn on-login-btn" @click="goLogin">Login</div>
       </form>
       <form id="signup" class="login-input-group">
         <p v-if='!passwordSchema.validate(signUpPassword) && (signUpPassword.length>0)' class='signup-err-msg'>비밀번호는 영문, 숫자 포함 8자리 이상이어야 합니다.</p>
         <p v-if='(passwordSchema.validate(signUpPassword)) && (signUpPassword != signUpPasswordConfirm)' class='signup-err-msg'>비밀번호가 일치하지 않습니다.</p>
+        <div class="sigup-sort-box">
+          <input type="radio" name="signup-sort" id="individual-user" checked @click="signupSort('individual')"><label for="individual-user" class='individual-user-label'>개인회원</label>
+          <input type="radio" name="signup-sort" id="corporation-user" @click="signupSort('corporation')"><label for="corporation-user" class="corporation-user-label">기업회원</label>
+        </div>
         <div class="signup-email">
-          <input v-model="signUpMail" type="email" class="login-input-field login-input-email" placeholder="Email" required>
+          <input v-model="signUpMail" type="email" class="login-input-field login-input-email" placeholder="이메일" required>
           <span @click="onModal">인증받기</span>
         </div>
-        <div class='signup-name'>
-          <input v-model="signUpFirst" type="text" class="login-input-field login-input-first" placeholder="First Name" required>
-          <input v-model="signUpLast" type="text" class="login-input-field login-input-last" placeholder="Last Name" required>
+        <div v-if="isIndiv" class='signup-name'>
+          <input v-model="signUpFirst" type="text" class="login-input-field login-input-first" placeholder="이름" required>
+          <input v-model="signUpLast" type="text" class="login-input-field login-input-last" placeholder="성" required>
         </div>
-        <input v-model="signUpPassword" type="password" class="login-input-field" placeholder="Password" required>
-        <input v-model="signUpPasswordConfirm" type="password" class="login-input-field" placeholder="Password Confirm" required>
+        <input v-if="!isIndiv" v-model="signUpCorpNum" type="text" class="login-input-field" placeholder="사업자번호" required>
+        <input v-model="signUpPassword" type="password" class="login-input-field" placeholder="비밀번호" required>
+        <input v-model="signUpPasswordConfirm" type="password" class="login-input-field" placeholder="비밀번호 확인" required>
         <div v-show="!isSignBtn" class="login-submit-btn">Signup</div>
         <div v-show="isSignBtn" class="login-submit-btn on-login-btn" @click="setSignup">Signup</div>
       </form>
@@ -59,12 +64,14 @@ export default {
       signUpMail: '',
       signUpFirst: '',
       signUpLast: '',
+      signUpCorpNum: '',
       signUpPassword: '',
       signUpPasswordConfirm: '',
       isLoginValid: true,
       isSignBtn: false,
       isLoginBtn: false,
       isPasswordValid: false,
+      isIndiv: true,
       passwordSchema: new PasswordValidator(),
     }
   },
@@ -115,7 +122,7 @@ export default {
     },
     loginPassword() {
       this.checkLoginForm()
-    }
+    },
   },
   methods: {
     ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken']),
@@ -227,7 +234,14 @@ export default {
           })
         })
         .catch((err) => console.log(err))
-    }
+    },
+    signupSort(type) {
+      if (type === 'individual') {
+        this.isIndiv = true
+      } else {
+        this.isIndiv = false
+      }
+    } 
   },
   beforeDestroy() { 
     this.setIsLogin(false)

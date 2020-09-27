@@ -23,7 +23,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-import './css/schoolsearch.css'
+import './css/school-search.css'
 import axios from 'axios'
 
 // const SERVER_URL = 'http://127.0.0.1:8000/'

@@ -18,7 +18,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-import './css/mailvalidationmodal.css'
+import './css/mail-validation-modal.css'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 

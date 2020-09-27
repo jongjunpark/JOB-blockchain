@@ -35,6 +35,52 @@
           </div>
         </div>
       </div>
+
+      <div class="resume-edit-box resume-edit-army-box">
+        <p>병역사항</p>
+        <div class="resume-edit-license-content">
+          <div class="resume-edit-army-input-box resume-edit-input-box">
+            <div class="resume-edit-input-inner-box resume-edit-army-inner-box">
+              <div class="inner-box army-sort-input">
+                <label for="army-sort">병역구분</label>
+                <select v-model='army.sort' name="sort" id="army-sort">
+                  <option disabled selected>선택</option>
+                  <option>군필</option><option>면제</option><option>미필</option>
+                  <option>복무중</option><option>비대상(여성)</option>
+                </select>
+              </div>
+              <div class="inner-box army-ability-input">
+                <label for="">군별</label>
+                <input v-model="army.ability" type="text" v-on:input="army.ability = $event.target.value">
+              </div>
+              <div class="inner-box army-rank-input">
+                <label for="">계급</label>
+                <input v-model="army.rank" type="text" v-on:input="army.rank = $event.target.value">
+              </div>
+            </div>
+            <div class="resume-edit-input-inner-box resume-edit-army-inner-box">
+              <div class="inner-box army-discharge-input">
+                <label for="army-discharge">제대구분</label>
+                <select v-model='army.discharge' name="discharge" id="army-discharge">
+                  <option disabled selected>선택</option>
+                  <option>만기제대</option><option>소집해제</option><option>의가사제대</option>
+                  <option>의병제대</option><option>불명예제대</option><option>상이제대</option>
+                </select>
+              </div>
+              <div class="inner-box army-reson-input">
+                <label for="">면제사유</label>
+                <input v-model="army.reson" type="text" v-on:input="army.reson = $event.target.value">
+              </div>
+              <div class="inner-box army-date-input">
+                <label for="">복무기간</label>
+                <input type="text" v-model='army.startDate' placeholder="YYYY . MM"><span>~</span>
+                <input type="text" v-model='army.endDate' placeholder="YYYY . MM">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="resume-edit-box resume-edit-school-box">
         <p>학력사항</p>
         <div class="resume-edit-license-content">
@@ -367,6 +413,48 @@
         </div>
       </div>
 
+      <div class="resume-edit-box resume-edit-lang-box">
+        <p>어학사항</p>
+        <div class="resume-edit-license-content">
+          <div class="resume-edit-license-certify-box">
+            <p v-if="certifiedLang.length===0">인증된 어학성적이 없습니다.</p>
+            <div class="resume-edit-license-certified-list" v-for='(lang, index) in certifiedLang' :key='`lang-${index}`'>
+              <div class="certified-detail certified-type">{{ lang[0] }}</div>
+              <div class="certified-detail">{{ lang[1] }}</div><div class="certified-detail">{{ lang[2] }}</div>
+              <div class="certified-detail">{{ lang[3] }}</div>
+              <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+            </div>
+          </div>
+          <div class="resume-edit-lang-input-box resume-edit-input-box">
+            <div class="resume-edit-input-inner-box resume-edit-lang-inner-box">
+              <div class="inner-box lang-name-input">
+                <label for="lang-sort">언어</label>
+                <select v-model='lang.sort' name="sort" id="lang-sort">
+                  <option disabled selected>선택</option>
+                  <option>영어</option><option>중국어</option><option>일본어</option>
+                  <option>러시아어</option><option>스페인어</option><option>프랑스어</option>
+                  <option>독일어</option><option>한국어</option><option>베트남어</option>
+                </select>
+              </div>
+              <div class="inner-box lang-name-input">
+                <label for="">시험명</label>
+                <input v-model="lang.name" type="text" v-on:input="lang.name = $event.target.value">
+              </div>
+              <div class="inner-box lang-rank-input">
+                <label for="">점수</label>
+                <input v-model="lang.rank" type="text" v-on:input="lang.rank = $event.target.value">
+              </div>
+              <div class="inner-box lang-date-input">
+                <label for="">취득일</label><input type="text" v-model='lang.date' placeholder="YYYY . MM">
+              </div>
+            </div>
+          </div>
+          <div class="resume-edit-license-btn-box resume-edit-input-box">
+            <div v-if="isLang" class="resume-edit-license-btn  on-license-btn" @click="addLang">인증하기</div>
+            <div v-if="!isLang" class="resume-edit-license-btn">인증하기</div>
+          </div>
+        </div>
+      </div>
 
       <div class="resume-edit-box resume-edit-career-box">
         <p>경력사항</p>
@@ -438,6 +526,74 @@
           </div>
         </div>
       </div>
+
+      <div class="resume-edit-box resume-edit-etc-box">
+        <p>기타</p>
+        <div class="resume-edit-license-content">
+          <div class="resume-edit-license-certify-box">
+            <p v-if="certifiedEtc.length===0">인증된 서류가 없습니다.</p>
+            <div class="resume-edit-license-certified-list" v-for='(etc, index) in certifiedEtc' :key='`etc-${index}`'>
+              <div class="certified-detail certified-type">{{ etc[0] }}</div>
+              <div class="certified-detail">{{ etc[1] }}</div><div class="certified-detail">{{ etc[2] }}</div>
+              <div class="certified-detail">{{ etc[3] }}</div>
+              <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+            </div>
+          </div>
+          <div class="resume-edit-license-school-box resume-edit-license-etc-box">
+            <div class="resume-edit-license-school-btn veteran-btn" @click="onVeteran">보훈</div>
+            <div class="resume-edit-license-school-btn disorder-btn" @click="onDisorder">장애</div>
+          </div>
+
+          <div v-if="isVeteran" class="resume-edit-license-etc-input-box resume-edit-input-box">
+            <div class="resume-edit-input-inner-box">
+              <div class="inner-box veteran-sort-input">
+                <label for="veteran-sort">보훈구분</label>
+                <select v-model='veteran.sort' name="sort" id="veteran-sort">
+                  <option disabled selected>선택</option>
+                  <option>독립유공자</option><option>국가유공자</option><option>보훈보상대상자</option>
+                  <option>참전유공자</option><option>5.18 민주유공자</option><option>특수임무유공자</option>
+                  <option>제대군인</option>
+                </select>
+              </div>
+              <div class="inner-box veteran-number-input">
+                <label for="">보훈번호</label>
+                <input v-model="veteran.num" type="text" v-on:input="veteran.num = $event.target.value">
+              </div>
+            </div>
+          </div>
+          <div v-if="isDisorder" class="resume-edit-license-etc-input-box resume-edit-input-box">
+            <div class="resume-edit-input-inner-box">
+              <div class="inner-box disorder-sort-input">
+                <label for="disorder-sort">장애구분</label>
+                <select v-model='disorder.sort' name="sort" id="disorder-sort">
+                  <option disabled selected>선택</option>
+                  <option>지체장애</option><option>뇌병변장애</option><option>시각장애</option>
+                  <option>청각장애</option><option>언어장애</option><option>지적장애</option>
+                  <option>정신장애</option><option>자폐성장애</option><option>신장장애</option>
+                  <option>심장장애</option><option>호흡기장애</option><option>간장애</option>
+                  <option>안면장애</option><option>간질장애</option><option>기타</option>
+                </select>
+              </div>
+              <div class="inner-box disorder-rank-input">
+                <label for="disorder-rank">등급</label>
+                <select v-model='disorder.rank' name="rank" id="disorder-rank">
+                  <option disabled selected>선택</option>
+                  <option>1급</option><option>2급</option><option>3급</option>
+                  <option>4급</option><option>5급</option><option>6급</option>
+                  <option>7급</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="resume-edit-license-btn-box resume-edit-input-box">
+            <div v-if="formVeteran" class="resume-edit-license-btn  on-license-btn" @click="addEtc('veteran')">인증하기</div>
+            <div v-if="formDisorder" class="resume-edit-license-btn  on-license-btn" @click="addEtc('disorder')">인증하기</div>
+            <div v-if="!isEtc" class="resume-edit-license-btn">인증하기</div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
 
     <SchoolSearch v-if="showModal" @close="showModal= false"/>
@@ -459,9 +615,13 @@ export default {
       showModal2: false,
       profileImg: '',
       isSchool: false,
+      isEtc: false,
       isLicense: false,
       isCareer: false,
       isCareerText: false,
+      isLang: false,
+      isVeteran: false,
+      isDisorder: false,
       isHighSchool: false,
       isTecUniv: false,
       isUniv: false,
@@ -472,6 +632,8 @@ export default {
       formUniv: false,
       formMaster: false,
       formDoctor: false,
+      formVeteran: false,
+      formDisorder: false,
       highSchool: {
         name: '',
         graduate: '선택',
@@ -538,9 +700,34 @@ export default {
         duties: '',
         text: '',
       },
+      army: {
+        sort: '선택',
+        ability: '',
+        rank: '',
+        discharge: '선택',
+        reson: '',
+        startDate: '',
+        endDate: '',
+      },
+      lang: {
+        sort: '선택',
+        name: '',
+        rank: '',
+        date: '',
+      },
+      veteran: {
+        sort: '',
+        num: '',
+      },
+      disorder: {
+        sort: '',
+        rank: '',
+      },
       certifiedSchool: [],
       certifiedLicense: [],
       certifiedCareer: [],
+      certifiedLang: [],
+      certifiedEtc: [],
     }
   },
   components: {
@@ -605,13 +792,29 @@ export default {
     },
     'career.text'() {
       this.setCareerText();
-    }
+    },
+    lang: {
+      handler() {
+        this.checkLangForm();
+      }, deep:true
+    },
+    veteran: {
+      handler() {
+        this.checkVeteranForm();
+      }, deep:true
+    },
+    disorder: {
+      handler() {
+        this.checkDisorderForm();
+      }, deep:true
+    },
   },
   created() {
     window.addEventListener('scroll', this.handleScroll)
   },
   mounted() {
     this.onHighSchool()
+    this.onVeteran()
   },
   computed: {
     ...mapState(['selectedSchool', 'selectedSchoolType', 'selectedMajor', 'selectedMajorType', 'selectedMajorType2']),
@@ -702,6 +905,24 @@ export default {
       this.isMaster = false; this.isDoctor = true;
       this.checkSchoolForm()
     },
+    onVeteran() {
+      const VETERAN = document.querySelector('.veteran-btn')
+      const DISORDER = document.querySelector('.disorder-btn')
+
+      VETERAN.classList.add('on-school-btn')
+      DISORDER.classList.remove('on-school-btn')
+      this.isVeteran = true; this.isDisorder = false;
+      this.checkVeteranForm()
+    },
+    onDisorder() {
+      const VETERAN = document.querySelector('.veteran-btn')
+      const DISORDER = document.querySelector('.disorder-btn')
+
+      VETERAN.classList.remove('on-school-btn')
+      DISORDER.classList.add('on-school-btn')
+      this.isVeteran = false; this.isDisorder = true;
+      this.checkDisorderForm()
+    },
     onModal(type, name, num, school) {
       this.setSchoolType(type);
       this.setSchoolName(name);
@@ -759,6 +980,28 @@ export default {
         this.isCareer = true
       } else {
         this.isCareer = false
+      }
+    },
+    checkLangForm() {
+      if (this.lang.name && this.lang.rank && this.lang.date
+      && (this.lang.sort && this.lang.sort != '선택')) {
+        this.isLang = true
+      } else {
+        this.isLang = false
+      }
+    },
+    checkVeteranForm() {
+      if (this.veteran.num && (this.veteran.sort && this.veteran.sort != '선택') && this.isVeteran) {
+        this.formVeteran = true; this.formDisorder = false; this.isEtc = true;
+      } else {
+        this.formVeteran = false; this.formDisorder = false; this.isEtc = false;
+      }
+    },
+    checkDisorderForm() {
+      if ((this.disorder.sort && this.disorder.sort != '선택') && (this.disorder.rank && this.disorder.rank != '선택') && this.isDisorder) {
+        this.formDisorder = true; this.formVeteran = false; this.isEtc = true;
+      } else {
+        this.formDisorder = false; this.formVeteran = false; this.isEtc = false;
       }
     },
     addSchool(type) {
@@ -820,6 +1063,25 @@ export default {
       this.certifiedCareer.push(ARR)
       this.career.name = ''; this.career.startDate = ''; this.career.endDate = ''; this.career.reason = '선택'; 
       this.career.department = ''; this.career.position = ''; this.career.duties = ''; this.career.text = '';
+    },
+    addLang() {
+      let ARR = []
+      ARR.push(this.lang.sort); ARR.push(this.lang.name); ARR.push(this.lang.rank); ARR.push(this.lang.date); 
+      this.certifiedLang.push(ARR)
+      this.lang.sort = '선택'; this.lang.name = ''; this.lang.rank = ''; this.lang.date = ''; 
+    },
+    addEtc(type) {
+      if (type === 'veteran') {
+        let ARR = ['보훈']
+        ARR.push(this.veteran.sort); ARR.push(this.veteran.num);
+        this.certifiedEtc.push(ARR)
+        this.veteran.num = ''; this.veteran.sort = '선택';
+      } else if (type === 'disorder'){
+        let ARR = ['장애']
+        ARR.push(this.disorder.sort); ARR.push(this.disorder.rank); 
+        this.certifiedEtc.push(ARR)
+        this.disorder.sort = '선택'; this.disorder.rank = '선택';
+      }
     },
     setCareerText() {
       if (this.career.text.length > 500) {

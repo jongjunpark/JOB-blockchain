@@ -159,6 +159,14 @@
   padding: 20px 0;
 }
 
+.resume-edit-license-content .resume-edit-license-etc-box {
+  justify-content: flex-start !important;
+}
+
+.resume-edit-license-etc-box .veteran-btn {
+  margin-right: 40px;
+}
+
 .resume-edit-license-school-box .resume-edit-license-school-btn {
   width: 120px;
   height: 40px;
@@ -205,7 +213,7 @@
 
 .resume-edit-input-box .resume-edit-input-inner-box .inner-box {
   margin: 10px 40px 20px 0;
-  width: 250px;
+  /* width: 250px; */
   display: flex;
   align-items: center;
   position: relative;
@@ -476,4 +484,65 @@
               inset 4px 4px 6px -1px rgba(0,0,0,0.2),
               inset -3px -3px 4px -1px #ffffff;
   font-weight: 700;
+}
+
+#army-sort {
+  width: 150px;
+}
+
+.resume-edit-army-inner-box .army-sort-input {
+  margin-right: 0 !important;
+}
+
+.resume-edit-army-inner-box .army-ability-input {
+  margin-right: 28px !important;
+}
+
+.resume-edit-army-inner-box .army-discharge-input {
+  margin-right: 10px !important;
+}
+
+.resume-edit-army-inner-box .army-reson-input {
+  margin-right: 30px !important;
+}
+
+.army-date-input {
+  width: 400px !important;
+}
+
+.army-discharge-input > select {
+  width: 140px !important;
+}
+
+.army-date-input > input {
+  width: 70px !important;
+}
+
+.army-date-input > span {
+  margin: 0 10px;
+}
+
+.resume-edit-lang-inner-box .inner-box {
+  margin-right: 10px !important;
+}
+
+#lang-sort {
+  width: 130px !important;
+}
+
+.resume-edit-lang-inner-box .lang-name-input input {
+  width: 100px !important;
+}
+
+.resume-edit-lang-inner-box .lang-rank-input input {
+  width: 50px !important;
+}
+
+.resume-edit-lang-inner-box .lang-date-input input {
+  width: 70px !important;
+}
+
+#veteran-sort,
+#disorder-sort {
+  width: 170px !important;
 }

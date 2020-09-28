@@ -5,6 +5,8 @@ import Login from '../views/Login.vue'
 import Resume from '../views/Resume.vue'
 import ResumeEdit from '../views/ResumeEdit.vue'
 import Video from '../views/Video.vue'
+import RecruitHome from '../views/RecruitHome.vue'
+import RecruitWrite from '../views/RecruitWrite.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +35,16 @@ Vue.use(VueRouter)
     path: '/video',
     name: 'Video',
     component: Video
+  },
+  {
+    path: '/corp/recruit',
+    name: 'RecruitHome',
+    component: RecruitHome
+  },
+  {
+    path: '/corp/recruit/write',
+    name: 'RecruitWrite',
+    component: RecruitWrite
   }
 ]
 

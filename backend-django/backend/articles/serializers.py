@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from .models import Article
-# from .models import Image
+from .models import Certificate
+from .models import Language
+from .models import Career
 from accounts.serializers import UserSerializer
+# from .models import Image
 
 class ArticleListSerializer(serializers.ModelSerializer):
     user = UserSerializer()
@@ -16,6 +19,41 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = '__all__'
 
+class CertificateListSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = Certificate
+        fields = '__all__'
+
+class CertificateSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
+    class Meta:
+        model = Certificate
+        fields = '__all__'
+
+class LanguageListSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = Language
+        fields = '__all__'
+
+class LanguageSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
+    class Meta:
+        model = Language
+        fields = '__all__'
+
+class CareerListSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    class Meta:
+        model = Career
+        fields = '__all__'
+
+class CareerSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=False)
+    class Meta:
+        model = Career
+        fields = '__all__'        
 # class ImageSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Image

@@ -135,6 +135,13 @@
   left: 450px;
 }
 
+.sigup-sort-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
 .signup-email {
   position: relative;
 }
@@ -177,10 +184,63 @@
 
 .login-input-group .signup-err-msg {
   position: absolute;
-  top: -15px;
+  top: -22px;
   font-size: 12px;
   margin-left: 5px;
   color:tomato;
   font-weight: 700;
   transition: .5s ease;
+}
+
+.sigup-sort-box > label {
+  cursor: pointer;
+  margin-right: 30px;
+  font-size: 12px;
+  transition: all .3s ease-in-out;
+}
+
+.sigup-sort-box > input[type=radio] {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  margin-left: 25px;
+  border-radius: 20%;
+  transition: all .3s ease-in-out;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff,
+              inset 0 0 0 rgba(0,0,0,0.2),
+              inset 0 0 0 #ffffff;
+  cursor: pointer;
+}
+
+.sigup-sort-box > input[type=radio]:checked {
+  position: relative;
+  background-color: #0088ff;
+  box-shadow: 0 0 0 0 rgba(0,0,0,.2),
+              0 0 0 0 rgba(255,255,255,1),
+              inset 4px 4px 8px -1px rgba(0,0,0,0.2),
+              inset -2px -2px 8px -1px #ffffff;
+}
+
+.sigup-sort-box > input[type=radio]:focus {
+  outline: none !important;
+}
+
+.sigup-sort-box > input[type=radio]:checked::before {
+  content: "\f00c";
+  font-family: 'Font Awesome 5 Free';
+  font-size: 10px;
+  font-weight: 900;
+  margin: 0;
+  color: #ffffff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#individual-user:checked ~ .individual-user-label,
+#corporation-user:checked ~ .corporation-user-label {
+  color: #0088ff;
 }

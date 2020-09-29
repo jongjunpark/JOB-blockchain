@@ -79,7 +79,7 @@ export default {
     MailValidationModal,
   },
   computed: {
-    ...mapState(['mailValid', 'loginPath']),
+    ...mapState(['mailValid', 'loginPath', 'UserInfo']),
   },
   created() {
     this.passwordSchema
@@ -125,7 +125,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken']),
+    ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken', 'setUserInfo']),
     onLogin() {
       const LOGIN = document.getElementById('login');
       const SIGNUP = document.getElementById('signup');
@@ -172,6 +172,7 @@ export default {
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
+          this.setUserInfo(this.$cookies.get('auth-token'));
           this.$router.push('/')
         })
         .catch(() => this.isLoginValid = false)
@@ -188,7 +189,7 @@ export default {
           console.log(err.data))
     },
     checkSingupForm() {
-      if(this.signUpMail && this.signUpFirst && this.signUpLast && this.signUpPassword && 
+      if(this.signUpMail && ((this.signUpFirst && this.signUpLast) || this.signUpCorpNum ) && this.signUpPassword && 
       this.signUpPasswordConfirm && this.mailValid && this.isPasswordValid) {
         this.isSignBtn = true
       } else {
@@ -210,38 +211,106 @@ export default {
       }
     },
     setSignup() {
-      const signupData = {
-        email: this.signUpMail,
-        password1: this.signUpPassword,
-        password2: this.signUpPasswordConfirm,
-        first_name: this.signUpFirst,
-        last_name: this.signUpLast
-      }
+      let signupData = {
+          email: this.signUpMail,
+          password1: this.signUpPassword,
+          password2: this.signUpPasswordConfirm,
+          first_name: this.signUpFirst,
+          last_name: this.signUpLast,
+          flag: 1
+        }
+      if(this.isIndiv === false) {
+        signupData.first_name = this.signUpCorpNum;
+        signupData.last_name = this.signUpCorpNum;
+        signupData.flag = 0
+      } 
       axios.post(SERVER_URL + 'rest-auth/signup/', signupData)
         .then(res => {
           console.log(res.data)
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
-          Swal.fire({
-            icon: 'success',
-            title: '환영합니다',
-            confirmButtonText: '확인'
-          }).then((result) => {
-            if (result.value) {
-              this.$router.push('/resume/edit')
+          this.setUserInfo(this.$cookies.get('auth-token'));
+          const config = {
+            headers: {
+              Authorization: `Token ${this.$cookies.get('auth-token')}`
             }
+          }
+          axios.post(`${SERVER_URL}articles/create/`, {
+            name: this.signUpLast + this.signUpFirst,
+            email: this.signUpMail
+          }, config)
+          .then(res => {
+            console.log(res)
+            // <int:article_pk>/certificates/create
+            this.createCertificate()
+            this.createLang()
+            this.createCareer()
           })
+          .catch((err) => console.log(err.response))
         })
         .catch((err) => console.log(err))
     },
     signupSort(type) {
       if (type === 'individual') {
         this.isIndiv = true
+        this.signUpCorpNum = ""
       } else {
         this.isIndiv = false
+        this.signUpFirst = ""; this.signUpLast = ""
       }
-    } 
+    },
+    createCertificate() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      let data = new FormData();
+      data.append('article', this.UserInfo.id);
+      axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/create/`, data, config)
+      .then(res => {
+        console.log(res, 'certifi')
+      })
+      .catch((err) => console.log(err.response))
+    },
+    createLang() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      let data = new FormData();
+      data.append('article', this.UserInfo.id);
+      axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/languages/create/`, data, config)
+      .then(res => {
+        console.log(res, 'lang')
+      })
+      .catch((err) => console.log(err.response))
+    },
+    createCareer() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      let data = new FormData();
+      data.append('article', this.UserInfo.id);
+      axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/careers/create/`, data, config)
+      .then(res => {
+        console.log(res, 'career')
+        Swal.fire({
+          icon: 'success',
+          title: '환영합니다',
+          confirmButtonText: '확인'
+        }).then((result) => {
+          if (result.value) {
+            this.$router.push('/resume/edit')
+          }
+        })
+      })
+      .catch((err) => console.log(err.response))
+    }
   },
   beforeDestroy() { 
     this.setIsLogin(false)

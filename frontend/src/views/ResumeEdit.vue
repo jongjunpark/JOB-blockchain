@@ -2,35 +2,35 @@
   <div class="wrap">
     <div class="wrap-container">
       <div class="resume-edit-save-btn-box">
-        <div class="resume-edit-save-btn">저장하기</div>
+        <div class="resume-edit-save-btn" @click="editResume">저장하기</div>
       </div>
       <div class="resume-edit-box resume-edit-user-box">
         <p>개인정보</p>
         <div class="resume-edit-user-content">
           <label for="resume-edit-user-img-edit">
             <div class='resume-edit-user-img-box'>
-                <i v-if="!profileImg" class="far fa-images"><i class="fas fa-plus"></i></i>
+                <i v-if="!getData.image" class="far fa-images"><i class="fas fa-plus"></i></i>
                 <input type="file" id="resume-edit-user-img-edit" accept="image/*" @change="setProfileImg">
-              <p v-if="!profileImg">프로필 사진을 등록해주세요</p>
-              <img v-if='profileImg' class="resume-edit-user-img" :src="profileImg" alt="#">
+              <p v-if="!getData.image">프로필 사진을 등록해주세요</p>
+              <img v-if='getData.image' class="resume-edit-user-img" :src="getData.image" alt="#">
             </div>
           </label>
           <div class="resume-edit-user-profile">
             <div class="resume-edit-user-name-box resume-edit-user-profile-box">
               <span>이름</span>
-              <input type="text" class="resume-edit-user-input">
+              <input v-model="getData.name" type="text" class="resume-edit-user-input">
             </div>
             <div class="resume-edit-user-birth-box resume-edit-user-profile-box">
               <span>생년월일</span>
-              <input type="text" class="resume-edit-user-input">
+              <input v-model="getData.date_of_birth" type="text" class="resume-edit-user-input">
             </div>
             <div class="resume-edit-user-mail-box resume-edit-user-profile-box">
               <span>이메일</span>
-              <input type="text" class="resume-edit-user-input">
+              <input v-model="getData.email" type="text" class="resume-edit-user-input">
             </div>
             <div class="resume-edit-user-num-box resume-edit-user-profile-box">
               <span>휴대폰</span>
-              <input type="text" class="resume-edit-user-input">
+              <input v-model="getData.phone_number" type="text" class="resume-edit-user-input">
             </div>
           </div>
         </div>
@@ -43,7 +43,7 @@
             <div class="resume-edit-input-inner-box resume-edit-army-inner-box">
               <div class="inner-box army-sort-input">
                 <label for="army-sort">병역구분</label>
-                <select v-model='army.sort' name="sort" id="army-sort">
+                <select v-model='getData.military_classification' name="sort" id="army-sort">
                   <option disabled selected>선택</option>
                   <option>군필</option><option>면제</option><option>미필</option>
                   <option>복무중</option><option>비대상(여성)</option>
@@ -51,17 +51,17 @@
               </div>
               <div class="inner-box army-ability-input">
                 <label for="">군별</label>
-                <input v-model="army.ability" type="text" v-on:input="army.ability = $event.target.value">
+                <input v-model="getData.military_branch" type="text" v-on:input="getData.military_branch = $event.target.value">
               </div>
               <div class="inner-box army-rank-input">
                 <label for="">계급</label>
-                <input v-model="army.rank" type="text" v-on:input="army.rank = $event.target.value">
+                <input v-model="getData.military_rank" type="text" v-on:input="getData.military_rank = $event.target.value">
               </div>
             </div>
             <div class="resume-edit-input-inner-box resume-edit-army-inner-box">
               <div class="inner-box army-discharge-input">
                 <label for="army-discharge">제대구분</label>
-                <select v-model='army.discharge' name="discharge" id="army-discharge">
+                <select v-model='getData.military_completed' name="discharge" id="army-discharge">
                   <option disabled selected>선택</option>
                   <option>만기제대</option><option>소집해제</option><option>의가사제대</option>
                   <option>의병제대</option><option>불명예제대</option><option>상이제대</option>
@@ -69,12 +69,12 @@
               </div>
               <div class="inner-box army-reson-input">
                 <label for="">면제사유</label>
-                <input v-model="army.reson" type="text" v-on:input="army.reson = $event.target.value">
+                <input v-model="getData.military_completed_reason" type="text" v-on:input="getData.military_completed_reason = $event.target.value">
               </div>
               <div class="inner-box army-date-input">
                 <label for="">복무기간</label>
-                <input type="text" v-model='army.startDate' placeholder="YYYY . MM"><span>~</span>
-                <input type="text" v-model='army.endDate' placeholder="YYYY . MM">
+                <input type="text" v-model='getData.military_start' placeholder="YYYY . MM"><span>~</span>
+                <input type="text" v-model='getData.military_end' placeholder="YYYY . MM">
               </div>
             </div>
           </div>
@@ -603,9 +603,12 @@
 
 <script>
 import { mapState,mapMutations } from 'vuex';
-import SchoolSearch from '../components/SchoolSearch.vue'
-import MajorSearch from '../components/MajorSearch.vue'
-import '../components/css/resume-edit.css'
+import axios from 'axios';
+import SchoolSearch from '../components/SchoolSearch.vue';
+import MajorSearch from '../components/MajorSearch.vue';
+import '../components/css/resume-edit.css';
+
+const SERVER_URL = 'http://127.0.0.1:8000/'
 
 export default {
   name: 'ResumeEdit',
@@ -634,6 +637,12 @@ export default {
       formDoctor: false,
       formVeteran: false,
       formDisorder: false,
+      user: {
+        name: '',
+        birth: '',
+        email: '',
+        number: '',
+      },
       highSchool: {
         name: '',
         graduate: '선택',
@@ -728,6 +737,8 @@ export default {
       certifiedCareer: [],
       certifiedLang: [],
       certifiedEtc: [],
+      getData: [],
+      putData: [],
     }
   },
   components: {
@@ -808,6 +819,11 @@ export default {
         this.checkDisorderForm();
       }, deep:true
     },
+    getData: {
+      handler() {
+        this.checkgetDataForm();
+      }, deep:true
+    },
   },
   created() {
     window.addEventListener('scroll', this.handleScroll)
@@ -815,15 +831,19 @@ export default {
   mounted() {
     this.onHighSchool()
     this.onVeteran()
+    setTimeout(() => {
+      this.getResume()
+    }, 100);
   },
   computed: {
-    ...mapState(['selectedSchool', 'selectedSchoolType', 'selectedMajor', 'selectedMajorType', 'selectedMajorType2']),
+    ...mapState(['selectedSchool', 'selectedSchoolType', 'selectedMajor', 'selectedMajorType', 'selectedMajorType2', 'UserInfo']),
   },
   methods: {
-    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2', 'setMajorName', 'setMajorType', 'setMajorType2']),
+    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2', 'setMajorName', 'setMajorType', 'setMajorType2', 'setUserInfo']),
     setProfileImg() {
       const photoFile = document.getElementById("resume-edit-user-img-edit");
-      this.profileImg = URL.createObjectURL(photoFile.files[0]);
+      this.getData.image = URL.createObjectURL(photoFile.files[0]);
+      this.profileImg = photoFile.files[0]
     },
     onHighSchool() {
       const HIGH_SCHOOL = document.querySelector('.high-school-btn')
@@ -1004,6 +1024,13 @@ export default {
         this.formDisorder = false; this.formVeteran = false; this.isEtc = false;
       }
     },
+    checkgetDataForm() {
+      // console.log('ss')
+      // console.log(this.getData)
+      // for (var key of data.keys()) {console.log(key);}
+      // for (var value of this.getData.values()) {console.log(value);}
+      console.log(event)
+    },
     addSchool(type) {
       if (type === 'high') {
         let ARR = ['고등학교']
@@ -1099,6 +1126,43 @@ export default {
       const ORIGIN = -600
       let TOP = window.scrollY
       document.querySelector('.resume-edit-save-btn').style.bottom = (ORIGIN - TOP) + 'px';
+    },
+    getResume() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/`, null, config)
+      .then(res => {
+        console.log(res,'get resume')
+        this.getData = res.data
+      })
+      .catch((err) => console.log(err.response))
+    },
+    editResume() {
+      let data = new FormData();
+      data.append('image', this.profileImg);
+      for (var key of data.keys()) {console.log(key);}
+      for (var value of data.values()) {console.log(value);}
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      if (this.profileImg) {
+        axios.put(`${SERVER_URL}articles/${this.UserInfo.id}/`, data, config)
+        .then(res => {
+          console.log(res,'put resume image')
+        })
+        .catch((err) => console.log(err.response))
+      }
+
+      axios.put(`${SERVER_URL}articles/${this.UserInfo.id}/`, this.getData, config)
+      .then(res => {
+        console.log(res,'put resume')
+      })
+      .catch((err) => console.log(err.response))
     }
   },
   beforeDestroy () {

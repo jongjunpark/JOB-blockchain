@@ -8,6 +8,7 @@ const state = {
   isLogin: false,
   authToken: '',
   isLoggedIn: false,
+  UserInfo: '',
   signUpInput: '',
   mailCode: '',
   mailValid: false,

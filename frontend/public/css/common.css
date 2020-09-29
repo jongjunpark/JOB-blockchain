@@ -152,7 +152,7 @@ body {
 }
 
 #nav .menu-bar-box {
-  width: 67%;
+  width: 43%;
   /* background-color: bisque; */
   display: flex;
   align-items: center;
@@ -161,7 +161,7 @@ body {
 }
 
 #nav .user-box {
-  width: 20%;
+  width: 45%;
   /* background-color: blueviolet; */
   display: flex;
   justify-content: flex-end;
@@ -205,6 +205,16 @@ body {
   color: white;
   cursor: pointer;
   transition: .3s;
+}
+
+.user-box .user-name-bar {
+  margin-right: 1vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1vw;
+  color: white;
+  margin-bottom: 4px;
 }
 
 .user-box .user-bar:hover {

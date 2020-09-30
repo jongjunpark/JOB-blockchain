@@ -38,8 +38,8 @@
   color: #0088ff;
 }
 
-.modal-enter .major-search-modal-wrapper,
-.modal-leave-active .major-search-modal-wrapper {
+.modal-enter .major-search-modal-wrap,
+.modal-leave-active .major-search-modal-wrap {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }

@@ -38,8 +38,8 @@
   color: #0088ff;
 }
 
-.modal-enter .mail-modal-wrapper,
-.modal-leave-active .mail-modal-wrapper {
+.modal-enter .mail-modal-wrap,
+.modal-leave-active .mail-modal-wrap {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }

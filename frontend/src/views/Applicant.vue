@@ -4,14 +4,15 @@
       <div class="apply-header">
         <div class="apply-header-text-box">
           <span>물류 경력사원 채용 </span>
-          <span>(1800 명)</span>
+          <span v-if="!isSome">(1800 명)</span>
+          <span v-if="isSome">(3 명)</span>
         </div>
         <div class="apply-header-toggle-box">
           <div @click='applyInfoChange(false)' class="all-apply-btn apply-toggle-btn on-apply-btn">전체</div>
           <div @click='applyInfoChange(true)' class="some-apply-btn apply-toggle-btn">저장</div>
         </div>
       </div>
-      <div class="apply-body">
+      <div v-if="!isSome" class="apply-body">
         <div class="applicant-card">
           <div class="applicant-img-box">
             <img src="@/assets/images/default-user.png" alt="#">
@@ -38,16 +39,32 @@
         <div class="applicant-card"></div>
         <div class="applicant-card"></div>
       </div>
+      <div v-if="isSome" class="apply-body">
+        <div class="applicant-card">
+          <div class="applicant-img-box">
+            <img src="@/assets/images/default-user.png" alt="#">
+          </div>
+          <div class="applicant-text-box">
+            <p>이싸피</p>
+            <p>2003. 01. 01</p>
+            <p>ssafy0101@naver.com</p>
+            <p>010-0101-0101</p>
+          </div>
+        </div>
+        <div class="applicant-card"></div>
+        <div class="applicant-card"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Base',
+  name: 'Applicant',
   data() {
     return {
       test: '',
+      isSome: '',
     }
   },
   components: {
@@ -75,6 +92,7 @@ export default {
         ALLBTN.classList.add('on-apply-btn')
         SOMEBTN.classList.remove('on-apply-btn')
       }
+      this.isSome = bool
     },
   },
   beforeDestroy () {
@@ -170,6 +188,15 @@ export default {
   display: flex;
   flex-wrap: wrap;
 }
+
+.apply-container .apply-body::-webkit-scrollbar { width: 15px;}
+/* 스크롤바의 width */
+::-webkit-scrollbar-track { background-color: #ffffff; }
+/* 스크롤바의 전체 배경색 */
+::-webkit-scrollbar-thumb { background: silver;}
+/* 스크롤바 색 */
+::-webkit-scrollbar-button { display: none; }
+/* 스크롤바 버튼 */
 
 .applicant-card {
   width: calc(30% - 24px);

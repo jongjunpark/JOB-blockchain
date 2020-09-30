@@ -2,11 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import Video from '../views/Video.vue'
 import Resume from '../views/Resume.vue'
 import ResumeEdit from '../views/ResumeEdit.vue'
-import Video from '../views/Video.vue'
 import RecruitHome from '../views/RecruitHome.vue'
 import RecruitWrite from '../views/RecruitWrite.vue'
+import Applicant from '../views/Applicant.vue'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ Vue.use(VueRouter)
     path: '/corp/recruit/write',
     name: 'RecruitWrite',
     component: RecruitWrite
+  },
+  {
+    path: '/corp/recruit/applicant',
+    name: 'Applicant',
+    component: Applicant
   }
 ]
 

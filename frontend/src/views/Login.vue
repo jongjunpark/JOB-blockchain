@@ -157,7 +157,7 @@ export default {
       SIGNUP_TOGGLE.style.color = 'rgba(0,0,0,0.8)'
     },
     goHome() {
-      this.$router.push('/')
+      this.$router.push('/').catch(()=>{})
     },
     goLogin() {
       const loginData = {
@@ -173,7 +173,7 @@ export default {
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
           this.setUserInfo(this.$cookies.get('auth-token'));
-          this.$router.push('/')
+          this.$router.push('/').catch(()=>{})
         })
         .catch(() => this.isLoginValid = false)
     },
@@ -305,7 +305,7 @@ export default {
           confirmButtonText: '확인'
         }).then((result) => {
           if (result.value) {
-            this.$router.push('/resume/edit')
+            this.$router.push('/resume/edit').catch(()=>{})
           }
         })
       })

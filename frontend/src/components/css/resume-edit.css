@@ -309,6 +309,11 @@
               inset 4px 4px 6px -1px rgba(0,0,0,0.2),
               inset -3px -3px 4px -1px #ffffff;
 }
+.resume-edit-license-certify-box .resume-edit-license-list-box {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
 
 .resume-edit-license-certify-box .resume-edit-license-certified-list {
   width: 100%;
@@ -358,10 +363,35 @@
               -6px -6px 10px -1px #ffffff;
   border-radius: 20px;
   color: #ffffff;
+  margin-right: 10px;
 }
 
 .certified-mark-box .fa-check-circle {
   margin-right: 5px;
+}
+
+.resume-edit-license-certified-list .certified-del-box {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  line-height: 1.4;
+  /* align-items: center; */
+  background-color: rgb(255, 50, 50);
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+  color: #ffffff;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.resume-edit-license-certified-list .certified-del-box:hover {
+  background-color: rgb(221, 50, 50);
+  box-shadow: 0 0 0 0 rgba(0,0,0,0),
+              0 0 0 0 rgba(0,0,0,0),
+              inset 2px 2px 6px -1px rgba(0,0,0,0.2),
+              inset -1px -1px 4px -1px #ffffff;
 }
 
 .resume-edit-license-certified-list .certified-type {

@@ -235,6 +235,20 @@ export default {
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
+          this.setUserInfo();
+          const config = {
+            headers: {
+              Authorization: `Token ${this.$cookies.get('auth-token')}`
+            }
+          }
+          axios.post(`${SERVER_URL}articles/create/`, {
+            name: this.signUpLast + this.signUpFirst,
+            email: this.signUpMail
+          }, config)
+          .then(res => {
+            console.log(res)
+          })
+          .catch((err) => console.log(err.response))        
           console.log(this.signUpPassword)
           console.log(this.$cookies.get('auth-token'))
           axios.post(SERVER_URL + `accounts/wallet/${this.signUpPassword}/`, {}, {
@@ -273,7 +287,11 @@ export default {
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
               console.log('I was closed by the timer')
-              this.$router.push('/')
+              if(signupData.flag === 0) {
+                this.$router.push('/corp/recruit').catch(()=>{})
+              } else {
+                this.$router.push('/resume/edit').catch(()=>{})
+              }
             }
             // <int:article_pk>/certificates/create
             // this.createCertificate()

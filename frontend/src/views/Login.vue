@@ -32,7 +32,10 @@
           <input v-model="signUpFirst" type="text" class="login-input-field login-input-first" placeholder="이름" required>
           <input v-model="signUpLast" type="text" class="login-input-field login-input-last" placeholder="성" required>
         </div>
-        <input v-if="!isIndiv" v-model="signUpCorpNum" type="text" class="login-input-field" placeholder="사업자번호" required>
+        <div v-if="!isIndiv" class='signup-name'>
+          <input v-model="signUpCorpNum" type="text" class="login-input-field" placeholder="사업자번호" required>
+          <input v-model="signUpCorpName" type="text" class="login-input-field login-input-corp" placeholder="기업이름" required>
+        </div>
         <input v-model="signUpPassword" type="password" class="login-input-field" placeholder="비밀번호" required>
         <input v-model="signUpPasswordConfirm" type="password" class="login-input-field" placeholder="비밀번호 확인" required>
         <div v-show="!isSignBtn" class="login-submit-btn">Signup</div>
@@ -45,7 +48,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import MailValidationModal from '../components/MailValidationModal.vue'
 import PasswordValidator from 'password-validator'
 import '../components/css/login.css'
@@ -65,6 +68,7 @@ export default {
       signUpFirst: '',
       signUpLast: '',
       signUpCorpNum: '',
+      signUpCorpName: '',
       signUpPassword: '',
       signUpPasswordConfirm: '',
       isLoginValid: true,
@@ -125,7 +129,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken', 'setUserInfo']),
+    ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken']),
+    ...mapActions(['setUserInfo']),
     onLogin() {
       const LOGIN = document.getElementById('login');
       const SIGNUP = document.getElementById('signup');
@@ -221,7 +226,7 @@ export default {
         }
       if(this.isIndiv === false) {
         signupData.first_name = this.signUpCorpNum;
-        signupData.last_name = this.signUpCorpNum;
+        signupData.last_name = this.signUpCorpName;
         signupData.flag = 0
       } 
       axios.post(SERVER_URL + 'rest-auth/signup/', signupData)
@@ -230,7 +235,7 @@ export default {
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
-          this.setUserInfo(this.$cookies.get('auth-token'));
+          this.setUserInfo();
           const config = {
             headers: {
               Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -242,14 +247,21 @@ export default {
           }, config)
           .then(res => {
             console.log(res)
+            if(signupData.flag === 0) {
+              this.$router.push('/corp/recruit').catch(()=>{})
+            } else {
+              this.$router.push('/resume/edit').catch(()=>{})
+            }
             // <int:article_pk>/certificates/create
-            this.createCertificate()
-            this.createLang()
-            this.createCareer()
+            // this.createCertificate()
+            // this.createLang()
+            // this.createCareer()
           })
           .catch((err) => console.log(err.response))
+
+          
         })
-        .catch((err) => console.log(err))
+        .catch((err) => console.log(err.response))
     },
     signupSort(type) {
       if (type === 'individual') {

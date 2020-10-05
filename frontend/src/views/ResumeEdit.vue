@@ -388,11 +388,22 @@
         <p>자격사항</p>
         <div class="resume-edit-license-content">
           <div class="resume-edit-license-certify-box">
-            <p v-if="certifiedLicense.length===0">인증된 자격증이 없습니다.</p>
-            <div class="resume-edit-license-certified-list" v-for='(license, index) in certifiedLicense' :key='`license-${index}`'>
-              <div class="certified-detail certified-type">{{ license[0] }}</div>
-              <div class="certified-detail">{{ license[1] }}</div><div class="certified-detail">{{ license[2] }}</div>
-              <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+            <p v-if="(getLicense.length+certifiedLicense.length)===0">인증된 자격증이 없습니다.</p>
+            <div class='resume-edit-license-list-box' v-for='(license, index) in getLicense' :key='`license1-${index}`'>
+              <div class="resume-edit-license-certified-list" v-if="license.name">
+                <div class="certified-detail certified-type">{{ license.name }}</div>
+                <div class="certified-detail">{{ license.publisher }}</div><div class="certified-detail">{{ license.date }}</div>
+                <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+                <div class="certified-detail certified-del-box" @click="delLicense('certified', license.id, index)">x</div>
+              </div>
+            </div>
+            <div class='resume-edit-license-list-box' v-for='(license, index) in certifiedLicense' :key='`license2-${index}`'>
+              <div class="resume-edit-license-certified-list" v-if="license[0]">
+                <div class="certified-detail certified-type">{{ license[0] }}</div>
+                <div class="certified-detail">{{ license[1] }}</div><div class="certified-detail">{{ license[2] }}</div>
+                <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+                <div class="certified-detail certified-del-box" @click="delLicense('tmp', null, index)">x</div>
+              </div>
             </div>
           </div>
           <div class="resume-edit-license-input-box resume-edit-input-box">
@@ -421,12 +432,24 @@
         <p>어학사항</p>
         <div class="resume-edit-license-content">
           <div class="resume-edit-license-certify-box">
-            <p v-if="certifiedLang.length===0">인증된 어학성적이 없습니다.</p>
-            <div class="resume-edit-license-certified-list" v-for='(lang, index) in certifiedLang' :key='`lang-${index}`'>
-              <div class="certified-detail certified-type">{{ lang[0] }}</div>
-              <div class="certified-detail">{{ lang[1] }}</div><div class="certified-detail">{{ lang[2] }}</div>
-              <div class="certified-detail">{{ lang[3] }}</div>
-              <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+            <p v-if="(getLang.length+certifiedLang.length)===0">인증된 어학성적이 없습니다.</p>
+            <div class='resume-edit-license-list-box' v-for='(lang, index) in getLang' :key='`lang1-${index}`'>
+              <div class="resume-edit-license-certified-list" v-if="lang.classification">
+                <div class="certified-detail certified-type">{{ lang.classification }}</div>
+                <div class="certified-detail">{{ lang.name }}</div><div class="certified-detail">{{ lang.score }}</div>
+                <div class="certified-detail">{{ lang.date }}</div>
+                <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+                <div class="certified-detail certified-del-box" @click="delLang('certified', lang.id, index)">x</div>
+              </div>
+            </div>
+            <div class='resume-edit-license-list-box' v-for='(lang, index) in certifiedLang' :key='`lang2-${index}`'>
+              <div class="resume-edit-license-certified-list" v-if="lang[0]">
+                <div class="certified-detail certified-type">{{ lang[0] }}</div>
+                <div class="certified-detail">{{ lang[1] }}</div><div class="certified-detail">{{ lang[2] }}</div>
+                <div class="certified-detail">{{ lang[3] }}</div>
+                <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+                <div class="certified-detail certified-del-box" @click="delLang('tmp', null, index)">x</div>
+              </div>
             </div>
           </div>
           <div class="resume-edit-lang-input-box resume-edit-input-box">
@@ -464,19 +487,38 @@
         <p>경력사항</p>
         <div class="resume-edit-license-content">
           <div class="resume-edit-license-certify-box">
-            <p v-if="certifiedCareer.length===0">인증된 경력이 없습니다.</p>
-            <div class="resume-edit-license-certified-list" v-for='(career, index) in certifiedCareer' :key='`career-${index}`'>
-              <div class="certified-detail certified-type">{{ career[0] }}</div>
-              <div class="certified-detail certified-detail-non-margin">{{ career[1] }}</div>
-              <div class="certified-detail certified-detail-non-margin">~</div>
-              <div class="certified-detail">{{ career[2] }}</div>
-              <div class="certified-detail">{{ career[3] }}</div><div class="certified-detail">{{ career[4] }}</div>
-              <div class="certified-detail">{{ career[5] }}</div><div class="certified-detail">{{ career[6] }}</div>
-              <div class="certified-detail certified-detail-career-text" @mouseenter="onCareerText('on')" @mouseleave="onCareerText('off')">
-                경력기술서
-                <div v-if="isCareerText">{{ career[7] }}</div>
+            <p v-if="(certifiedCareer.length+getCareer.length)===0">인증된 경력이 없습니다.</p>
+            <div class='resume-edit-license-list-box' v-for='(career, index1) in getCareer' :key='`career1-${index1}`'>
+              <div class="resume-edit-license-certified-list" v-if="career.name">
+                <div class="certified-detail certified-type">{{ career.name }}</div>
+                <div class="certified-detail certified-detail-non-margin">{{ career.start_term }}</div>
+                <div class="certified-detail certified-detail-non-margin">~</div>
+                <div class="certified-detail">{{ career.end_term }}</div>
+                <div class="certified-detail">{{ career.retirement_reason }}</div><div class="certified-detail">{{ career.department }}</div>
+                <div class="certified-detail">{{ career.rank }}</div><div class="certified-detail">{{ career.duty }}</div>
+                <div class="certified-detail certified-detail-career-text" @mouseenter="onCareerText1('on', index1)" @mouseleave="onCareerText1('off', index1)">
+                  경력기술서
+                  <div v-if="isCareerText1[index1]">{{ career.statement }}</div>
+                </div>
+                <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+                <div class="certified-detail certified-del-box" @click="delCareer('certified', career.id, index1)">x</div>
               </div>
-              <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+            </div>
+            <div class='resume-edit-license-list-box' v-for='(career, index2) in certifiedCareer' :key='`career2-${index2}`'>
+              <div class="resume-edit-license-certified-list" v-if="career[0]">
+                <div class="certified-detail certified-type">{{ career[0] }}</div>
+                <div class="certified-detail certified-detail-non-margin">{{ career[1] }}</div>
+                <div class="certified-detail certified-detail-non-margin">~</div>
+                <div class="certified-detail">{{ career[2] }}</div>
+                <div class="certified-detail">{{ career[3] }}</div><div class="certified-detail">{{ career[4] }}</div>
+                <div class="certified-detail">{{ career[5] }}</div><div class="certified-detail">{{ career[6] }}</div>
+                <div class="certified-detail certified-detail-career-text" @mouseenter="onCareerText2('on', index2)" @mouseleave="onCareerText2('off', index2)">
+                  경력기술서
+                  <div v-if="isCareerText2[index2]">{{ career[7] }}</div>
+                </div>
+                <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+                <div class="certified-detail certified-del-box" @click="delCareer('tmp', null, index2)">x</div>
+              </div>
             </div>
           </div>
           <div class="resume-edit-career-input-box resume-edit-input-box">
@@ -535,12 +577,14 @@
         <p>기타</p>
         <div class="resume-edit-license-content">
           <div class="resume-edit-license-certify-box">
-            <p v-if="certifiedEtc.length===0">인증된 서류가 없습니다.</p>
-            <div class="resume-edit-license-certified-list" v-for='(etc, index) in certifiedEtc' :key='`etc-${index}`'>
-              <div class="certified-detail certified-type">{{ etc[0] }}</div>
-              <div class="certified-detail">{{ etc[1] }}</div><div class="certified-detail">{{ etc[2] }}</div>
-              <div class="certified-detail">{{ etc[3] }}</div>
-              <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+            <p v-if="(certifiedEtc[0].length+certifiedEtc[1].length)===0">인증된 서류가 없습니다.</p>
+            <div class='resume-edit-license-list-box' v-for='(etc, index) in certifiedEtc' :key='`etc-${index}`'>
+              <div class="resume-edit-license-certified-list" v-if="(etc[0] || etc[1])">
+                <div class="certified-detail certified-type">{{ etc[0] }}</div>
+                <div class="certified-detail">{{ etc[1] }}</div><div class="certified-detail">{{ etc[2] }}</div>
+                <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+                <div class="certified-detail certified-del-box" @click="delEtc(etc[0])">x</div>
+              </div>
             </div>
           </div>
           <div class="resume-edit-license-school-box resume-edit-license-etc-box">
@@ -590,8 +634,8 @@
             </div>
           </div>
           <div class="resume-edit-license-btn-box resume-edit-input-box">
-            <div v-if="formVeteran" class="resume-edit-license-btn  on-license-btn" @click="addEtc('veteran')">인증하기</div>
-            <div v-if="formDisorder" class="resume-edit-license-btn  on-license-btn" @click="addEtc('disorder')">인증하기</div>
+            <div v-if="formVeteran" class="resume-edit-license-btn on-license-btn" @click="addEtc('veteran')">인증하기</div>
+            <div v-if="formDisorder" class="resume-edit-license-btn on-license-btn" @click="addEtc('disorder')">인증하기</div>
             <div v-if="!isEtc" class="resume-edit-license-btn">인증하기</div>
           </div>
         </div>
@@ -606,7 +650,7 @@
 </template>
 
 <script>
-import { mapState,mapMutations } from 'vuex';
+import { mapState,mapMutations,mapActions } from 'vuex';
 import axios from 'axios';
 import SchoolSearch from '../components/SchoolSearch.vue';
 import MajorSearch from '../components/MajorSearch.vue';
@@ -625,7 +669,8 @@ export default {
       isEtc: false,
       isLicense: false,
       isCareer: false,
-      isCareerText: false,
+      isCareerText1: [],
+      isCareerText2: [],
       isLang: false,
       isVeteran: false,
       isDisorder: false,
@@ -656,35 +701,24 @@ export default {
         duties: '',
         text: '',
       },
-      army: {
-        sort: '선택',
-        ability: '',
-        rank: '',
-        discharge: '선택',
-        reson: '',
-        startDate: '',
-        endDate: '',
-      },
       lang: {
         sort: '선택',
         name: '',
         rank: '',
         date: '',
       },
-      veteran: {
-        sort: '',
-        num: '',
-      },
-      disorder: {
-        sort: '',
-        rank: '',
-      },
       certifiedSchool: [[],[],[],[],[]],
       certifiedLicense: [],
       certifiedCareer: [],
       certifiedLang: [],
-      certifiedEtc: [],
+      certifiedEtc: [[],[]],
       getData: [],
+      getLicense: [],
+      delLicenseList: [],
+      getLang: [],
+      delLangList: [],
+      getCareer: [],
+      delCareerList: [],
       setData: [],
     }
   },
@@ -756,20 +790,10 @@ export default {
         this.checkLangForm();
       }, deep:true
     },
-    veteran: {
-      handler() {
-        this.checkVeteranForm();
-      }, deep:true
-    },
-    disorder: {
-      handler() {
-        this.checkDisorderForm();
-      }, deep:true
-    },
     getData: {
       handler() {
-        this.checkgetDataForm();
-        this.checkSchoolForm();
+        this.checkSchoolForm()
+        this.checkEtc()
       }, deep:true
     },
   },
@@ -781,13 +805,14 @@ export default {
     this.onVeteran()
     setTimeout(() => {
       this.getResume()
-    }, 100);
+    }, 1000);
   },
   computed: {
     ...mapState(['selectedSchool', 'selectedSchoolType', 'selectedMajor', 'selectedMajorType', 'selectedMajorType2', 'UserInfo']),
   },
   methods: {
-    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2', 'setMajorName', 'setMajorType', 'setMajorType2', 'setUserInfo']),
+    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2', 'setMajorName', 'setMajorType', 'setMajorType2']),
+    ...mapActions(['setUserInfo']),
     setProfileImg() {
       const photoFile = document.getElementById("resume-edit-user-img-edit");
       this.getData.image = URL.createObjectURL(photoFile.files[0]);
@@ -880,7 +905,7 @@ export default {
       VETERAN.classList.add('on-school-btn')
       DISORDER.classList.remove('on-school-btn')
       this.isVeteran = true; this.isDisorder = false;
-      this.checkVeteranForm()
+      this.checkEtc()
     },
     onDisorder() {
       const VETERAN = document.querySelector('.veteran-btn')
@@ -889,7 +914,7 @@ export default {
       VETERAN.classList.remove('on-school-btn')
       DISORDER.classList.add('on-school-btn')
       this.isVeteran = false; this.isDisorder = true;
-      this.checkDisorderForm()
+      this.checkEtc()
     },
     onModal(type, name, num, school) {
       this.setSchoolType(type);
@@ -952,18 +977,15 @@ export default {
         this.isLang = false
       }
     },
-    checkVeteranForm() {
+    checkEtc() {
       if (this.getData.veterans_number && (this.getData.veterans_classification && this.getData.veterans_classification != '선택') && this.isVeteran) {
         this.formVeteran = true; this.formDisorder = false; this.isEtc = true;
-      } else {
-        this.formVeteran = false; this.formDisorder = false; this.isEtc = false;
-      }
-    },
-    checkDisorderForm() {
-      if ((this.getData.obstacle_classification && this.getData.obstacle_classification != '선택') && (this.getData.obstacle_grade && this.getData.obstacle_grade != '선택') && this.isDisorder) {
+        console.log(this.formVeteran, 'on')
+      } else if ((this.getData.obstacle_classification && this.getData.obstacle_classification != '선택') && (this.getData.obstacle_grade && this.getData.obstacle_grade != '선택') && this.isDisorder) {
         this.formDisorder = true; this.formVeteran = false; this.isEtc = true;
       } else {
-        this.formDisorder = false; this.formVeteran = false; this.isEtc = false;
+        this.formVeteran = false; this.formDisorder = false; this.isEtc = false;
+        console.log(this.formVeteran, 'off')
       }
     },
     checkgetDataForm() {
@@ -1028,7 +1050,7 @@ export default {
       let ARR = []
       ARR.push(this.career.name); ARR.push(this.career.startDate); ARR.push(this.career.endDate); ARR.push(this.career.reason); 
       ARR.push(this.career.department); ARR.push(this.career.position); ARR.push(this.career.duties); ARR.push(this.career.text)
-      this.certifiedCareer.push(ARR)
+      this.certifiedCareer.push(ARR); this.isCareerText2.push(false);
       this.career.name = ''; this.career.startDate = ''; this.career.endDate = ''; this.career.reason = '선택'; 
       this.career.department = ''; this.career.position = ''; this.career.duties = ''; this.career.text = '';
     },
@@ -1043,16 +1065,13 @@ export default {
         let ARR = ['보훈']
         ARR.push(this.getData.veterans_classification); ARR.push(this.getData.veterans_number);
         this.certifiedEtc.push(ARR)
-        this.getData.veterans_number = ''; this.getData.veterans_classification = '선택';
       } else if (type === 'disorder'){
         let ARR = ['장애']
         ARR.push(this.getData.obstacle_classification); ARR.push(this.getData.obstacle_grade); 
         this.certifiedEtc.push(ARR)
-        this.getData.obstacle_classification = '선택'; this.getData.obstacle_grade = '선택';
       }
     },
     delSchool(type) {
-      console.log(type)
       if (type === '고등학교') {
         this.certifiedSchool[0] = []
         let tmp = this.isSchool; this.isSchool = null; this.isSchool = tmp;
@@ -1084,16 +1103,67 @@ export default {
         this.getData.doctor_minor = ''; this.getData.doctor_grade = undefined; this.getData.doctor_total = undefined;
       }
     },
+    delLicense(type, id, idx) {
+      if (type === 'certified') {
+        this.delLicenseList.push(id)
+        this.getLicense[idx] = []
+        let tmp = this.license.name; this.license.name = null; this.license.name = tmp;
+      } else {
+        this.certifiedLicense[idx] = []
+        let tmp = this.license.name; this.license.name = null; this.license.name = tmp;
+      }
+    },
+    delLang(type, id, idx) {
+      if (type === 'certified') {
+        this.delLangList.push(id)
+        console.log(this.delLangList)
+        this.getLang[idx] = []
+        let tmp = this.lang.name; this.lang.name = null; this.lang.name = tmp;
+      } else {
+        this.certifiedlang[idx] = []
+        let tmp = this.lang.name; this.lang.name = null; this.lang.name = tmp;
+      }
+    },
+    delCareer(type, id, idx) {
+      if (type === 'certified') {
+        this.delCareerList.push(id)
+        this.getCareer[idx] = []
+        let tmp = this.career.name; this.career.name = null; this.career.name = tmp;
+      } else {
+        this.certifiedCareer[idx] = []
+        let tmp = this.career.name; this.career.name = null; this.career.name = tmp;
+      }
+    },
+    delEtc(type) {
+      if (type === '보훈') {
+        this.certifiedEtc[0] = []
+        let tmp = this.isVeteran; this.isVeteran = null; this.isVeteran = tmp;
+        this.getData.veterans_classification = ''; this.getData.veterans_classification = '';
+      } else if (type === '장애') {
+        this.certifiedEtc[1] = []
+        let tmp = this.isDisorder; this.isDisorder = null; this.isDisorder = tmp;
+        this.getData.obstacle_classification = ''; this.getData.obstacle_grade = '';
+      }
+    },
     setCareerText() {
       if (this.career.text.length > 500) {
         this.career.text = this.career.text.substring(0,500)
       }
     },
-    onCareerText(text) {
+    onCareerText1(text, idx) {
       if (text === 'on') {
-        this.isCareerText = true
+        this.isCareerText1[idx] = true
+        console.log(this.isCareerText1)
+        console.log(this.isCareerText2)
       } else {
-        this.isCareerText = false
+        this.isCareerText1[idx] = false
+      }
+    },
+    onCareerText2(text, idx) {
+      if (text === 'on') {
+        this.isCareerText2[idx] = true
+      } else {
+        this.isCareerText2[idx] = false
       }
     },
     handleScroll() {
@@ -1111,11 +1181,42 @@ export default {
       .then(res => {
         console.log(res,'get resume')
         this.getData = res.data
+        if(this.getData.image) {
+          this.getData.image = 'http://localhost:8000' + this.getData.image
+        }
         this.sortSchool()
+        this.sortEtc()
+      })
+      .catch((err) => console.log(err.response))
+
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/`, null, config)
+      .then(res => {
+        console.log(res,'get license')
+        this.getLicense = res.data
+      })
+      .catch((err) => console.log(err.response))
+
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/languages/`, null, config)
+      .then(res => {
+        console.log(res,'get lang')
+        this.getLang = res.data
+      })
+      .catch((err) => console.log(err.response))
+
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/careers/`, null, config)
+      .then(res => {
+        console.log(res,'get career')
+        this.getCareer = res.data
+        for(let i=0; i<res.data.length; i++) {
+          this.isCareerText1.push(false)
+        }
       })
       .catch((err) => console.log(err.response))
     },
     editResume() {
+      this.editLicense()
+      this.editLang()
+      this.editCareer()
       this.cleanObj(this.getData)
       let data = new FormData();
       data.append('image', this.profileImg);
@@ -1186,6 +1287,126 @@ export default {
         ARR.push(this.getData.doctor_entrance_year); ARR.push(this.getData.doctor_graduation_year); ARR.push(this.getData.doctor_major);
         if (this.getData.doctor_minor) { ARR.push(this.getData.doctor_minor) } else { ARR.push('X') } ARR.push(this.getData.doctor_grade); ARR.push(this.getData.doctor_total)
         this.certifiedSchool[4] = ARR
+      }
+    },
+    sortEtc() {
+      if(this.getData.veterans_classification) {
+        let ARR = ['보훈']
+        ARR.push(this.getData.veterans_classification); ARR.push(this.getData.veterans_number);
+        this.certifiedEtc[0] = ARR
+      }
+      if(this.getData.obstacle_classification) {
+        let ARR = ['장애']
+        ARR.push(this.getData.obstacle_classification); ARR.push(this.getData.obstacle_grade);
+        this.certifiedEtc[1] = ARR
+      }
+    },
+    editLicense() {
+      for (let i=0; i<this.certifiedLicense.length; i++) {
+        if (this.certifiedLicense[i].length > 0) {
+          const config = {
+            headers: {
+              Authorization: `Token ${this.$cookies.get('auth-token')}`
+            }
+          }
+          axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/create/`, {
+            article : this.UserInfo.id,
+            name : this.certifiedLicense[i][0],
+            publisher : this.certifiedLicense[i][1],
+            date : this.certifiedLicense[i][2]
+          }, config)
+          .then(res => {
+            console.log(res,'create license')
+          })
+          .catch((err) => console.log(err.response))
+        }
+      }
+      for (let i=0; i<this.delLicenseList; i++) {
+        const config = {
+          headers: {
+            Authorization: `Token ${this.$cookies.get('auth-token')}`
+          }
+        }
+        // '<int:article_pk>/certificates/<int:certificate_pk>/'
+        axios.delete(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/${this.delLicenseList[i]}/`, null, config)
+        .then(res => {
+          console.log(res,'delete license')
+        })
+        .catch((err) => console.log(err.response))
+      }
+    },
+    editLang() {
+      for (let i=0; i<this.certifiedLang.length; i++) {
+        if (this.certifiedLang[i].length > 0) {
+          const config = {
+            headers: {
+              Authorization: `Token ${this.$cookies.get('auth-token')}`
+            }
+          }
+          axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/languages/create/`, {
+            article : this.UserInfo.id,
+            classification: this.certifiedLang[i][0],
+            name : this.certifiedLang[i][1],
+            score : this.certifiedLang[i][2],
+            date : this.certifiedLang[i][3]
+          }, config)
+          .then(res => {
+            console.log(res,'create LangcertifiedLang')
+          })
+          .catch((err) => console.log(err.response))
+        }
+      }
+      for (let i=0; i<this.delLangList.length; i++) {
+        const config = {
+          headers: {
+            Authorization: `Token ${this.$cookies.get('auth-token')}`
+          }
+        }
+        // '<int:article_pk>/certificates/<int:certificate_pk>/'
+        axios.delete(`${SERVER_URL}articles/${this.UserInfo.id}/languages/${this.delLangList[i]}/`, null, config)
+        .then(res => {
+          console.log(res,'delete Lang')
+        })
+        .catch((err) => console.log(err.response))
+      }
+    },
+    editCareer() {
+      for (let i=0; i<this.certifiedCareer.length; i++) {
+        if (this.certifiedCareer[i].length > 0) {
+          const config = {
+            headers: {
+              Authorization: `Token ${this.$cookies.get('auth-token')}`
+            }
+          }
+          axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/careers/create/`, {
+            article : this.UserInfo.id,
+            name: this.certifiedCareer[i][0],
+            start_term : this.certifiedCareer[i][1],
+            end_term : this.certifiedCareer[i][2],
+            retirement_reason : this.certifiedCareer[i][3],
+            department: this.certifiedCareer[i][4],
+            rank: this.certifiedCareer[i][5],
+            duty: this.certifiedCareer[i][6],
+            statement: this.certifiedCareer[i][7]
+          }, config)
+          .then(res => {
+            console.log(res,'create Career')
+          })
+          .catch((err) => console.log(err.response))
+        }
+      }
+      for (let i=0; i<this.delCareerList.length; i++) {
+        const config = {
+          headers: {
+            Authorization: `Token ${this.$cookies.get('auth-token')}`
+          }
+        }
+        // '<int:article_pk>/certificates/<int:certificate_pk>/'
+        axios.delete(`${SERVER_URL}articles/${this.UserInfo.id}/careers/${this.delCareerList[i]}/`, null, config)
+        .then(res => {
+          console.log(res,'delete Career')
+        })
+        .catch((err) => console.log(err.response))
       }
     }
   },

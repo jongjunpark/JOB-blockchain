@@ -4,7 +4,7 @@
       <div class="resume-user-box">
         <div class="resume-user-content">
           <img v-if="!getData.image" src="@/assets/images/default-user.png" alt="#">
-          <img v-if="getData.image" :src="getData.image" alt="#">
+          <img v-if="getData.image" :src="'http://localhost:8000' + getData.image" alt="#">
           <p class="resume-user-name">{{ getData.name }}</p>
           <p class="resume-user-birth">{{ getData.date_of_birth }}</p>
           <p class="resume-user-email">{{ getData.email }}</p>
@@ -17,7 +17,7 @@
           <p>병역사항</p>
           <div class="resume-data-content">
             <p v-if="!getData.military_classification">인증된 병력사항이 없습니다.</p>
-            <div class="resume-license-certified-list">
+            <div v-if="getData.military_classification" class="resume-license-certified-list">
               <div class="resume-detail resume-type">{{ getData.military_classification }}</div>
               <div class="resume-detail">{{ getData.military_branch }}</div>
               <div class="resume-detail">{{ getData.military_rank }}</div>
@@ -54,30 +54,45 @@
         <div class="resume-data-content-box">
           <p>자격사항</p>
           <div class="resume-data-content">
-            <p>인증된 자격사항이 없습니다.</p>
+            <p v-if="getLicense.length===0">인증된 자격증이 없습니다.</p>
+            <div class="resume-license-resume-list" v-for='(license, index) in getLicense' :key='`license1-${index}`'>
+              <div class="resume-license-certified-list" v-if="license.name">
+                <div class="resume-detail resume-type">{{ license.name }}</div>
+                <div class="resume-detail">{{ license.publisher }}</div><div class="resume-detail">{{ license.date }}</div>
+                <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="resume-data-content-box">
           <p>어학사항</p>
           <div class="resume-data-content">
-            <p>인증된 어학사항이 없습니다.</p>
+            <p v-if="getLang.length===0">인증된 어학성적이 없습니다.</p>
+            <div class="resume-license-resume-list" v-for='(lang, index) in getLang' :key='`lang1-${index}`'>
+              <div class="resume-license-certified-list" v-if="lang.classification">
+                <div class="resume-detail resume-type">{{ lang.classification }}</div>
+                <div class="resume-detail">{{ lang.name }}</div><div class="resume-detail">{{ lang.score }}</div>
+                <div class="resume-detail">{{ lang.date }}</div>
+                <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="resume-data-content-box">
           <p>경력사항</p>
           <div class="resume-data-content">
-            <p v-if="resumeCareer.length===0">인증된 경력사항이 없습니다.</p>
-            <div class="resume-license-resume-list" v-for='(career, index) in resumeCareer' :key='`career-${index}`'>
-              <div class="resume-license-certified-list" v-if="career[0]">
-                <div class="resume-detail resume-type">{{ career[0] }}</div>
-                <div class="resume-detail resume-detail-non-margin">{{ career[1] }}</div>
+            <p v-if="getCareer.length===0">인증된 경력이 없습니다.</p>
+            <div class="resume-license-resume-list" v-for='(career, index1) in getCareer' :key='`career1-${index1}`'>
+              <div class="resume-license-certified-list" v-if="career.name">
+                <div class="resume-detail resume-type">{{ career.name }}</div>
+                <div class="resume-detail resume-detail-non-margin">{{ career.start_term }}</div>
                 <div class="resume-detail resume-detail-non-margin">~</div>
-                <div class="resume-detail">{{ career[2] }}</div>
-                <div class="resume-detail">{{ career[3] }}</div><div class="resume-detail">{{ career[4] }}</div>
-                <div class="resume-detail">{{ career[5] }}</div><div class="resume-detail">{{ career[6] }}</div>
-                <div class="resume-detail resume-detail-career-text" @mouseenter="onCareerText('on')" @mouseleave="onCareerText('off')">
+                <div class="resume-detail">{{ career.end_term }}</div>
+                <div class="resume-detail">{{ career.retirement_reason }}</div><div class="resume-detail">{{ career.department }}</div>
+                <div class="resume-detail">{{ career.rank }}</div><div class="resume-detail">{{ career.duty }}</div>
+                <div class="resume-detail resume-detail-career-text" @mouseenter="onCareerText1('on', index1)" @mouseleave="onCareerText1('off', index1)">
                   경력기술서
-                  <div v-if="isCareerText">{{ career[7] }}</div>
+                  <div v-if="isCareerText[index1]">{{ career.statement }}</div>
                 </div>
                 <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
               </div>
@@ -87,7 +102,14 @@
         <div class="resume-data-content-box">
           <p>기타</p>
           <div class="resume-data-content">
-            <p>인증된 기타사항이 없습니다.</p>
+            <p v-if="(certifiedEtc[0].length+certifiedEtc[1].length)===0">인증된 기타사항이 없습니다.</p>
+            <div class="resume-license-resume-list" v-for='(etc, index) in certifiedEtc' :key='`etc-${index}`'>
+              <div class="resume-license-certified-list" v-if="(etc[0] || etc[1])">
+                <div class="resume-detail resume-type">{{ etc[0] }}</div>
+                <div class="resume-detail">{{ etc[1] }}</div><div class="resume-detail">{{ etc[2] }}</div>
+                <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -105,10 +127,13 @@ export default {
   name: 'Resume',
   data() {
     return {
-      resumeCareer: [['삼성전자', '2020.01', '2020.07', '이직', '무선사업부', '책임', 'CS', '아무것도 안함']],
-      isCareerText: false,
       getData: [],
+      getLicense: [],
+      getLang: [],
+      getCareer: [],
       certifiedSchool: [[],[],[],[],[]],
+      certifiedEtc: [[],[]],
+      isCareerText: [],
     }
   },
   components: {
@@ -122,7 +147,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.getResume()
-    }, 100);
+    }, 1000);
   },
   watch: {
   },
@@ -135,11 +160,11 @@ export default {
       let TOP = window.scrollY
       document.querySelector('.resume-user-content').style.top = (ORIGIN + TOP) + 'px';
     },
-    onCareerText(text) {
+    onCareerText(text, idx) {
       if (text === 'on') {
-        this.isCareerText = true
+        this.isCareerText[idx] = true
       } else {
-        this.isCareerText = false
+        this.isCareerText[idx] = false
       }
     },
     getResume() {
@@ -153,6 +178,31 @@ export default {
         console.log(res,'get resume')
         this.getData = res.data
         this.sortSchool()
+        this.sortEtc()
+      })
+      .catch((err) => console.log(err.response))
+
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/`, null, config)
+      .then(res => {
+        console.log(res,'get license')
+        this.getLicense = res.data
+      })
+      .catch((err) => console.log(err.response))
+
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/languages/`, null, config)
+      .then(res => {
+        console.log(res,'get lang')
+        this.getLang = res.data
+      })
+      .catch((err) => console.log(err.response))
+
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/careers/`, null, config)
+      .then(res => {
+        console.log(res,'get career')
+        this.getCareer = res.data
+        for(let i=0; i<res.data.length; i++) {
+          this.isCareerText.push(false)
+        }
       })
       .catch((err) => console.log(err.response))
     },
@@ -191,6 +241,18 @@ export default {
         if (this.getData.doctor_minor) { ARR.push(this.getData.doctor_minor) } else { ARR.push('X') } ARR.push(this.getData.doctor_grade); ARR.push(this.getData.doctor_total)
         this.certifiedSchool[4] = ARR
       }
+    },
+    sortEtc() {
+      if(this.getData.veterans_classification) {
+        let ARR = ['보훈']
+        ARR.push(this.getData.veterans_classification); ARR.push(this.getData.veterans_number);
+        this.certifiedEtc[0] = ARR
+      }
+      if(this.getData.obstacle_classification) {
+        let ARR = ['장애']
+        ARR.push(this.getData.obstacle_classification); ARR.push(this.getData.obstacle_grade);
+        this.certifiedEtc[1] = ARR
+      }
     }
   },
   beforeDestroy () {
@@ -210,7 +272,7 @@ export default {
 }
 
 .resume-container .resume-user-box {
-  width: 25%;
+  width: 22%;
   height: 30px;
   position: relative;
   /* background-color: hotpink; */
@@ -235,6 +297,7 @@ export default {
 .resume-user-content > img {
   width: 100%;
   height: 200px;
+  border-radius: 15px;
 }
 
 .resume-user-content > p {
@@ -272,7 +335,7 @@ export default {
 }
 
 .resume-container .resume-data-box {
-  width: 75%;
+  width: 80%;
   height: 30px;
   /* background-color: greenyellow; */
 }
@@ -295,7 +358,7 @@ export default {
 
 .resume-data-box .resume-data-content {
   width: 94%;
-  /* margin-left: calc(5% - 20px); */
+  margin-left: calc(6% - 35px);
   padding: 10px 15px;
   box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
             inset -4px -4px 6px -1px #ffffff;

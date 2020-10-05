@@ -23,7 +23,7 @@
 
 <script>
 import "../public/css/common.css";
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import axios from 'axios';
 
 const SERVER_URL = 'http://127.0.0.1:8000/';
@@ -39,15 +39,15 @@ export default {
     if (this.$cookies.isKey('auth-token')) {
       this.setIsLoggedIn(true);
       this.setToken(this.$cookies.get('auth-token'));
-      this.setUserInfo(this.$cookies.get('auth-token'));
+      this.setUserInfo();
     }
     else {
       this.setIsLoggedIn(false);
-      this.setUserInfo(false)
     }
   },
   methods: {
-    ...mapMutations(['setIsLoggedIn', 'setToken', 'setLoginPath', 'setUserInfo']),
+    ...mapMutations(['setIsLoggedIn', 'setToken', 'setLoginPath', 'setUser']),
+    ...mapActions(['setUserInfo']),
     goHome() {
       this.$router.push('/').catch(()=>{})
     },

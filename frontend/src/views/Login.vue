@@ -223,13 +223,26 @@ export default {
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
+          console.log(this.signUpPassword)
+          console.log(this.$cookies.get('auth-token'))
+          axios.post(SERVER_URL + `accounts/wallet/${this.signUpPassword}/`, {}, {
+                        headers: {
+                          Authorization: `Token ${this.$cookies.get('auth-token')}`
+                        }
+                      }
+                )
+              .then(res => {
+                console.log('finish')
+                // 개인키 발급 => 향후 이것으로 결제 . 자기 계정인것을 증명
+                console.log(res.data)
+              })
           Swal.fire({
             icon: 'success',
             title: '환영합니다',
             confirmButtonText: '확인'
           }).then((result) => {
             if (result.value) {
-              this.$router.push('/resume/edit')
+              // this.$router.push('/resume/edit')
             }
           })
         })

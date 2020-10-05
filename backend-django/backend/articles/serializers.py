@@ -15,6 +15,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
     image = serializers.ImageField(use_url=True, required=False)
+
     class Meta:
         model = Article
         fields = '__all__'

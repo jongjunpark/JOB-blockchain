@@ -193,15 +193,6 @@
 15:52:21.158421 db@close closing
 15:52:21.159414 db@close done T·992.1µs
 =============== Oct 5, 2020 (KST) ===============
-17:29:26.526092 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-17:29:26.528086 version@stat F·[1 2] S·2MiB[209KiB 2MiB] Sc·[0.25 0.03]
-17:29:26.528086 db@open opening
-17:29:26.530080 version@stat F·[1 2] S·2MiB[209KiB 2MiB] Sc·[0.25 0.03]
-17:29:26.539164 db@janitor F·5 G·0
-17:29:26.539164 db@open done T·11.0783ms
-17:29:26.551970 db@close closing
-17:29:26.551970 db@close done T·0s
-=============== Oct 5, 2020 (KST) ===============
 17:29:33.387879 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
 17:29:33.387879 version@stat F·[1 2] S·2MiB[209KiB 2MiB] Sc·[0.25 0.03]
 17:29:33.387879 db@open opening
@@ -252,3 +243,10 @@
 21:22:49.850749 db@janitor F·6 G·1
 21:22:49.850749 db@janitor removing table-55
 21:22:49.850749 db@open done T·15.9556ms
+=======
+17:51:52.455554 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+17:51:52.456551 version@stat F·[1 2] S·2MiB[209KiB 2MiB] Sc·[0.25 0.03]
+17:51:52.456551 db@open opening
+17:51:52.458545 version@stat F·[1 2] S·2MiB[209KiB 2MiB] Sc·[0.25 0.03]
+17:51:52.472508 db@janitor F·5 G·0
+17:51:52.472508 db@open done T·15.9574ms

@@ -291,14 +291,6 @@
 15:43:56.349522 table@remove removed @68
 15:43:56.349522 table@remove removed @69
 =============== Oct 5, 2020 (KST) ===============
-17:29:33.503569 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-17:29:33.505565 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.02]
-17:29:33.506562 db@open opening
-17:29:33.507559 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.02]
-17:29:33.527506 db@janitor F·5 G·1
-17:29:33.527506 db@janitor removing table-70
-17:29:33.529534 db@open done T·22.9726ms
-=============== Oct 5, 2020 (KST) ===============
 18:03:01.414003 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
 18:03:01.415999 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.02]
 18:03:01.415999 db@open opening
@@ -351,3 +343,11 @@
 21:22:51.363876 table@compaction committed F-1 S-100KiB Ke·0 D·4318 T·54.6043ms
 21:22:51.364875 table@remove removed @85
 21:22:51.365871 table@remove removed @86
+=======
+17:51:52.571244 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+17:51:52.573239 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.02]
+17:51:52.573239 db@open opening
+17:51:52.574237 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.02]
+17:51:52.587202 db@janitor F·5 G·1
+17:51:52.587202 db@janitor removing table-70
+17:51:52.589196 db@open done T·15.957ms

@@ -23,7 +23,7 @@
           <div class="menu-bar" @click="goResume">이력서</div>
           <div class="menu-bar">취업달력</div>
           <div class="menu-bar" @click="goVideo">교육</div>
-          <div class="menu-bar">검색</div>
+          <div class="menu-bar" @click="goSearch">검색</div>
         </div>
         <div class="user-box">
           <div v-show="isLoggedIn" class="user-name-bar">{{ UserInfo.last_name }}{{ UserInfo.first_name }}님 환영합니다</div>
@@ -75,6 +75,9 @@ export default {
     },
     goVideo() {
       this.$router.push('/video').catch(()=>{})
+    },
+    goSearch() {
+      this.$router.push('/search').catch(()=>{})
     },
     goRecruit() {
       this.$router.push('/corp/recruit').catch(()=>{})

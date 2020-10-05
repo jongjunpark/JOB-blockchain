@@ -9,6 +9,7 @@ import RecruitHome from '../views/RecruitHome.vue'
 import RecruitWrite from '../views/RecruitWrite.vue'
 import Applicant from '../views/Applicant.vue'
 import Mypage from '../views/Mypage.vue'
+import Search from '../views/Search.vue'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,11 @@ Vue.use(VueRouter)
     path: '/mypage',
     name: 'Mypage',
     component: Mypage
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: Search
   },
 ]
 

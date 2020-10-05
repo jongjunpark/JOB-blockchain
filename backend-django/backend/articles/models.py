@@ -77,6 +77,7 @@ class Article(models.Model):
     obstacle_grade = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    buyer = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='seller', blank=True)
 
 class Certificate(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)

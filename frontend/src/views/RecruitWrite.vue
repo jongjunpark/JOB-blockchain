@@ -2,14 +2,15 @@
   <div class="wrap">
     <div class="wrap-container">
       <div class="recruit-write-btn-box">
-        <div class="recruit-write-btn" @click="editRecruit">작성하기</div>
+        <div v-if="!isRecruit" class="recruit-write-btn">작성하기</div>
+        <div v-if="isRecruit" class="recruit-write-btn on-write-btn" @click="editRecruit">작성하기</div>
       </div>
       <div class="recruit-write-box">
         <p>기본정보</p>
         <div class="recruit-write-inner-box">
-          <label for="">공고명</label><input type="text" v-model="recruitName" v-on:input="recruitName = $event.target.value">
+          <label for="">공고명</label><input type="text" v-model="recruit.name" v-on:input="recruit.name = $event.target.value">
           <label for="">구분</label>
-          <select name="" id="" v-model='recruitSort'>
+          <select name="" id="" v-model='recruit.sort'>
             <option disabled selected>선택</option>
             <option>신입</option><option>경력</option><option>신입/경력</option>
           </select>
@@ -20,11 +21,11 @@
           <span>{{ imgName }}</span>
         </div>
         <div class="recruit-write-inner-box recruit-write-inner-time">
-          <label for="">시작시간</label><input type="text" class="long-width" placeholder="YYYY.MM.DD" v-model="recruitStartDate">
-          <input type="text" class="short-width" placeholder="HH" v-model="recruitStartHour"><input type="text" class="short-width" placeholder="MM" v-model="recruitStartMin">
+          <label for="">시작시간</label><input type="text" class="long-width" placeholder="YYYY.MM.DD" v-model="recruit.startDate">
+          <input type="text" class="short-width" placeholder="HH" v-model="recruit.startHour"><input type="text" class="short-width" placeholder="MM" v-model="recruit.startMin">
           <div></div>
-          <label for="">마감시간</label><input type="text" class="long-width" placeholder="YYYY.MM.DD" v-model="recruitEndDate">
-          <input type="text" class="short-width" placeholder="HH" v-model="recruitEndHour"><input type="text" class="short-width" placeholder="MM" v-model="recruitEndMin">
+          <label for="">마감시간</label><input type="text" class="long-width" placeholder="YYYY.MM.DD" v-model="recruit.endDate">
+          <input type="text" class="short-width" placeholder="HH" v-model="recruit.endHour"><input type="text" class="short-width" placeholder="MM" v-model="recruit.endMin">
         </div>
       </div>
       <div class="recruit-write-box">
@@ -39,8 +40,8 @@
           </div>
         </div>
         <div class="recruit-write-inner-box recruit-write-selfintro">
-          <label for="">제목</label><input type="text" v-model="recruitSelfName">
-          <label for="">글자수</label><input type="text" v-model="recruitSelfLength">
+          <label for="">제목</label><input type="text" v-model="self.name">
+          <label for="">글자수</label><input type="text" v-model="self.length">
         </div>
         <div class="recruit-write-btn-area">
           <div v-if="isSelf" class="recruit-write-self-btn on-write-btn" @click="addSelf">추가하기</div>
@@ -52,27 +53,33 @@
 </template>
 
 <script>
-// import axios from 'axios';
+import axios from 'axios';
 
-// const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'http://127.0.0.1:8000/'
 
 export default {
   name: 'RecruitWrite',
   data() {
     return {
       imgName: '공고 이미지를 첨부해주세요',
-      recruitName: '',
-      recruitSort: '',
-      recruitImg: '',
-      recruitStartDate: '',
-      recruitStartHour: '',
-      recruitStartMin: '',
-      recruitEndDate: '',
-      recruitEndHour: '',
-      recruitEndMin: '',
-      recruitSelfName: '',
-      recruitSelfLength: '',
+      recruit: {
+        name: '',
+        sort: '선택',
+        img: '',
+        startDate: '',
+        startHour: '',
+        startMin: '',
+        endDate: '',
+        endHour: '',
+        endMin: '',
+        id: '',
+      },
+      self: {
+        name: '',
+        length: '',
+      },
       isSelf: false,
+      isRecruit: false,
       certifiedSelf: [],
     }
   },
@@ -86,11 +93,19 @@ export default {
   mounted() {
   },
   watch: {
-    recruitSelfName() {
-      this.checkSelfForm();
+    self: {
+      handler() {
+        this.checkSelfForm();
+        this.checkWriteForm();
+      }, deep:true
     },
-    recruitSelfLength() {
-      this.checkSelfForm();
+    recruit: {
+      handler() {
+        this.checkWriteForm();
+      }, deep:true
+    },
+    certifiedSelf() {
+      this.checkWriteForm();
     }
   },
   methods: {
@@ -102,23 +117,66 @@ export default {
     setImg() {
       const photoFile = document.getElementById("recruit-write-file");
       this.imgName = photoFile.files[0].name
-      this.recruitImg = photoFile.files[0]
+      this.recruit.img = photoFile.files[0]
     },
     editRecruit() {
-
+      let data = new FormData();
+      data.append('image', this.recruit.img);
+      data.append('division', this.recruit.sort);
+      data.append('title', this.recruit.name);
+      data.append('startdate', this.recruit.startDate + this.recruit.startHour + this.recruit.startMin)
+      data.append('deadline', this.recruit.endDate + this.recruit.endHour + this.recruit.endMin)
+      for (var key of data.keys()) {console.log(key);}
+      for (var value of data.values()) {console.log(value);}
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.post(`${SERVER_URL}recruitments/create/`, data, config)
+      .then(res => {
+        console.log(res,'create recruit')
+        axios.get(`${SERVER_URL}recruitments/`, null, config)
+        .then(res => {
+          this.recruit.id = res.data.id
+          // 리스트에서 마지막 배열의 id를 받아와야함
+          for (let i=0; i<this.certifiedSelf.length; i++) {
+            axios.post(`${SERVER_URL}recruitments/${this.recruit.id}/introductions/create/`, {
+              title : this.self.name,
+              number : this.self.length
+            }, config)
+            .then(res => {
+              console.log(res,'create self')
+              this.$router.push('/corp/recruit').catch(()=>{})
+            })
+            .catch((err) => console.log(err.response))
+          }
+        })
+        .catch((err) => console.log(err.response))
+      })
+      .catch((err) => console.log(err.response))
     },
     checkSelfForm() {
-      if (this.recruitSelfName && this.recruitSelfLength) {
+      if (this.self.name && this.self.length) {
         this.isSelf = true
       } else {
         this.isSelf = false
       }
     },
+    checkWriteForm() {
+      if (this.recruit.name && (this.recruit.sort && this.recruit.sort != '선택') && this.recruit.img
+      && this.recruit.startDate && this.recruit.startHour && this.recruit.startMin
+      && this.recruit.endDate && this.recruit.endHour && this.recruit.endMin && this.certifiedSelf[0]) {
+        this.isRecruit = true
+      } else {
+        this.isRecruit = false
+      }
+    },
     addSelf() {
       let ARR = []
-      ARR.push(this.recruitSelfName); ARR.push(this.recruitSelfLength);
+      ARR.push(this.self.name); ARR.push(this.self.length);
       this.certifiedSelf.push(ARR)
-      this.recruitSelfName = ''; this.recruitSelfLength = '';
+      this.self.name = ''; this.self.length = '';
     },
     delSelf(idx) {
       this.certifiedSelf.splice(idx, 1);
@@ -148,13 +206,17 @@ export default {
   border-radius: 30px;
   box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
               -6px -6px 10px -1px #ffffff;
+  transition: box-shadow .3s;
+  color: rgba(0,0,0,0.3);
+}
+
+.recruit-write-btn-box .on-write-btn {
   background-color: #0088ff;
   cursor: pointer;
   color: #ffffff;
-  transition: box-shadow .3s;
 }
 
-.recruit-write-btn:hover {
+.recruit-write-btn-box .on-write-btn:hover {
   box-shadow: 0 0 0 0 rgba(0,0,0,0),
               0 0 0 0 rgba(0,0,0,0),
               inset 4px 4px 6px -1px rgba(0,0,0,0.2),

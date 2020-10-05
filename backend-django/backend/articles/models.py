@@ -28,7 +28,8 @@ class Article(models.Model):
     military_rank = models.CharField(max_length=100, null=True, blank=True)
     military_completed = models.CharField(max_length=100, null=True, blank=True)
     military_completed_reason = models.CharField(max_length=100, null=True, blank=True)
-    military_term = models.CharField(max_length=100, null=True, blank=True)
+    military_start = models.CharField(max_length=100, null=True, blank=True)
+    military_end = models.CharField(max_length=100, null=True, blank=True)
     # 고등학교
     highschool_name = models.CharField(max_length=100, null=True, blank=True)
     highschool_classification = models.CharField(max_length=100, null=True, blank=True)
@@ -44,6 +45,7 @@ class Article(models.Model):
     college_major = models.CharField(max_length=100, null=True, blank=True)
     college_minor = models.CharField(max_length=100, null=True, blank=True)
     college_grade = models.FloatField(null=True, blank=True)
+    college_total = models.FloatField(null=True, blank=True)
     # 대학교
     university_name = models.CharField(max_length=100, null=True, blank=True)
     university_classification = models.CharField(max_length=100, null=True, blank=True)
@@ -52,7 +54,8 @@ class Article(models.Model):
     university_graduation_year = models.CharField(max_length=100, null=True, blank=True)
     university_major = models.CharField(max_length=100, null=True, blank=True)
     university_minor = models.CharField(max_length=100, null=True, blank=True)
-    university_grade = models.FloatField(null=True, blank=True)    
+    university_grade = models.FloatField(null=True, blank=True)
+    university_total = models.FloatField(null=True, blank=True)  
     # 석사
     master_name = models.CharField(max_length=100, null=True, blank=True)
     master_classification = models.CharField(max_length=100, null=True, blank=True)
@@ -61,7 +64,8 @@ class Article(models.Model):
     master_graduation_year = models.CharField(max_length=100, null=True, blank=True)
     master_major = models.CharField(max_length=100, null=True, blank=True)
     master_minor = models.CharField(max_length=100, null=True, blank=True)
-    master_grade = models.FloatField(null=True, blank=True)    
+    master_grade = models.FloatField(null=True, blank=True)
+    master_total = models.FloatField(null=True, blank=True) 
     # 박사
     doctor_name = models.CharField(max_length=100, null=True, blank=True)
     doctor_classification = models.CharField(max_length=100, null=True, blank=True)
@@ -71,6 +75,7 @@ class Article(models.Model):
     doctor_major = models.CharField(max_length=100, null=True, blank=True)
     doctor_minor = models.CharField(max_length=100, null=True, blank=True)
     doctor_grade = models.FloatField(null=True, blank=True)
+    doctor_total = models.FloatField(null=True, blank=True)
     # 기타
     veterans_classification = models.CharField(max_length=100, null=True, blank=True)
     veterans_number = models.CharField(max_length=100, null=True, blank=True)
@@ -89,6 +94,7 @@ class Certificate(models.Model):
 
 class Language(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     classification = models.CharField(max_length=100, null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True, blank=True)
@@ -96,10 +102,11 @@ class Language(models.Model):
     date = models.CharField(max_length=100, null=True, blank=True)
 
 class Career(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)  
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True, blank=True)
-    term = models.CharField(max_length=100, null=True, blank=True)
+    start_term = models.CharField(max_length=100, null=True, blank=True)
+    end_term = models.CharField(max_length=100, null=True, blank=True)
     retirement_reason = models.CharField(max_length=100, null=True, blank=True)
     department = models.CharField(max_length=100, null=True, blank=True)
     rank = models.CharField(max_length=100, null=True, blank=True)

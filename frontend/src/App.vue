@@ -11,6 +11,7 @@
         <div class="menu-bar">검색</div>
       </div>
       <div class="user-box">
+        <div v-show="isLoggedIn" class="user-name-bar">{{ UserInfo.last_name }}{{ UserInfo.first_name }}님 환영합니다</div>
         <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('login')">로그인</div>
         <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('signup')">회원가입</div>
         <div v-show="isLoggedIn" class="user-bar" @click="goLogout">로그아웃</div>
@@ -22,7 +23,7 @@
 
 <script>
 import "../public/css/common.css";
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import axios from 'axios';
 
 const SERVER_URL = 'http://127.0.0.1:8000/';
@@ -34,8 +35,19 @@ export default {
 
     }
   },
+  mounted() {
+    if (this.$cookies.isKey('auth-token')) {
+      this.setIsLoggedIn(true);
+      this.setToken(this.$cookies.get('auth-token'));
+      this.setUserInfo();
+    }
+    else {
+      this.setIsLoggedIn(false);
+    }
+  },
   methods: {
-    ...mapMutations(['setIsLoggedIn', 'setToken', 'setLoginPath']),
+    ...mapMutations(['setIsLoggedIn', 'setToken', 'setLoginPath', 'setUser']),
+    ...mapActions(['setUserInfo']),
     goHome() {
       this.$router.push('/').catch(()=>{})
     },
@@ -77,7 +89,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLogin', 'isLoggedIn']),
+    ...mapState(['isLogin', 'isLoggedIn', 'UserInfo']),
   }
 }
 </script>

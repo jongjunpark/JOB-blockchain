@@ -192,3 +192,32 @@
 15:43:54.408792 db@open done T·17.3598ms
 15:52:21.158421 db@close closing
 15:52:21.159414 db@close done T·992.1µs
+=============== Oct 5, 2020 (KST) ===============
+17:29:26.526092 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+17:29:26.528086 version@stat F·[1 2] S·2MiB[209KiB 2MiB] Sc·[0.25 0.03]
+17:29:26.528086 db@open opening
+17:29:26.530080 version@stat F·[1 2] S·2MiB[209KiB 2MiB] Sc·[0.25 0.03]
+17:29:26.539164 db@janitor F·5 G·0
+17:29:26.539164 db@open done T·11.0783ms
+17:29:26.551970 db@close closing
+17:29:26.551970 db@close done T·0s
+=============== Oct 5, 2020 (KST) ===============
+17:29:33.387879 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+17:29:33.387879 version@stat F·[1 2] S·2MiB[209KiB 2MiB] Sc·[0.25 0.03]
+17:29:33.387879 db@open opening
+17:29:33.387879 journal@recovery F·1
+17:29:33.389873 journal@recovery recovering @47
+17:29:33.393862 memdb@flush created L0@49 N·1 S·302B "eth..\xbb\xd5^,v72360":"eth..\xbb\xd5^,v72360"
+17:29:33.394860 version@stat F·[2 2] S·2MiB[210KiB 2MiB] Sc·[0.50 0.03]
+17:29:33.401841 db@janitor F·6 G·0
+17:29:33.401841 db@open done T·13.9624ms
+=============== Oct 5, 2020 (KST) ===============
+18:03:01.336211 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+18:03:01.338206 version@stat F·[2 2] S·2MiB[210KiB 2MiB] Sc·[0.50 0.03]
+18:03:01.338206 db@open opening
+18:03:01.338206 journal@recovery F·1
+18:03:01.339204 journal@recovery recovering @50
+18:03:01.343193 memdb@flush created L0@52 N·1 S·217B "Las..ock,v72362":"Las..ock,v72362"
+18:03:01.344190 version@stat F·[3 2] S·2MiB[210KiB 2MiB] Sc·[0.75 0.03]
+18:03:01.352169 db@janitor F·7 G·0
+18:03:01.352169 db@open done T·13.9623ms

@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Article
-from .models import Certificate
+from .models import Article, Certificate
 from .models import Language
 from .models import Career
 from accounts.serializers import UserSerializer

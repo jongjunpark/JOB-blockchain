@@ -61,14 +61,14 @@ def certificate_create(request, article_pk):
     serializer = CertificateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user, article=article)
-    return Respone(serializer.data)
+    return Response(serializer.data)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def certificate_detail(request, article_pk, certificate_pk):
     if request.method == 'GET':
         certificate = get_object_or_404(Certificate, pk=certificate_pk)
         serializer = CertificateSerializer(certificate)
-        return Respone(serializer.data)
+        return Response(serializer.data)
     
     elif request.method == 'PUT':
         certificate = get_object_or_404(Certificate, pk=certificate_pk)
@@ -95,14 +95,14 @@ def language_create(request, article_pk):
     serializer = LanguageSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user, article=article)
-    return Respone(serializer.data)
+    return Response(serializer.data)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def language_detail(request, article_pk, language_pk):
     if request.method == 'GET':
         language = get_object_or_404(Language, pk=language_pk)
         serializer = LanguageSerializer(language)
-        return Respone(serializer.data)
+        return Response(serializer.data)
     
     elif request.method == 'PUT':
         language = get_object_or_404(Language, pk=language_pk)
@@ -129,14 +129,14 @@ def career_create(request, article_pk):
     serializer = CareerSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user, article=article)
-    return Respone(serializer.data)
+    return Response(serializer.data)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def career_detail(request, article_pk, career_pk):
     if request.method == 'GET':
         career = get_object_or_404(Career, pk=career_pk)
         serializer = CareerSerializer(career)
-        return Respone(serializer.data)
+        return Response(serializer.data)
     
     elif request.method == 'PUT':
         career = get_object_or_404(Career, pk=career_pk)

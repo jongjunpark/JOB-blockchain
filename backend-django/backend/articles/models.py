@@ -85,12 +85,14 @@ class Article(models.Model):
 
 class Certificate(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True, blank=True)
     publisher = models.CharField(max_length=100, null=True, blank=True)
     date = models.CharField(max_length=100, null=True, blank=True)
 
 class Language(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     classification = models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True)
     score = models.CharField(max_length=100, null=True, blank=True)
@@ -98,6 +100,7 @@ class Language(models.Model):
 
 class Career(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)  
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True, blank=True)
     start_term = models.CharField(max_length=100, null=True, blank=True)
     end_term = models.CharField(max_length=100, null=True, blank=True)

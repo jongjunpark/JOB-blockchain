@@ -8,6 +8,7 @@ import ResumeEdit from '../views/ResumeEdit.vue'
 import RecruitHome from '../views/RecruitHome.vue'
 import RecruitWrite from '../views/RecruitWrite.vue'
 import Applicant from '../views/Applicant.vue'
+import Mypage from '../views/Mypage.vue'
 
 Vue.use(VueRouter)
 
@@ -51,7 +52,12 @@ Vue.use(VueRouter)
     path: '/corp/recruit/applicant',
     name: 'Applicant',
     component: Applicant
-  }
+  },
+  {
+    path: '/mypage',
+    name: 'Mypage',
+    component: Mypage
+  },
 ]
 
 const router = new VueRouter({

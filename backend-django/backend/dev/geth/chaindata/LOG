@@ -148,3 +148,15 @@
 12:50:46.972386 db@open done T·71.5174ms
 14:27:08.976574 db@close closing
 14:27:08.977070 db@close done T·496.2µs
+=============== Oct 5, 2020 (KST) ===============
+14:45:11.295472 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:45:11.295968 version@stat F·[2 1] S·3MiB[2MiB 1020KiB] Sc·[0.50 0.01]
+14:45:11.295968 db@open opening
+14:45:11.296464 journal@recovery F·1
+14:45:11.326224 journal@recovery recovering @34
+14:45:11.330193 memdb@flush created L0@36 N·1 S·217B "Las..ock,v68263":"Las..ock,v68263"
+14:45:11.331712 version@stat F·[3 1] S·3MiB[2MiB 1020KiB] Sc·[0.75 0.01]
+14:45:11.338126 db@janitor F·6 G·0
+14:45:11.338126 db@open done T·42.1584ms
+15:26:28.219557 db@close closing
+15:26:28.220054 db@close done T·496.3µs

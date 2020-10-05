@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Resume from '../views/Resume.vue'
 import ResumeEdit from '../views/ResumeEdit.vue'
 import Video from '../views/Video.vue'
+import Mypage from '../views/Mypage.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ Vue.use(VueRouter)
     path: '/video',
     name: 'Video',
     component: Video
+  },
+  {
+    path: '/mypage',
+    name: 'Mypage',
+    component: Mypage
   }
 ]
 

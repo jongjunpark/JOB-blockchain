@@ -27,6 +27,10 @@ class Article(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    buyer = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='seller', blank=True)
+
+
+
 # 다중 이미지 업로드
 # class Image(models.Model):
 #     article = models.ForeignKey(Article, blank=True, null=True, on_delete=models.CASCADE)

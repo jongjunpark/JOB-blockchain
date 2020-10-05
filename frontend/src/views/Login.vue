@@ -223,16 +223,48 @@ export default {
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
+          console.log(this.signUpPassword)
+          console.log(this.$cookies.get('auth-token'))
+          axios.post(SERVER_URL + `accounts/wallet/${this.signUpPassword}/`, {}, {
+                        headers: {
+                          Authorization: `Token ${this.$cookies.get('auth-token')}`
+                        }
+                      }
+                )
+              .then(res => {
+                console.log('finish')
+                // 개인키 발급 => 향후 이것으로 결제 . 자기 계정인것을 증명
+                console.log(res.data)
+              })
+          let timerInterval
           Swal.fire({
-            icon: 'success',
-            title: '환영합니다',
-            confirmButtonText: '확인'
+            title: '잠시만 기다려주세요!',
+            html: '현재 지갑을 생성중입니다',
+            timer: 6000,
+            timerProgressBar: true,
+            willOpen: () => {
+              Swal.showLoading()
+              timerInterval = setInterval(() => {
+                const content = Swal.getContent()
+                if (content) {
+                  const b = content.querySelector('b')
+                  if (b) {
+                    b.textContent = Swal.getTimerLeft()
+                  }
+                }
+              }, 100)
+            },
+            onClose: () => {
+              clearInterval(timerInterval)
+            }
           }).then((result) => {
-            if (result.value) {
-              this.$router.push('/resume/edit')
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+              this.$router.push('/')
             }
           })
-        })
+                  })
         .catch((err) => console.log(err))
     },
     signupSort(type) {

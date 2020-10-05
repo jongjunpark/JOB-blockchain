@@ -16,4 +16,7 @@ urlpatterns = [
     path('<int:article_pk>/careers/', views.career_list, name='career_list'),
     path('<int:article_pk>/careers/create', views.career_create, name='career_create'),
     path('<int:article_pk>/careers/<int:career_pk>/', views.career_detail, name='career_detail'),
+    path('<int:article_pk>/selfintroductions/<int:recruitment_pk>/', views.selfintroduction_list, name='selfintroduction_list'),
+    path('<int:article_pk>/selfintroductions/<int:recruitment_pk>/create/', views.selfintroduction_create, name='selfintroduction_create'),
+    path('<int:article_pk>/selfintroductions/<int:recruitment_pk>/<int:selfintroduction_pk>/', views.selfintroduction_detail, name='selfintroduction_detail'),
 ]

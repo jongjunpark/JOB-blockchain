@@ -20,5 +20,5 @@ urlpatterns = [
     path('<int:article_pk>/selfintroductions/', views.selfintroduction_list2, name='selfintroduction_list2'),
     path('<int:article_pk>/selfintroductions/<int:recruitment_pk>/create/', views.selfintroduction_create, name='selfintroduction_create'),
     path('<int:article_pk>/selfintroductions/<int:recruitment_pk>/<int:selfintroduction_pk>/', views.selfintroduction_detail, name='selfintroduction_detail'),
-    path('search/<str:query>', views.search, name='search'),
+    path('search/<str:query>/', views.search, name='search'),
 ]

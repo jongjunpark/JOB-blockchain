@@ -157,7 +157,7 @@ export default {
       LOGIN.style.left = "-400px";
       SIGNUP.style.left = "50px";
       BTN.style.left = "50%";
-      FORM.style.height = "590px";
+      FORM.style.height = "610px";
       LOGIN_TOGGLE.style.color = 'rgba(0,0,0,0.3)'
       SIGNUP_TOGGLE.style.color = 'rgba(0,0,0,0.8)'
     },
@@ -217,25 +217,37 @@ export default {
     },
     setSignup() {
       let signupData = {
-          email: this.signUpMail,
-          password1: this.signUpPassword,
-          password2: this.signUpPasswordConfirm,
-          first_name: this.signUpFirst,
-          last_name: this.signUpLast,
-          flag: 1
-        }
+        email: this.signUpMail,
+        password1: this.signUpPassword,
+        password2: this.signUpPasswordConfirm,
+        first_name: this.signUpFirst,
+        last_name: this.signUpLast
+      }
       if(this.isIndiv === false) {
         signupData.first_name = this.signUpCorpNum;
         signupData.last_name = this.signUpCorpName;
-        signupData.flag = 0
-      } 
+      }
       axios.post(SERVER_URL + 'rest-auth/signup/', signupData)
         .then(res => {
           console.log(res.data)
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
-          this.setUserInfo();
+          if(this.isIndiv === false) {
+            const config = {
+              headers: {
+                Authorization: `Token ${this.$cookies.get('auth-token')}`
+              }
+            }
+            axios.post(`${SERVER_URL}accounts/0/`, null, config)
+              .then(res => {
+                console.log(res)
+                this.setUserInfo();
+              })
+            .catch((err) => console.log(err.response))
+          } else {
+            this.setUserInfo();
+          }
           const config = {
             headers: {
               Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -287,7 +299,7 @@ export default {
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
               console.log('I was closed by the timer')
-              if(signupData.flag === 0) {
+              if(this.isIndiv === false) {
                 this.$router.push('/corp/recruit').catch(()=>{})
               } else {
                 this.$router.push('/resume/edit').catch(()=>{})

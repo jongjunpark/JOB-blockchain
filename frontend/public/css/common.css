@@ -114,7 +114,7 @@ body {
   z-index: 999999 !important;
 }
 
-#nav {
+.nav {
   height: 8vh;
   min-height: 30px;
   background-color:#0088ff ;
@@ -128,7 +128,7 @@ body {
   display: flex;
 }
 
-#nav .logo-box {
+.nav .logo-box {
   /* background-color: aqua; */
   display: flex;
   justify-content: center;
@@ -142,16 +142,16 @@ body {
   color: white;
   /* min-width: 110px; */
 }
-#nav .logo-img {
+.nav .logo-img {
   width: calc(3vw + 30px);
 }
 @media(max-height: 650px) {
-  #nav .logo-img {
+  .nav .logo-img {
     width: calc(7vh + 30px);
   }
 }
 
-#nav .menu-bar-box {
+.nav .menu-bar-box {
   width: 43%;
   /* background-color: bisque; */
   display: flex;
@@ -160,7 +160,7 @@ body {
   
 }
 
-#nav .user-box {
+.nav .user-box {
   width: 45%;
   /* background-color: blueviolet; */
   display: flex;

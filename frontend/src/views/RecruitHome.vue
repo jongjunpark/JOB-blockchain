@@ -3,9 +3,16 @@
     <div class="wrap-container recruit-container">
       <div class="recruit-user-box">
         <div class="recruit-user-content">
-          <img src="@/assets/images/default-user.png" alt="#">
-          <p class="recruit-user-name">한국전자</p>
-          <p class="recruit-user-email">poiufgin7373@naver.com</p>
+          <label for="recruit-user-img-edit">
+            <div class="recruit-user-img-box">
+              <img v-if='!getData.image' class="default-img" src="@/assets/images/company2.png" alt="#">
+              <img v-if='getData.image' :src="getData.image" alt="#">
+              <p v-if='!getData.image'>회사로고를 등록해 주세요</p>
+              <input type="file" id="recruit-user-img-edit" accept="image/*" @change="setProfileImg">
+            </div>
+          </label>
+          <p class="recruit-user-name">{{ UserInfo.last_name }}</p>
+          <p class="recruit-user-email">{{ UserInfo.email }}</p>
           <div class="recruit-user-btn" @click="goRecruitWrite">공고 작성하기</div>
         </div>
       </div>
@@ -41,21 +48,32 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { mapState } from 'vuex';
+
+const SERVER_URL = 'http://127.0.0.1:8000/'
+
 export default {
   name: 'RecruitHome',
   data() {
     return {
       test: '',
+      getData: [],
+      profileImg: '',
     }
   },
   components: {
   },
   computed: {
+    ...mapState(['UserInfo']),
   },
   created() {
     window.addEventListener('scroll', this.handleScroll)
   },
   mounted() {
+    setTimeout(() => {
+      this.getResume()
+    }, 1000);
   },
   watch: {
   },
@@ -67,7 +85,47 @@ export default {
     },
     goRecruitWrite() {
       this.$router.push('/corp/recruit/write').catch(()=>{})
-    }
+    },
+    setProfileImg() {
+      const photoFile = document.getElementById("recruit-user-img-edit");
+      this.getData.image = URL.createObjectURL(photoFile.files[0]);
+      this.profileImg = photoFile.files[0]
+      this.editResume()
+    },
+    getResume() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/`, null, config)
+      .then(res => {
+        console.log(res,'get resume')
+        this.getData = res.data
+        if(this.getData.image) {
+          this.getData.image = 'http://localhost:8000' + this.getData.image
+        }
+      })
+      .catch((err) => console.log(err.response))
+    },
+    editResume() {
+      let data = new FormData();
+      data.append('image', this.profileImg);
+      for (var key of data.keys()) {console.log(key);}
+      for (var value of data.values()) {console.log(value);}
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      if (this.profileImg) {
+        axios.put(`${SERVER_URL}articles/${this.UserInfo.id}/`, data, config)
+        .then(res => {
+          console.log(res,'put resume image')
+        })
+        .catch((err) => console.log(err.response))
+      }
+    },
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.handleScroll)
@@ -108,9 +166,42 @@ export default {
   border-radius: 20px;
 }
 
-.recruit-user-content > img {
-  width: 100%;
-  height: 200px;
+.recruit-user-img-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+}
+
+.recruit-user-img-box > .default-img {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.recruit-user-img-box > img {
+  width: 86%;
+  padding: 7%;
+}
+
+.recruit-user-img-box > p {
+  font-size: 12px;
+  position: absolute;
+  bottom: 13px;
+  font-weight: 900;
+}
+
+.recruit-user-img-box input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 .recruit-user-content > p {

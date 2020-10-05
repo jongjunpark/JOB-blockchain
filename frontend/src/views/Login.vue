@@ -32,7 +32,10 @@
           <input v-model="signUpFirst" type="text" class="login-input-field login-input-first" placeholder="이름" required>
           <input v-model="signUpLast" type="text" class="login-input-field login-input-last" placeholder="성" required>
         </div>
-        <input v-if="!isIndiv" v-model="signUpCorpNum" type="text" class="login-input-field" placeholder="사업자번호" required>
+        <div v-if="!isIndiv" class='signup-name'>
+          <input v-model="signUpCorpNum" type="text" class="login-input-field" placeholder="사업자번호" required>
+          <input v-model="signUpCorpName" type="text" class="login-input-field login-input-corp" placeholder="기업이름" required>
+        </div>
         <input v-model="signUpPassword" type="password" class="login-input-field" placeholder="비밀번호" required>
         <input v-model="signUpPasswordConfirm" type="password" class="login-input-field" placeholder="비밀번호 확인" required>
         <div v-show="!isSignBtn" class="login-submit-btn">Signup</div>
@@ -45,7 +48,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import MailValidationModal from '../components/MailValidationModal.vue'
 import PasswordValidator from 'password-validator'
 import '../components/css/login.css'
@@ -65,6 +68,7 @@ export default {
       signUpFirst: '',
       signUpLast: '',
       signUpCorpNum: '',
+      signUpCorpName: '',
       signUpPassword: '',
       signUpPasswordConfirm: '',
       isLoginValid: true,
@@ -79,7 +83,7 @@ export default {
     MailValidationModal,
   },
   computed: {
-    ...mapState(['mailValid', 'loginPath']),
+    ...mapState(['mailValid', 'loginPath', 'UserInfo']),
   },
   created() {
     this.passwordSchema
@@ -126,6 +130,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken']),
+    ...mapActions(['setUserInfo']),
     onLogin() {
       const LOGIN = document.getElementById('login');
       const SIGNUP = document.getElementById('signup');
@@ -157,7 +162,7 @@ export default {
       SIGNUP_TOGGLE.style.color = 'rgba(0,0,0,0.8)'
     },
     goHome() {
-      this.$router.push('/')
+      this.$router.push('/').catch(()=>{})
     },
     goLogin() {
       const loginData = {
@@ -172,7 +177,8 @@ export default {
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
-          this.$router.push('/')
+          this.setUserInfo(this.$cookies.get('auth-token'));
+          this.$router.push('/').catch(()=>{})
         })
         .catch(() => this.isLoginValid = false)
     },
@@ -188,7 +194,7 @@ export default {
           console.log(err.data))
     },
     checkSingupForm() {
-      if(this.signUpMail && this.signUpFirst && this.signUpLast && this.signUpPassword && 
+      if(this.signUpMail && ((this.signUpFirst && this.signUpLast) || this.signUpCorpNum ) && this.signUpPassword && 
       this.signUpPasswordConfirm && this.mailValid && this.isPasswordValid) {
         this.isSignBtn = true
       } else {
@@ -210,13 +216,19 @@ export default {
       }
     },
     setSignup() {
-      const signupData = {
-        email: this.signUpMail,
-        password1: this.signUpPassword,
-        password2: this.signUpPasswordConfirm,
-        first_name: this.signUpFirst,
-        last_name: this.signUpLast
-      }
+      let signupData = {
+          email: this.signUpMail,
+          password1: this.signUpPassword,
+          password2: this.signUpPasswordConfirm,
+          first_name: this.signUpFirst,
+          last_name: this.signUpLast,
+          flag: 1
+        }
+      if(this.isIndiv === false) {
+        signupData.first_name = this.signUpCorpNum;
+        signupData.last_name = this.signUpCorpName;
+        signupData.flag = 0
+      } 
       axios.post(SERVER_URL + 'rest-auth/signup/', signupData)
         .then(res => {
           console.log(res.data)
@@ -263,17 +275,77 @@ export default {
               console.log('I was closed by the timer')
               this.$router.push('/')
             }
+            // <int:article_pk>/certificates/create
+            // this.createCertificate()
+            // this.createLang()
+            // this.createCareer()
           })
-                  })
-        .catch((err) => console.log(err))
+          .catch((err) => console.log(err.response))
+
+          
+        })
+        .catch((err) => console.log(err.response))
     },
     signupSort(type) {
       if (type === 'individual') {
         this.isIndiv = true
+        this.signUpCorpNum = ""
       } else {
         this.isIndiv = false
+        this.signUpFirst = ""; this.signUpLast = ""
       }
-    } 
+    },
+    createCertificate() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      let data = new FormData();
+      data.append('article', this.UserInfo.id);
+      axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/create/`, data, config)
+      .then(res => {
+        console.log(res, 'certifi')
+      })
+      .catch((err) => console.log(err.response))
+    },
+    createLang() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      let data = new FormData();
+      data.append('article', this.UserInfo.id);
+      axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/languages/create/`, data, config)
+      .then(res => {
+        console.log(res, 'lang')
+      })
+      .catch((err) => console.log(err.response))
+    },
+    createCareer() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      let data = new FormData();
+      data.append('article', this.UserInfo.id);
+      axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/careers/create/`, data, config)
+      .then(res => {
+        console.log(res, 'career')
+        Swal.fire({
+          icon: 'success',
+          title: '환영합니다',
+          confirmButtonText: '확인'
+        }).then((result) => {
+          if (result.value) {
+            this.$router.push('/resume/edit').catch(()=>{})
+          }
+        })
+      })
+      .catch((err) => console.log(err.response))
+    }
   },
   beforeDestroy() { 
     this.setIsLogin(false)

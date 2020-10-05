@@ -1,7 +1,31 @@
+// import axios from 'axios';
+// const SERVER_URL = 'http://127.0.0.1:8000/';
+
 export default {
   setIsLogin(state, data) {
     state.isLogin = data
   },
+  setUser(state, data) {
+    state.UserInfo = data
+  },
+  // setUserInfo(state, data) {
+  //   if (data !== false) {
+  //     const config = {
+  //       headers: {
+  //         Authorization: `Token ${data}`
+  //       },
+  //     }
+  //     axios.post(`${SERVER_URL}accounts/`, null, config)
+  //     .then((res)=>{
+  //       state.UserInfo = res.data
+  //       console.log(state.UserInfo)
+  //     })
+  //     .catch(()=>{
+  //     }); 
+  //   } else {
+  //     state.UserInfo = ''
+  //   }
+  // },
   setMailInput(state, data) {
     state.signUpInput = data
   },
@@ -55,5 +79,5 @@ export default {
   },
   selectMajorType2(state, data) {
     state.selectedMajorType2 = data
-  }
+  },
 }

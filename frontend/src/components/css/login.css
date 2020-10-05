@@ -182,6 +182,10 @@
   margin-left: 10px;
 }
 
+.login-input-corp {
+  margin-left: 10px;
+}
+
 .login-input-group .signup-err-msg {
   position: absolute;
   top: -22px;

@@ -5,6 +5,7 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = {
+  UserInfo: '',
   isLogin: false,
   authToken: '',
   isLoggedIn: false,

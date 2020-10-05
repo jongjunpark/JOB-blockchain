@@ -56,9 +56,28 @@ q:before, q:after {
   font-weight: normal;
   font-style: normal;
 }
-@font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
-@font-face { font-family: 'GmarketSansMedium'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff'); font-weight: normal; font-style: normal; }
-@font-face { font-family: 'GmarketSansLight'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { 
+  font-family: 'GmarketSansBold'; 
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); 
+  font-weight: normal; 
+  font-style: normal; 
+}
+@font-face { 
+  font-family: 'GmarketSansMedium'; 
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff'); 
+  font-weight: normal; font-style: normal; 
+}
+@font-face { 
+  font-family: 'GmarketSansLight'; 
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff'); 
+  font-weight: normal; font-style: normal; 
+}
+@font-face { 
+  font-family: 'TmonMonsori'; 
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/TmonMonsori.woff') format('woff'); 
+  font-weight:normal; 
+  font-style: normal; 
+}
 
 
 html {
@@ -121,10 +140,15 @@ body {
   cursor: pointer;
   margin: 0 1vw 0 4vw;
   color: white;
-  min-width: 110px;
+  /* min-width: 110px; */
 }
 #nav .logo-img {
-  width:100px;
+  width: calc(3vw + 30px);
+}
+@media(max-height: 650px) {
+  #nav .logo-img {
+    width: calc(7vh + 30px);
+  }
 }
 
 #nav .menu-bar-box {
@@ -153,7 +177,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.1vw;
+  font-size: 1vw;
   border-radius: 20px;
   color:white;
   cursor: pointer;
@@ -161,8 +185,10 @@ body {
 }
 
 .menu-bar-box .menu-bar:hover {
-  box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
-          inset -4px -4px 6px -1px #ffffff;
+  box-shadow: 0 0 0 0 rgba(0,0,0,0),
+              0 0 0 0 rgba(0,0,0,0),
+              inset 4px 4px 6px -1px rgba(0,0,0,0.3),
+              inset -3px -3px 6px -1px rgba(255,255,255,0.6);
   font-weight: 900;
 }
 
@@ -174,7 +200,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.1vw;
+  font-size: 1vw;
   border-radius: 20px;
   color: white;
   cursor: pointer;
@@ -182,7 +208,9 @@ body {
 }
 
 .user-box .user-bar:hover {
-  box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
-          inset -4px -4px 6px -1px #ffffff;
+  box-shadow: 0 0 0 0 rgba(0,0,0,0),
+              0 0 0 0 rgba(0,0,0,0),
+              inset 4px 4px 6px -1px rgba(0,0,0,0.3),
+              inset -3px -3px 6px -1px rgba(255,255,255,0.6);
   font-weight: 900;
 }

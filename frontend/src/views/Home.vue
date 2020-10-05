@@ -27,7 +27,7 @@
                           </div>
                           <p>삼성SDI</p>
                         </div>
-                        <div class="recruit-card">
+                        <div class="recruit-card" @click="onModal">
                           <div class="recruit-card-img-box">
                             <img src="@/assets/images/naver.png" alt="">
                           </div>
@@ -258,12 +258,15 @@
         </div>
       </div>
     </div>
+
+    <RecruitModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
 // import axios from 'axios'
 import SingleDatePicker from 'vue-single-date-picker';
+import RecruitModal from '../components/RecruitModal.vue'
 import 'vue-single-date-picker/dist/vue-single-date-picker.css';
 import '../components/css/home.css'
 
@@ -273,6 +276,7 @@ export default {
   name: 'Home',
   data() {
     return {
+      showModal: false,
       selectYear: '',
       selectMonth: '',
       selectDay: '',
@@ -290,7 +294,7 @@ export default {
           recruit: ['네이버', '삼성전자'],
           test: ['제49회 SQLD', '기사 제4회 실기시험'],
         },
-        200919 : {
+        200930 : {
           recruit: ['삼성전자', '카카오'],
           test: ['기사 제4회 실기시험'],
         },
@@ -302,7 +306,8 @@ export default {
     }
   },
   components: {
-    SingleDatePicker
+    SingleDatePicker,
+    RecruitModal
   },
   mounted() {
     let today = new Date();   
@@ -345,6 +350,9 @@ export default {
     todatSchedule(date) {
       this.todayRecruits = this.defaultSchedule[date].recruit
       this.todayTests = this.defaultSchedule[date].test
+    },
+    onModal() {
+      this.showModal = true;
     },
     // getRecruitInform() {
     //   console.log(WORK_API_KEY)

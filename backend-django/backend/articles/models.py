@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+# from recruitments.models import Recruitment
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
@@ -82,6 +83,7 @@ class Article(models.Model):
     obstacle_grade = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    buyer = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='seller', blank=True)
 
 class Certificate(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
@@ -94,6 +96,7 @@ class Language(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     classification = models.CharField(max_length=100, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, null=True, blank=True)
     score = models.CharField(max_length=100, null=True, blank=True)
     date = models.CharField(max_length=100, null=True, blank=True)
@@ -109,6 +112,12 @@ class Career(models.Model):
     rank = models.CharField(max_length=100, null=True, blank=True)
     duty = models.CharField(max_length=100, null=True, blank=True)
     statement = models.TextField()
+
+class SelfIntroduction(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    recruitment = models.ForeignKey("recruitments.Recruitment", on_delete=models.CASCADE)
+    content = models.TextField(null=True, blank=True)
 
 # 다중 이미지 업로드
 # class Image(models.Model):

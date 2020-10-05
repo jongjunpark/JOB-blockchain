@@ -235,22 +235,45 @@ export default {
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
-          this.setUserInfo();
-          const config = {
-            headers: {
-              Authorization: `Token ${this.$cookies.get('auth-token')}`
+          console.log(this.signUpPassword)
+          console.log(this.$cookies.get('auth-token'))
+          axios.post(SERVER_URL + `accounts/wallet/${this.signUpPassword}/`, {}, {
+                        headers: {
+                          Authorization: `Token ${this.$cookies.get('auth-token')}`
+                        }
+                      }
+                )
+              .then(res => {
+                console.log('finish')
+                // 개인키 발급 => 향후 이것으로 결제 . 자기 계정인것을 증명
+                console.log(res.data)
+              })
+          let timerInterval
+          Swal.fire({
+            title: '잠시만 기다려주세요!',
+            html: '현재 지갑을 생성중입니다',
+            timer: 6000,
+            timerProgressBar: true,
+            willOpen: () => {
+              Swal.showLoading()
+              timerInterval = setInterval(() => {
+                const content = Swal.getContent()
+                if (content) {
+                  const b = content.querySelector('b')
+                  if (b) {
+                    b.textContent = Swal.getTimerLeft()
+                  }
+                }
+              }, 100)
+            },
+            onClose: () => {
+              clearInterval(timerInterval)
             }
-          }
-          axios.post(`${SERVER_URL}articles/create/`, {
-            name: this.signUpLast + this.signUpFirst,
-            email: this.signUpMail
-          }, config)
-          .then(res => {
-            console.log(res)
-            if(signupData.flag === 0) {
-              this.$router.push('/corp/recruit').catch(()=>{})
-            } else {
-              this.$router.push('/resume/edit').catch(()=>{})
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+              this.$router.push('/')
             }
             // <int:article_pk>/certificates/create
             // this.createCertificate()

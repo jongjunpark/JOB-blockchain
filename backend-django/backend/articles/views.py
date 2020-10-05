@@ -8,10 +8,13 @@ from .models import Article
 from .models import Certificate
 from .models import Language
 from .models import Career
+from .models import SelfIntroduction
+from recruitments.models import Recruitment
 from .serializers import ArticleListSerializer, ArticleSerializer
 from .serializers import CertificateListSerializer, CertificateSerializer
 from .serializers import LanguageListSerializer, LanguageSerializer
 from .serializers import CareerListSerializer, CareerSerializer
+from .serializers import SelfintroductionSerializer
 
 # 이력서
 @api_view(['GET'])
@@ -148,4 +151,38 @@ def career_detail(request, article_pk, career_pk):
     elif request.method == 'DELETE':
         career = get_object_or_404(Career, pk=career_pk)
         career.delete()
+        return Response({'message': '성공적으로 삭제'})
+
+@api_view(['GET'])
+def selfintroduction_list(request, article_pk, recruitment_pk):
+    selfintroductions = Recruitment.objects.filter(recruitment_id=recruitment_pk)
+    serializer = SelfintroductionSerializer(selfintroductions, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def selfintroduction_create(request, article_pk, recruitment_pk):
+    article = get_object_or_404(Article, pk=article_pk)
+    recruitment = get_object_or_404(Recruitment, pk=recruitment_pk)
+    serializer = SelfintroductionSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(user=request.user, article=article, recruitment=recruitment)
+    return Response(serializer.data)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def selfintroduction_detail(request, article_pk, recruitment_pk, selfintroduction_pk):
+    if request.method == 'GET':
+        selfintroduction = get_object_or_404(SelfIntroduction, pk=selfintroduction_pk)
+        serializer = SelfintroductionSerializer(selfintroduction)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        selfintroduction = get_object_or_404(SelfIntroduction, pk=selfintroduction_pk)
+        serializer = SelfintroductionSerializer(data=request.data, instance=selfintroduction)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user)
+            return Response({'message': '성공적으로 수정'})
+        
+    elif request.mehtod == 'DELETE':
+        selfintroduction = get_object_or_404(SelfIntroduction, pk-selfintroduction_pk)
+        selfintroduction.delete()
         return Response({'message': '성공적으로 삭제'})

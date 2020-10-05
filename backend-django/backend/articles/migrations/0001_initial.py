@@ -78,6 +78,47 @@ class Migration(migrations.Migration):
                 ('obstacle_grade', models.CharField(blank=True, max_length=100, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
+                ('buyer', models.ManyToManyField(blank=True, related_name='seller', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Career',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(blank=True, max_length=100, null=True)),
+                ('term', models.CharField(blank=True, max_length=100, null=True)),
+                ('retirement_reason', models.CharField(blank=True, max_length=100, null=True)),
+                ('department', models.CharField(blank=True, max_length=100, null=True)),
+                ('rank', models.CharField(blank=True, max_length=100, null=True)),
+                ('duty', models.CharField(blank=True, max_length=100, null=True)),
+                ('statement', models.TextField()),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Certificate',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(blank=True, max_length=100, null=True)),
+                ('publisher', models.CharField(blank=True, max_length=100, null=True)),
+                ('date', models.CharField(blank=True, max_length=100, null=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Language',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('classification', models.CharField(blank=True, max_length=100, null=True)),
+                ('name', models.CharField(blank=True, max_length=100, null=True)),
+                ('score', models.CharField(blank=True, max_length=100, null=True)),
+                ('date', models.CharField(blank=True, max_length=100, null=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='SelfIntroduction',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('content', models.TextField(blank=True, null=True)),
+                ('article', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='articles.article')),
             ],
         ),
         migrations.CreateModel(

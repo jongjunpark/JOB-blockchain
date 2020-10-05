@@ -254,3 +254,39 @@
 14:45:14.760777 table@compaction committed F-1 S-193KiB Ke·0 D·10963 T·53.2463ms
 14:45:14.761273 table@remove removed @58
 14:45:14.761768 table@remove removed @59
+=============== Oct 5, 2020 (KST) ===============
+15:34:49.459319 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:34:49.459839 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.02]
+15:34:49.459839 db@open opening
+15:34:49.459839 journal@recovery F·1
+15:34:49.460819 journal@recovery recovering @61
+15:34:49.489575 memdb@flush created L0@65 N·19313 S·419KiB "loc..seq,v404376":"n:\xff..ail,v404916"
+15:34:49.491063 version@stat F·[1 2] S·2MiB[419KiB 2MiB] Sc·[0.25 0.02]
+15:34:49.498008 db@janitor F·6 G·1
+15:34:49.498008 db@janitor removing table-60
+15:34:49.498505 db@open done T·38.6654ms
+15:34:55.365950 table@compaction L0·1 -> L1·2 S·2MiB Q·423716
+15:34:55.406353 table@build created L1@68 N·49443 S·2MiB "loc..seq,v404376":"n:\xe2..ail,v408787"
+15:34:55.412822 table@build created L1@69 N·6534 S·271KiB "n:\xe2..ing,v408777":"version,v1"
+15:34:55.412822 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.02]
+15:34:55.414448 table@compaction committed F-1 S-270KiB Ke·0 D·15262 T·48.4978ms
+15:34:55.414805 table@remove removed @63
+15:34:55.415278 table@remove removed @64
+=============== Oct 5, 2020 (KST) ===============
+15:43:54.469870 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:43:54.470366 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.02]
+15:43:54.470366 db@open opening
+15:43:54.470366 journal@recovery F·1
+15:43:54.471358 journal@recovery recovering @66
+15:43:54.475822 memdb@flush created L0@70 N·1986 S·67KiB "loc..seq,v423698":"n:\xfb..ail,v423743"
+15:43:54.476813 version@stat F·[1 2] S·2MiB[67KiB 2MiB] Sc·[0.25 0.02]
+15:43:54.483809 db@janitor F·6 G·1
+15:43:54.483809 db@janitor removing table-65
+15:43:54.484305 db@open done T·13.939ms
+15:43:56.306815 table@compaction L0·1 -> L1·2 S·2MiB Q·425685
+15:43:56.341090 table@build created L1@73 N·49608 S·2MiB "loc..seq,v423698":"n:\xe0..ail,v173556"
+15:43:56.347042 table@build created L1@74 N·7104 S·297KiB "n:\xe0..ing,v328462":"version,v1"
+15:43:56.347042 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.02]
+15:43:56.349118 table@compaction committed F-1 S-41KiB Ke·0 D·1251 T·42.303ms
+15:43:56.349522 table@remove removed @68
+15:43:56.349522 table@remove removed @69

@@ -21,17 +21,28 @@ from solc import compile_source
 blockchain_address = 'http://127.0.0.1:8545'
 web3 = Web3(HTTPProvider(blockchain_address))
 # Path to the compiled contract JSON file
-compiled_contract_path = './dev/truffle/build/contracts/Wallet.json'
+compiled_contract_cash_path = './dev/truffle/build/contracts/Cash.json'
+compiled_contract_purchaserecord_path = './dev/truffle/build/contracts/PurchaseRecord.json'
 # Deployed contract address (see `migrate` command output: `contract address`)
-deployed_contract_address = '0x0eb976AB7f0C29f9Ab8E016285c52eAddEB5c6D6'
+CASH_CONTRACT_ADDRESS  = '0xc3F21414ACa813075c205306cb566D175cE1213F'
+PURCHASE_RECORD_CONTRACT_ADDRESS  = '0xedEdC142D938fc2c09f0CA35c388b0b14BA26781'
 
-with open(compiled_contract_path) as file:
+with open(compiled_contract_cash_path) as file:
     contract_json = json.load(file)  # load contract info as JSON
 # fetch contract's abi - necessary to call its functions
     contract_abi = contract_json['abi']
 # Create your views here.
 # Fetch deployed contract reference
-contract = web3.eth.contract(address=deployed_contract_address,
+contract_cash = web3.eth.contract(address=CASH_CONTRACT_ADDRESS,
+                             abi=contract_abi, bytecode=contract_json['bytecode'])
+
+with open(compiled_contract_purchaserecord_path) as file:
+    contract_json = json.load(file)  # load contract info as JSON
+# fetch contract's abi - necessary to call its functions
+    contract_abi = contract_json['abi']
+# Create your views here.
+# Fetch deployed contract reference
+contract_purchaserecord = web3.eth.contract(address=PURCHASE_RECORD_CONTRACT_ADDRESS,
                              abi=contract_abi, bytecode=contract_json['bytecode'])
 
 # 회원가입

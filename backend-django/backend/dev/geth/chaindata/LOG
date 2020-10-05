@@ -160,3 +160,35 @@
 14:45:11.338126 db@open done T·42.1584ms
 15:26:28.219557 db@close closing
 15:26:28.220054 db@close done T·496.3µs
+=============== Oct 5, 2020 (KST) ===============
+15:34:49.390323 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:34:49.391315 version@stat F·[3 1] S·3MiB[2MiB 1020KiB] Sc·[0.75 0.01]
+15:34:49.391315 db@open opening
+15:34:49.391315 journal@recovery F·1
+15:34:49.392803 journal@recovery recovering @37
+15:34:49.395778 memdb@flush created L0@39 N·157 S·10KiB "\x06\xdfy..\xb9-},v68408":"\xf0\xce\xe5..W\x8f4,v68415"
+15:34:49.397266 version@stat F·[4 1] S·3MiB[2MiB 1020KiB] Sc·[1.00 0.01]
+15:34:49.404760 db@janitor F·7 G·0
+15:34:49.404760 db@open done T·13.4451ms
+15:34:49.404760 table@compaction L0·4 -> L1·1 S·3MiB Q·68422
+15:34:49.444439 table@build created L1@42 N·36068 S·2MiB "\x00q\x16..\xa634,v27004":"h\x00\x00..\xa6\xbb\xb3,v63927"
+15:34:49.452910 table@build created L1@43 N·9004 S·424KiB "h\x00\x00..\xbb\xb3t,v63924":"\xff\xb5\xdc..8\xd7a,v5494"
+15:34:49.453400 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.03]
+15:34:49.454393 table@compaction committed F-3 S-535KiB Ke·0 D·14628 T·49.633ms
+15:34:49.454856 table@remove removed @36
+15:34:49.454856 table@remove removed @33
+15:34:49.455352 table@remove removed @30
+15:34:49.455352 table@remove removed @29
+=============== Oct 5, 2020 (KST) ===============
+15:43:54.390936 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+15:43:54.391432 version@stat F·[0 2] S·2MiB[0B 2MiB] Sc·[0.00 0.03]
+15:43:54.391432 db@open opening
+15:43:54.391432 journal@recovery F·1
+15:43:54.392920 journal@recovery recovering @40
+15:43:54.399864 memdb@flush created L0@44 N·3936 S·209KiB "H\x00[..\xa2\xd4\xd9,v70813":"r\x00\x00..\t\x9e\xa8,v72354"
+15:43:54.401352 version@stat F·[1 2] S·2MiB[209KiB 2MiB] Sc·[0.25 0.03]
+15:43:54.408296 db@janitor F·6 G·1
+15:43:54.408296 db@janitor removing table-39
+15:43:54.408792 db@open done T·17.3598ms
+15:52:21.158421 db@close closing
+15:52:21.159414 db@close done T·992.1µs

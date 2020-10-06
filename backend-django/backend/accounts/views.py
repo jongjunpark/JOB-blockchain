@@ -110,7 +110,11 @@ def wallet_create(request, password):
     pending_transactions = tx_hash['transactions']
 
     web3.geth.miner.start(4)
-    time.sleep(4)
+    time.sleep(3)
+    web3.geth.miner.stop()
+
+    web3.geth.miner.start(4)
+    time.sleep(3)
     web3.geth.miner.stop()
 
     transact = web3.eth.getTransactionReceipt(
@@ -168,7 +172,11 @@ def register(request, id):
     pending_transactions = tx_hash['transactions']
 
     web3.geth.miner.start(4)
-    time.sleep(5)
+    time.sleep(3)
+    web3.geth.miner.stop()
+
+    web3.geth.miner.start(4)
+    time.sleep(3)
     web3.geth.miner.stop()
     transact = web3.eth.getTransactionReceipt(
         pending_transactions[0]['hash'].hex())
@@ -206,6 +214,16 @@ def item_read(request):
     serializer = ItemListSerializer(articles, many=True)
     return Response(serializer.data)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def item_read_ather(request, id):
+    user = request.user
+    article = get_object_or_404(Article, pk=id)
+    if article.buyer.filter(id=request.user.pk).exists():
+        return Response({ "result": 1})
+    else:
+        return Response({ "result": 0})
+
 # 아이템 구매
 
 
@@ -221,7 +239,6 @@ def item_purchase(request, id):
     if article.buyer.filter(id=request.user.pk).exists():
         pass
     else:
-        article.buyer.add(request.user)
         user = request.user
         web3.geth.personal.unlockAccount(user.wallet_addr, pwd, 0)
         # Path to the compiled contract JSON file
@@ -236,15 +253,20 @@ def item_purchase(request, id):
                         encrypted_key, pwd)
                 if private_key.hex() == key:
                     print("sucess")
-        web3.eth.sendTransaction(
-            {'to': another.wallet_addr, 'from': user.wallet_addr, 'value': web3.toWei(1, "ether")})
-
+                    web3.eth.sendTransaction(
+                        {'to': another.wallet_addr, 'from': user.wallet_addr, 'value': web3.toWei(1, "ether")})
+                else: 
+                    return Response({'result': 'fail'})
         tx_hash = web3.eth.getBlock(
             block_identifier='pending', full_transactions=True)
         pending_transactions = tx_hash['transactions']
 
         web3.geth.miner.start(4)
-        time.sleep(5)
+        time.sleep(3)
+        web3.geth.miner.stop()
+
+        web3.geth.miner.start(4)
+        time.sleep(3)
         web3.geth.miner.stop()
 
         transact = web3.eth.getTransactionReceipt(
@@ -256,6 +278,7 @@ def item_purchase(request, id):
         # another.balance = web3.fromWei(web3.eth.getBalance(another.wallet_addr), "ether")
         another.balance = web3.fromWei(
             web3.eth.getBalance(another.wallet_addr), "microether")
+        article.buyer.add(request.user)
         user.save()
         another.save()
 
@@ -303,15 +326,21 @@ def video_purchase(request, id):
                     encrypted_key, pwd)
             if private_key.hex() == key:
                 print("sucess")
-    web3.eth.sendTransaction(
-        {'to': web3.eth.accounts[0], 'from': user.wallet_addr, 'value': web3.toWei(1, "ether")})
+                web3.eth.sendTransaction(
+                    {'to': web3.eth.accounts[0], 'from': user.wallet_addr, 'value': web3.toWei(1, "ether")})
+            else: 
+                    return Response({'result': 'fail'})
 
     tx_hash = web3.eth.getBlock(
         block_identifier='pending', full_transactions=True)
     pending_transactions = tx_hash['transactions']
 
     web3.geth.miner.start(4)
-    time.sleep(5)
+    time.sleep(3)
+    web3.geth.miner.stop()
+
+    web3.geth.miner.start(4)
+    time.sleep(3)
     web3.geth.miner.stop()
 
     transact = web3.eth.getTransactionReceipt(

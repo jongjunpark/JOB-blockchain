@@ -10,6 +10,7 @@ import RecruitWrite from '../views/RecruitWrite.vue'
 import Applicant from '../views/Applicant.vue'
 import Mypage from '../views/Mypage.vue'
 import Search from '../views/Search.vue'
+import OtherResume from '../views/OtherResume.vue'
 
 Vue.use(VueRouter)
 
@@ -32,7 +33,8 @@ Vue.use(VueRouter)
   {
     path: '/resume/edit',
     name: 'ResumeEdit',
-    component: ResumeEdit
+    component: ResumeEdit,
+    props: true
   },
   {
     path: '/video',
@@ -42,7 +44,8 @@ Vue.use(VueRouter)
   {
     path: '/corp/recruit',
     name: 'RecruitHome',
-    component: RecruitHome
+    component: RecruitHome,
+    props: true
   },
   {
     path: '/corp/recruit/write',
@@ -63,6 +66,11 @@ Vue.use(VueRouter)
     path: '/search',
     name: 'Search',
     component: Search
+  },
+  {
+    path: '/otherresume/:id',
+    name: 'OtherResume',
+    component: OtherResume
   },
 ]
 

@@ -21,5 +21,8 @@ urlpatterns = [
   path('item/list/', views.item_read),
   path('item/<int:id>/', views.item_purchase),
 
+  ## 영상 구매
+  path('video/<int:id>/', views.video_purchase)
+
 ]
 

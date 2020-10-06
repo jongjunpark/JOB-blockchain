@@ -104,7 +104,7 @@ def wallet_create(request, password):
     pending_transactions = tx_hash['transactions']
 
     web3.geth.miner.start(4)
-    time.sleep(3)
+    time.sleep(4)
     web3.geth.miner.stop()
 
     transact = web3.eth.getTransactionReceipt(
@@ -127,7 +127,7 @@ def wallet_create(request, password):
         r=pending_transactions[0]['r'].hex(),
         s=pending_transactions[0]['s'].hex(),
         v=pending_transactions[0]['v'],
-        value=web3.fromWei(pending_transactions[0]['value'], "ether")
+        value=web3.fromWei(pending_transactions[0]['value'], "microether")
     )
 
     return Response({"result": private_key.hex()})
@@ -152,8 +152,6 @@ def register(request, id):
         encrypted_key = keyfile.read()
         private_key = web3.eth.account.decrypt(
             encrypted_key, 'asd')  # '123'은 개인 password
-    contract = web3.eth.contract(address=deployed_contract_address,
-                                 abi=contract_abi, bytecode=contract_json['bytecode'])
 
     addr = user.wallet_addr
     web3.eth.sendTransaction(
@@ -164,7 +162,7 @@ def register(request, id):
     pending_transactions = tx_hash['transactions']
 
     web3.geth.miner.start(4)
-    time.sleep(3)
+    time.sleep(5)
     web3.geth.miner.stop()
     transact = web3.eth.getTransactionReceipt(
         pending_transactions[0]['hash'].hex())
@@ -183,7 +181,7 @@ def register(request, id):
         r=pending_transactions[0]['r'].hex(),
         s=pending_transactions[0]['s'].hex(),
         v=pending_transactions[0]['v'],
-        value=web3.fromWei(pending_transactions[0]['value'], "ether")
+        value=web3.fromWei(pending_transactions[0]['value'], "microether")
     )
 
     # user.balance = web3.fromWei(web3.eth.getBalance(addr), "ether")
@@ -240,7 +238,7 @@ def item_purchase(request, id):
         pending_transactions = tx_hash['transactions']
 
         web3.geth.miner.start(4)
-        time.sleep(3)
+        time.sleep(5)
         web3.geth.miner.stop()
 
         transact = web3.eth.getTransactionReceipt(
@@ -269,9 +267,82 @@ def item_purchase(request, id):
             r=pending_transactions[0]['r'].hex(),
             s=pending_transactions[0]['s'].hex(),
             v=pending_transactions[0]['v'],
-            value=web3.fromWei(pending_transactions[0]['value'], "ether")
+            value=web3.fromWei(pending_transactions[0]['value'], "microether")
         )
 
     serializer = ItemListSerializer(article)
 
     return Response(serializer.data)
+
+## 영상 구매
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def video_purchase(request, id):
+    pwd = request.data['password']
+    key = request.data['private_key']
+    print(pwd, 1)
+    print(key, 2)
+
+    user = request.user
+    web3.geth.personal.unlockAccount(user.wallet_addr, pwd, 0)
+    # Path to the compiled contract JSON file
+    path = "./dev/keystore"
+    file_list = os.listdir(path)
+    for i in range(len(file_list)):
+        file_name = file_list[i]
+        if user.wallet_addr[2:].lower() in file_name:
+            with open('./dev/keystore/'+file_name) as keyfile:
+                encrypted_key = keyfile.read()
+                private_key = web3.eth.account.decrypt(
+                    encrypted_key, pwd)
+            if private_key.hex() == key:
+                print("sucess")
+    web3.eth.sendTransaction(
+        {'to': web3.eth.accounts[0], 'from': user.wallet_addr, 'value': web3.toWei(1, "ether")})
+
+    tx_hash = web3.eth.getBlock(
+        block_identifier='pending', full_transactions=True)
+    pending_transactions = tx_hash['transactions']
+
+    web3.geth.miner.start(4)
+    time.sleep(5)
+    web3.geth.miner.stop()
+
+    transact = web3.eth.getTransactionReceipt(
+        pending_transactions[0]['hash'].hex())
+    # user.balance = web3.fromWei(web3.eth.getBalance(user.wallet_addr), "ether")
+    user.balance = web3.fromWei(
+        web3.eth.getBalance(user.wallet_addr), "microether")
+
+    # another.balance = web3.fromWei(web3.eth.getBalance(another.wallet_addr), "ether")
+    if request.data['video'] == 'IT':
+        user.it = 1
+    elif request.data['video'] == '전자':
+        user.electric = 1
+    elif request.data['video'] == '반도체':
+        user.semiconductor = 1
+    elif request.data['video'] == '디자인':
+        user.design = 1
+    else:
+        user.eng = 1
+    user.save()
+
+    Transaction.objects.create(
+        tx_hash=pending_transactions[0]['hash'].hex(),
+        blockHash=transact['blockHash'].hex(),
+        blockNumber=pending_transactions[0]['blockNumber'],
+        from_adrr=pending_transactions[0]['from'],
+        to_addr=pending_transactions[0]['to'],
+        from_pk=user.id,
+        to_pk=0,
+        gas=pending_transactions[0]['gas'],
+        gasPrice=pending_transactions[0]['gasPrice'],
+        nonce=pending_transactions[0]['nonce'],
+        r=pending_transactions[0]['r'].hex(),
+        s=pending_transactions[0]['s'].hex(),
+        v=pending_transactions[0]['v'],
+        value=web3.fromWei(pending_transactions[0]['value'], "microether")
+    )
+
+
+    return Response({"result": "sucess"})

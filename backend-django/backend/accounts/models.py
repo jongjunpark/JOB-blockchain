@@ -8,6 +8,11 @@ class User(AbstractUser):
   flag = models.IntegerField(blank=True, default=1)
   balance = models.IntegerField(blank=True, default=0)
   wallet_addr = models.CharField(max_length=120, blank=True, default='')
+  it = models.IntegerField(blank=True, default=0)
+  electric = models.IntegerField(blank=True, default=0)
+  semiconductor = models.IntegerField(blank=True, default=0)
+  design = models.IntegerField(blank=True, default=0)
+  eng = models.IntegerField(blank=True, default=0)
   username = None
   email = models.EmailField(_('email address'), unique=True)
 

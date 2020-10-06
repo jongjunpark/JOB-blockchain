@@ -655,6 +655,7 @@ import axios from 'axios';
 import SchoolSearch from '../components/SchoolSearch.vue';
 import MajorSearch from '../components/MajorSearch.vue';
 import '../components/css/resume-edit.css';
+import Swal from 'sweetalert2'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -806,12 +807,20 @@ export default {
     setTimeout(() => {
       this.getResume()
     }, 1000);
+    if (this.$cookies.isKey('auth-token')) {
+      this.setIsLoggedIn(true);
+      this.setToken(this.$cookies.get('auth-token'));
+      this.setUserInfo();
+    }
+    else {
+      this.setIsLoggedIn(false);
+    }
   },
   computed: {
     ...mapState(['selectedSchool', 'selectedSchoolType', 'selectedMajor', 'selectedMajorType', 'selectedMajorType2', 'UserInfo']),
   },
   methods: {
-    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2', 'setMajorName', 'setMajorType', 'setMajorType2']),
+    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2', 'setMajorName', 'setMajorType', 'setMajorType2', 'setIsLoggedIn', 'setToken', 'setLoginPath', 'setUser']),
     ...mapActions(['setUserInfo']),
     setProfileImg() {
       const photoFile = document.getElementById("resume-edit-user-img-edit");
@@ -996,6 +1005,7 @@ export default {
       // this.cleanObj(this.getData)
     },
     addSchool(type) {
+      this.goConfirm()
       if (type === 'high') {
         let ARR = ['고등학교']
         ARR.push(this.getData.highschool_name); ARR.push(this.getData.highschool_classification); ARR.push(this.getData.highschool_location);
@@ -1041,12 +1051,14 @@ export default {
       }
     },
     addLicense() {
+      this.goConfirm()
       let ARR = []
       ARR.push(this.license.name); ARR.push(this.license.institute); ARR.push(this.license.date);
       this.certifiedLicense.push(ARR)
       this.license.name = ''; this.license.institute = ''; this.license.date = '';
     },
     addCareer() {
+      this.goConfirm()
       let ARR = []
       ARR.push(this.career.name); ARR.push(this.career.startDate); ARR.push(this.career.endDate); ARR.push(this.career.reason); 
       ARR.push(this.career.department); ARR.push(this.career.position); ARR.push(this.career.duties); ARR.push(this.career.text)
@@ -1055,12 +1067,14 @@ export default {
       this.career.department = ''; this.career.position = ''; this.career.duties = ''; this.career.text = '';
     },
     addLang() {
+      this.goConfirm()
       let ARR = []
       ARR.push(this.lang.sort); ARR.push(this.lang.name); ARR.push(this.lang.rank); ARR.push(this.lang.date); 
       this.certifiedLang.push(ARR)
       this.lang.sort = '선택'; this.lang.name = ''; this.lang.rank = ''; this.lang.date = ''; 
     },
     addEtc(type) {
+      this.goConfirm()
       if (type === 'veteran') {
         let ARR = ['보훈']
         ARR.push(this.getData.veterans_classification); ARR.push(this.getData.veterans_number);
@@ -1334,6 +1348,52 @@ export default {
         })
         .catch((err) => console.log(err.response))
       }
+    },
+    goConfirm() {
+      const config = {
+          headers: {
+            Authorization: `Token ${this.$cookies.get('auth-token')}`
+          }
+        }
+      axios.post(`${SERVER_URL}accounts/register/${this.UserInfo.id}/`, null, config)
+        .then(res => {
+          console.log(res)
+        })
+        .catch((err) => console.log(err.response))
+      let timerInterval
+          Swal.fire({
+            title: '잠시만 기다려주세요!',
+            html: '기관이 자격증을 인증하고 있습니다',
+            timer: 7000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            willOpen: () => {
+              Swal.showLoading()
+              timerInterval = setInterval(() => {
+                const content = Swal.getContent()
+                if (content) {
+                  const b = content.querySelector('b')
+                  if (b) {
+                    b.textContent = Swal.getTimerLeft()
+                  }
+                }
+              }, 100)
+            },
+            onClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log('I was closed by the timer')
+            }
+            // <int:article_pk>/certificates/create
+            // this.createCertificate()
+            // this.createLang()
+            // this.createCareer()
+          })
+          .catch((err) => console.log(err.response))
+      
     },
     editLang() {
       for (let i=0; i<this.certifiedLang.length; i++) {

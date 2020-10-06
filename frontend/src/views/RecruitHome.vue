@@ -19,38 +19,33 @@
       <div class="recruit-data-box">
         <div class="recruit-data-content-box">
           <p>작성한공고</p>
-          <div class="recruit-data-content">
-            <div class="recruit-data-head">
-              <span class="recruit-data-sort">경력</span>
-              <span class="recruit-data-name">물류 경력사원 채용</span>
-            </div>
-            <div class="recruit-data-footer">
-              <span>마감일</span>
-              <span>2020.11.01</span>
-              <span>18:00</span>
-            </div>
-          </div>
-          <div class="recruit-data-content">
-            <div class="recruit-data-head">
-              <span class="recruit-data-sort">경력</span>
-              <span class="recruit-data-name">물류 경력사원 채용</span>
-            </div>
-            <div class="recruit-data-footer">
-              <span>마감일</span>
-              <span>2020.11.01</span>
-              <span>18:00</span>
+          <p v-if="RecruitList.length===0">작성한 공고가 없습니다.</p>
+          <div v-for="recruit in RecruitList" :key="recruit.id" @click="onModal(recruit.id)">
+            <div class="recruit-data-content" v-if="(recruit.user.email === UserInfo.email)&&(recruit.deadline>nowTime)">
+              <div class="recruit-data-head">
+                <span class="recruit-data-sort">{{ recruit.division }}</span>
+                <span class="recruit-data-name">{{ recruit.title }}</span>
+              </div>
+              <div class="recruit-data-footer">
+                <span>마감일</span>
+                <span>{{recruit.deadline.substring(0,4)}}.{{recruit.deadline.substring(4,6)}}.{{recruit.deadline.substring(6,8)}}</span>
+                <span>{{ recruit.deadline.substring(8,10) }}:{{ recruit.deadline.substring(10,) }}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <RecruitModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import { mapState } from 'vuex';
 import swal from 'sweetalert';
+import { mapState, mapMutations } from 'vuex';
+import RecruitModal from '../components/RecruitModal.vue'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -66,12 +61,16 @@ export default {
   },
   data() {
     return {
+      showModal: false,
       test: '',
       getData: [],
+      RecruitList: [],
       profileImg: '',
+      nowTime: '',
     }
   },
   components: {
+    RecruitModal,
   },
   computed: {
     ...mapState(['UserInfo']),
@@ -80,6 +79,8 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
   },
   mounted() {
+    this.setNowTime()
+    this.getRecruit()
     setTimeout(() => {
       this.getResume()
     }, 1000);
@@ -88,6 +89,7 @@ export default {
   watch: {
   },
   methods: {
+    ...mapMutations(['setRecruitId']),
     handleScroll() {
       const ORIGIN = 0
       let TOP = window.scrollY
@@ -118,6 +120,19 @@ export default {
       })
       .catch((err) => console.log(err.response))
     },
+    getRecruit() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}recruitments/`, null, config)
+      .then(res => {
+        console.log(res,'get recruitment')
+        this.RecruitList = res.data
+      })
+      .catch((err) => console.log(err.response))
+    },
     editResume() {
       let data = new FormData();
       data.append('image', this.profileImg);
@@ -136,6 +151,26 @@ export default {
         .catch((err) => console.log(err.response))
       }
     },
+    onModal(id) {
+      this.setRecruitId(id)
+      this.showModal = true;
+    },
+    setNowTime() {
+      let today = new Date();   
+      let year = today.getFullYear()
+      let month = today.getMonth()+1
+      let date = ''+today.getDate()
+      let hours = today.getHours()
+      let minutes = today.getMinutes()
+      if(month.length === 1) {
+        month = '0' + month
+      }
+      if (date.length === 1) {
+        date = '0' + date
+      }
+      this.nowTime = year + '' + month + '' + date + '' + hours + '' + minutes
+      console.log(this.nowTime)
+    }
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.handleScroll)
@@ -269,6 +304,13 @@ export default {
   margin-bottom: 20px;
   font-weight: 500;
   font-size: 25px;
+}
+
+.recruit-data-content-box > p:nth-child(2) {
+  font-size: 13px;
+  font-family: "Noto Sans KR", sans-serif !important;
+  margin-left: 250px;
+  font-weight: 400;
 }
 
 .recruit-data-content-box .recruit-data-content {

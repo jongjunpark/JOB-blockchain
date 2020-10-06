@@ -26,6 +26,8 @@ const state = {
   selectedMajorType: '',
   selectedMajorType2: '',
   UserModalId: '',
+  recruitId: '',
+  UserDivide: '',
 }
 
 Vue.use(Vuex)

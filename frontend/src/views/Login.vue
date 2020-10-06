@@ -280,7 +280,7 @@ export default {
           Swal.fire({
             title: '잠시만 기다려주세요!',
             html: '현재 지갑을 생성중입니다',
-            timer: 7000,
+            timer: 8000,
             timerProgressBar: true,
             showConfirmButton: false,
             willOpen: () => {
@@ -324,6 +324,33 @@ export default {
               title: '다른 이메일을 사용해주세요',
               text: `${err.response.data.email}`,
             })
+          }
+        })
+        let timerInterval
+        Swal.fire({
+          title: '아이디 생성중입니다!',
+          timer: 5000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          willOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              const content = Swal.getContent()
+              if (content) {
+                const b = content.querySelector('b')
+                if (b) {
+                  b.textContent = Swal.getTimerLeft()
+                }
+              }
+            }, 100)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer')
           }
         })
     },

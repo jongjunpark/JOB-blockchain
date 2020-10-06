@@ -21,6 +21,7 @@ urlpatterns = [
   ## 이력서 구매, 조회
   path('item/list/', views.item_read),
   path('item/<int:id>/', views.item_purchase),
+  path('item/list/<int:id>/', views.item_read_ather),
 
   ## 영상 구매
   path('video/<int:id>/', views.video_purchase)

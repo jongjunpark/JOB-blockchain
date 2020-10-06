@@ -15,10 +15,11 @@
           <div class="buy-modal-buy">
             내 잔액 : <p class="price-eth">{{ eth }} (ETH)</p>
           </div>
-          <div class="buyVideoActive" v-if="eth>1000000+121000" @click="goBuy">구매하기</div>
+          <div class="buyVideoActive" v-if="eth>1000000+121000" @click="isShow=true">구매하기</div>
           <div class="buyVideoNoactive" v-else>구매하기</div>
         </div>
       </div>
+      <SignModal v-if="isShow" @close="isShow=false"/>
     </div>
   </transition>
 </template>
@@ -28,21 +29,24 @@ import './css/buymodal.css'
 import { mapState } from 'vuex';
 import axios from 'axios';
 import Swal from 'sweetalert2'
+import SignModal from '../components/SignModal.vue'
+
 const SERVER_URL = 'http://127.0.0.1:8000/'
-
-
 
 export default {
   name: 'BuyModal',
   props: {
     videoName: String,
   },
-
+  components: {
+    SignModal,
+  },
   data() {
     return {
       eth: '',
       password: '',
       private_key: '',
+      isShow: false,
       ans : false,
     }
   },

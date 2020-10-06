@@ -43,6 +43,7 @@
 
 <script>
 import axios from 'axios';
+import swal from 'sweetalert';
 import { mapState, mapMutations } from 'vuex';
 import RecruitModal from '../components/RecruitModal.vue'
 
@@ -50,6 +51,14 @@ const SERVER_URL = 'http://127.0.0.1:8000/'
 
 export default {
   name: 'RecruitHome',
+  props: {
+    first: {
+      type: Boolean,
+    },
+    private_key: {
+      type: Object,
+    }
+  },
   data() {
     return {
       showModal: false,
@@ -75,6 +84,7 @@ export default {
     setTimeout(() => {
       this.getResume()
     }, 1000);
+    swal(`warning\n`, `${this.private_key.result}\n\n1. 지갑 비밀키를 잃어버리지 마세요! 한 번 잃어버리면 복구 할 수 없습니다.\n2. 공유하지 마세요! 비밀키가 악위적인 사이트에 노출되면 당신의 자산이 유실될 수 있습니다.\n3. 백업을 만들어 두세요! 종이에 적어서 오프라인으로 관리하세요.`, "warning")
   },
   watch: {
   },

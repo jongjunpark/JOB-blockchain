@@ -83,5 +83,8 @@ export default {
   },
   setUserModalId(state, data) {
     state.UserModalId = data
+  },
+  setRecruitId(state, data) {
+    state.recruitId = data
   }
 }

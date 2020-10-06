@@ -236,9 +236,11 @@ cert.ppk
 
 Vagrantfile
 
-s03p23b104.git/
+s03p23b104.git
 /keystore
-
+/migrations
+migrations/
+q
 
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django

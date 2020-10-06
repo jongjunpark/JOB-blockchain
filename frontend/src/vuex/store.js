@@ -25,6 +25,7 @@ const state = {
   selectedMajor: '',
   selectedMajorType: '',
   selectedMajorType2: '',
+  UserModalId: '',
 }
 
 Vue.use(Vuex)

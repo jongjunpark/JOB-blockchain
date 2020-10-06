@@ -315,7 +315,15 @@ export default {
 
           
         })
-        .catch((err) => console.log(err.response))
+        .catch(err => {
+          if(err.response.data.email) {
+            Swal.fire({
+              icon: 'error',
+              title: '다른 이메일을 사용해주세요',
+              text: `${err.response.data.email}`,
+            })
+          }
+        })
     },
     signupSort(type) {
       if (type === 'individual') {

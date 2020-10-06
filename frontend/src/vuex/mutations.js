@@ -81,4 +81,7 @@ export default {
   selectMajorType2(state, data) {
     state.selectedMajorType2 = data
   },
+  setUserModalId(state, data) {
+    state.UserModalId = data
+  }
 }

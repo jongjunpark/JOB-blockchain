@@ -8,12 +8,27 @@ from .models import Recruitment
 from .models import Introduction
 from .serializers import RecruitmentListSerializer, RecruitmentSerializer
 from .serializers import IntroductionSerializer
+
+from datetime import datetime
 # Create your views here.
 
 # 공고
 @api_view(['GET'])
 def index(request):
     recruitments = Recruitment.objects.all()
+    serializer = RecruitmentListSerializer(recruitments, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def showlist(request):
+    today = datetime.today().strftime("%Y%m%d%H%M")
+    recruitments = Recruitment.objects.filter(startdate__gte=today)
+    serializer = RecruitmentListSerializer(recruitments, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def calendar(request, date):
+    recruitments = Recruitment.objects.filter(startdate__lte=date, deadline__gte=date)
     serializer = RecruitmentListSerializer(recruitments, many=True)
     return Response(serializer.data)
 
@@ -46,7 +61,7 @@ def detail(request, recruitment_pk):
 # 자기소개
 @api_view(['GET'])
 def introduction_list(request, recruitment_pk):
-    introductions = Introuction.objects.filter(recruitment_pk=recruitment_pk)
+    introductions = Introduction.objects.filter(recruitment_pk=recruitment_pk)
     serializer = IntroductionSerializer(introductions, many=True)
     return Response(serializer.data)
 

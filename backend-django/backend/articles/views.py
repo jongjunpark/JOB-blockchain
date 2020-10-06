@@ -155,7 +155,13 @@ def career_detail(request, article_pk, career_pk):
 
 @api_view(['GET'])
 def selfintroduction_list(request, article_pk, recruitment_pk):
-    selfintroductions = Recruitment.objects.filter(recruitment_id=recruitment_pk)
+    selfintroductions = SelfIntroduction.objects.filter(recruitment_id=recruitment_pk)
+    serializer = SelfintroductionSerializer(selfintroductions, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def selfintroduction_list2(request, article_pk):
+    selfintroductions = SelfIntroduction.objects.filter(article_id=article_pk)
     serializer = SelfintroductionSerializer(selfintroductions, many=True)
     return Response(serializer.data)
 
@@ -186,3 +192,10 @@ def selfintroduction_detail(request, article_pk, recruitment_pk, selfintroductio
         selfintroduction = get_object_or_404(SelfIntroduction, pk-selfintroduction_pk)
         selfintroduction.delete()
         return Response({'message': '성공적으로 삭제'})
+
+@api_view(['POST'])
+def search(request, query):
+    # articles = Article.objects.filter(user__contains)
+    articles = Article.objects.filter(name__contains=query)
+    serializer = ArticleSerializer(articles, many=True)
+    return Response(serializer.data)

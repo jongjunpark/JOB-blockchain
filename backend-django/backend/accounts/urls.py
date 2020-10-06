@@ -6,6 +6,7 @@ app_name = 'accounts'
 
 urlpatterns = [
   path('', views.user),
+  path('<int:flag>/', views.set_flag),
 
   ## 이메일 인증
   path('<str:email>/', views.email),

@@ -54,6 +54,12 @@ def user(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def set_flag(request, flag):
+    request.user.flag = flag
+    request.user.save()
+    return Response({'message': '성공적으로 제출되었습니다.'})
 
 @api_view(['POST'])
 def email(request, email):

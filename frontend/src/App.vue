@@ -1,8 +1,19 @@
 <template>
   <div id="app">
-    <div id="nav" v-show="!isLogin">
-      <div class="logo-box" @click="goHome">
-        <img class="logo-img" src="./assets/logo/B104_logo_basic_skyblue.png" alt="">
+    <div v-show="!isLogin">
+      <div class="nav" v-if="UserInfo.flag===0">
+        <div class="logo-box" @click="goCorpHome">
+          <img class="logo-img" src="./assets/logo/B104_logo_basic_skyblue.png" alt="">
+        </div>
+        <div class="menu-bar-box">
+          <div class="menu-bar" @click="goRecruit">공고관리</div>
+        </div>
+        <div class="user-box">
+          <div v-show="isLoggedIn" class="user-name-bar">{{ UserInfo.last_name }}님 환영합니다</div>
+          <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('login')">로그인</div>
+          <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('signup')">회원가입</div>
+          <div v-show="isLoggedIn" class="user-bar" @click="goLogout">로그아웃</div>
+        </div>
       </div>
       <div class="menu-bar-box">
         <div class="menu-bar" @click="goResume">이력서</div>
@@ -51,11 +62,20 @@ export default {
     goHome() {
       this.$router.push('/').catch(()=>{})
     },
+    goCorpHome() {
+      this.$router.push('/corp/recruit').catch(()=>{})
+    },
     goResume() {
       this.$router.push('/resume').catch(()=>{})
     },
     goVideo() {
       this.$router.push('/video').catch(()=>{})
+    },
+    goSearch() {
+      this.$router.push('/search').catch(()=>{})
+    },
+    goRecruit() {
+      this.$router.push('/corp/recruit').catch(()=>{})
     },
     goLogin(path) {
       if(path === 'login') {

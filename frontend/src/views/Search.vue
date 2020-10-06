@@ -6,7 +6,7 @@
         <input type="text" class="search-input" placeholder="유저이름을 검색하세요" v-model="username" v-on:input="username = $event.target.value">
         <div v-show="userList.length>0">
           <transition-group v-show="username" name='fade' tag="div" class="search-user-group" mode="in-out">
-            <div class='search-user-item' v-for='user in userList' :key='user.user.id'>
+            <div class='search-user-item' v-for='user in userList' :key='user.user.id' @click="onModal(user.user.id)">
               <div class="search-user-img">
                 <img v-show="user.image" :src="user.image" alt="#">
                 <img v-show="!user.image" src="../assets/images/default-user.png" alt="#">
@@ -20,11 +20,14 @@
         </div>
       </div>
     </div>
+
+    <UserModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { mapMutations } from 'vuex';
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -35,14 +38,12 @@ export default {
       username: '',
       userList: [],
       userListLength: 0,
+      showModal: false,
     }
   },
   components: {
   },
   computed: {
-  },
-  created() {
-    window.addEventListener('scroll', this.handleScroll)
   },
   mounted() {
   },
@@ -54,6 +55,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setUserModalId']),
     searchUser() {
       console.log(this.username)
       const config = {
@@ -73,9 +75,10 @@ export default {
       })
       .catch((err) => console.log(err.response))
     },
-  },
-  beforeDestroy () {
-    window.removeEventListener('scroll', this.handleScroll)
+    onModal(id) {
+      this.setUserModalId(id);
+      this.showModal = true;
+    },
   },
 }
 </script>

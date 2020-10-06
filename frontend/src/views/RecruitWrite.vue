@@ -138,12 +138,14 @@ export default {
         console.log(res,'create recruit')
         axios.get(`${SERVER_URL}recruitments/`, null, config)
         .then(res => {
-          this.recruit.id = res.data.id
+          console.log(res)
+          this.recruit.id = res.data[res.data.length-1].id
           // 리스트에서 마지막 배열의 id를 받아와야함
           for (let i=0; i<this.certifiedSelf.length; i++) {
             axios.post(`${SERVER_URL}recruitments/${this.recruit.id}/introductions/create/`, {
-              title : this.self.name,
-              number : this.self.length
+              title : this.certifiedSelf[i][0],
+              number : this.certifiedSelf[i][1],
+              recruitment : this.recruit.id
             }, config)
             .then(res => {
               console.log(res,'create self')

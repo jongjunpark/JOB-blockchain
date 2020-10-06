@@ -17,7 +17,7 @@
                 <p>{{ getData.phone_number }}</p>
               </div>
             </div>
-            <div class='user-modal-body'>
+            <div class='user-modal-body user-modal-unlock'>
               <div class="user-modal-content-box">
                 <p>병역사항</p>
                 <div class="user-modal-data-content">
@@ -153,7 +153,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import axios from 'axios'
+import axios from 'axios';
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -184,11 +184,29 @@ export default {
   },
   mounted() {
       this.getResume()
-      this.getSelfList();
-      this.getApplicant();
-      this.getMySelf()
+    }, 1000);
+    const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.post(`${SERVER_URL}accounts/item/list/${this.UserModalId}/`, null, config)
+      .then(res => {
+        if (res.data.result == 1) {
+          this.isBuy = true
+          const Lock = document.querySelector('.user-modal-unlock')
+          Lock.classList.remove('user-modal-unlock')
+        }
+        else {
+          this.isBuy = false
+        }
+      })
+      .catch((err) => console.log(err.response))
   },
   methods: {
+    goBuy() {
+      this.$router.push(`/otherresume/${this.UserModalId}`)
+    },
     getResume() {
       const config = {
         headers: {

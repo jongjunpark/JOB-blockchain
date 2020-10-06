@@ -26,7 +26,7 @@
           <div class="menu-bar" @click="goSearch">검색</div>
         </div>
         <div class="user-box">
-          <div v-show="isLoggedIn" class="user-name-bar">{{ UserInfo.last_name }}{{ UserInfo.first_name }}님 환영합니다</div>
+          <div v-show="isLoggedIn" class="user-name-bar" @click="goMypage">{{ UserInfo.last_name }}{{ UserInfo.first_name }}님 환영합니다</div>
           <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('login')">로그인</div>
           <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('signup')">회원가입</div>
           <div v-show="isLoggedIn" class="user-bar" @click="goLogout">로그아웃</div>

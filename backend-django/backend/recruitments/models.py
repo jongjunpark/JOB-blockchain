@@ -10,7 +10,7 @@ class Recruitment(models.Model):
     title = models.CharField(max_length=100)
     startdate = models.CharField(max_length=100)
     deadline = models.CharField(max_length=100)
-    applicants = models.ManyToManyField("articles.Article", related_name='applicants_set')
+    applicants = models.ManyToManyField("articles.Article", related_name='applicants_set', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -18,4 +18,4 @@ class Introduction(models.Model):
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    number = models.IntegerField()
+    number = models.CharField(max_length=100)

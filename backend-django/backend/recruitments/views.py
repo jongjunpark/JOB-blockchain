@@ -46,7 +46,7 @@ def detail(request, recruitment_pk):
 # 자기소개
 @api_view(['GET'])
 def introduction_list(request, recruitment_pk):
-    introductions = Introuction.objects.filter(recruitment_pk=recruitment_pk)
+    introductions = Introduction.objects.filter(recruitment_id=recruitment_pk)
     serializer = IntroductionSerializer(introductions, many=True)
     return Response(serializer.data)
 

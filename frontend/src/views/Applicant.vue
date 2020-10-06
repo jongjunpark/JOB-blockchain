@@ -3,43 +3,30 @@
     <div class="wrap-container apply-container">
       <div class="apply-header">
         <div class="apply-header-text-box">
-          <span>물류 경력사원 채용 </span>
-          <span v-if="!isSome">(1800 명)</span>
-          <span v-if="isSome">(3 명)</span>
+          <span>{{ RecruitDetail.title }}</span>
+          <span v-if="RecruitDetail.applicants" >( {{ RecruitDetail.applicants.length }}명 )</span>
+          <!-- <span v-if="isSome">(3 명)</span> -->
         </div>
-        <div class="apply-header-toggle-box">
+        <!-- <div class="apply-header-toggle-box">
           <div @click='applyInfoChange(false)' class="all-apply-btn apply-toggle-btn on-apply-btn">전체</div>
           <div @click='applyInfoChange(true)' class="some-apply-btn apply-toggle-btn">저장</div>
-        </div>
+        </div> -->
       </div>
       <div v-if="!isSome" class="apply-body">
-        <div class="applicant-card">
+        <div class="applicant-card" v-for="user in userList" :key="user.user.id" @click="onModal(user.user.id, 'corp')">
           <div class="applicant-img-box">
-            <img src="@/assets/images/default-user.png" alt="#">
+            <img v-if="!user.image" src="@/assets/images/default-user.png" alt="#">
+            <img v-if="user.image" :src="user.image" alt="#">
           </div>
           <div class="applicant-text-box">
-            <p>박종준</p>
-            <p>1991. 05. 24</p>
-            <p>poiufgin7373@naver.com</p>
-            <p>010-5002-1524</p>
+            <p>{{ user.name }}</p>
+            <p>{{ user.date_of_birth }}</p>
+            <p>{{ user.email }}</p>
+            <p>{{ user.phone_number }}</p>
           </div>
         </div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
-        <div class="applicant-card"></div>
       </div>
-      <div v-if="isSome" class="apply-body">
+      <!-- <div v-if="isSome" class="apply-body">
         <div class="applicant-card">
           <div class="applicant-img-box">
             <img src="@/assets/images/default-user.png" alt="#">
@@ -53,35 +40,47 @@
         </div>
         <div class="applicant-card"></div>
         <div class="applicant-card"></div>
-      </div>
+      </div> -->
     </div>
+
+    <UserModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import UserModal from '../components/UserModal.vue';
+import { mapMutations } from 'vuex';
+
+const SERVER_URL = 'http://127.0.0.1:8000/'
+
 export default {
   name: 'Applicant',
   data() {
     return {
+      showModal: false,
       test: '',
       isSome: '',
+      recruitID: '',
+      RecruitDetail: [],
+      userList: [],
     }
   },
   components: {
+    UserModal,
   },
   computed: {
   },
   created() {
-    window.addEventListener('scroll', this.handleScroll)
+    this.recruitID = this.$route.params.recruitID
   },
   mounted() {
+    this.getRecruitDetail();
   },
   watch: {
   },
   methods: {
-    handleScroll() {
-      console.log('Base')
-    },
+    ...mapMutations(['setUserModalId', 'setUserDivide', 'setRecruitId']),
     applyInfoChange(bool) {
       const ALLBTN = document.querySelector('.all-apply-btn')
       const SOMEBTN = document.querySelector('.some-apply-btn')
@@ -94,9 +93,42 @@ export default {
       }
       this.isSome = bool
     },
+    getRecruitDetail() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}recruitments/${this.recruitID}`, null, config)
+      .then(res => {
+        console.log(res,'get recruitment detail2')
+        this.RecruitDetail = res.data
+        for (let i=0; i<res.data.applicants.length; i++) {
+          const config = {
+            headers: {
+              Authorization: `Token ${this.$cookies.get('auth-token')}`
+            }
+          }
+          axios.get(`${SERVER_URL}articles/${res.data.applicants[i]}/`, null, config)
+          .then(res => {
+            console.log(res,'get resume detail')
+            this.userList.push(res.data) 
+          })
+          .catch((err) => console.log(err.response))
+        }
+      })
+      .catch((err) => console.log(err.response))
+    },
+    onModal(id, type) {
+      this.setRecruitId(id);
+      this.setUserModalId(id);
+      this.setUserDivide(type)
+      this.showModal = true;
+    },
   },
   beforeDestroy () {
-    window.removeEventListener('scroll', this.handleScroll)
+    this.setRecruitId('')
+    this.setUserDivide('')
   },
 }
 </script>
@@ -208,6 +240,15 @@ export default {
   display: flex;
   padding: 15px;
   cursor: pointer;
+  transition: all .5s;
+}
+
+.applicant-card:hover {
+  box-shadow: 0 0 0 0 rgba(0,0,0,0),
+              0 0 0 0 rgba(0,0,0,0),
+              inset 4px 4px 6px -1px rgba(0,0,0,0.2),
+              inset -3px -3px 4px -1px #ffffff;
+  background-color: #ececf0;
 }
 
 .applicant-card .applicant-img-box {

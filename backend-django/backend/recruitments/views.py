@@ -22,7 +22,7 @@ def index(request):
 @api_view(['GET'])
 def showlist(request):
     today = datetime.today().strftime("%Y%m%d%H%M")
-    recruitments = Recruitment.objects.filter(startdate__gte=today)
+    recruitments = Recruitment.objects.filter(deadline__gte=today).order_by('deadline')
     serializer = RecruitmentListSerializer(recruitments, many=True)
     return Response(serializer.data)
 
@@ -96,7 +96,7 @@ def introduction_detail(request, recruitment_pk, introduction_pk):
 def apply(request, recruitment_pk, article_pk):
     recruitment = get_object_or_404(Recruitment, pk=recruitment_pk)
     if recruitment.applicants.filter(pk=article_pk).exists():
-        recruitment.like.remove(article_pk)
+        recruitment.applicants.remove(article_pk)
     else:
-        recruitment.like.add(article_pk)
-    return Response(serializer.data)
+        recruitment.applicants.add(article_pk)
+    return Response({'message': '성공!'})

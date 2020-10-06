@@ -120,6 +120,7 @@ export default {
       this.recruit.img = photoFile.files[0]
     },
     editRecruit() {
+      this.splitDate()
       let data = new FormData();
       data.append('image', this.recruit.img);
       data.append('division', this.recruit.sort);
@@ -182,6 +183,18 @@ export default {
     },
     delSelf(idx) {
       this.certifiedSelf.splice(idx, 1);
+    },
+    splitDate() {
+      const arr = this.recruit.startDate.split('.')
+      const arr2 = this.recruit.endDate.split('.')
+      this.recruit.startDate = ''
+      this.recruit.endDate = ''
+      for(let i=0; i<arr.length; i++) {
+        this.recruit.startDate += arr[i]
+      }
+      for(let j=0; j<arr.length; j++) {
+        this.recruit.endDate += arr2[j]
+      }
     }
   },
   beforeDestroy () {

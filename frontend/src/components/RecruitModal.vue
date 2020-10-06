@@ -1,25 +1,31 @@
 <template>
   <transition name="modal">
     <div class="recruit-modal-mask">
-      <div @click.self="$emit('close')">
+      <div @mousedown.self="$emit('close')">
         <div class="recruit-modal-wrap">
           <div class="recruit-modal-content">
             <i class="fas fa-times" @click.self="$emit('close')"></i>
             <div class='recruit-modal-header'>
-              <p class="recruit-modal-corp-name">네이버</p>
-              <p class="recruit-modal-name"><span>경력</span>물류 경력사원 채용</p>
-              <p class="recruit-modal-date">~ 2020.11.01 18:00</p>
+              <p class="recruit-modal-corp-name">{{ UserInfo.last_name }}</p>
+              <p class="recruit-modal-name"><span>{{ RecruitDetail.division }}</span>{{ RecruitDetail.title }}</p>
+              <p v-if="RecruitDetail.startdate" class="recruit-modal-date">
+                {{RecruitDetail.startdate.substring(0,4)}}.{{RecruitDetail.startdate.substring(4,6)}}.{{RecruitDetail.startdate.substring(6,8)}} 
+                {{ RecruitDetail.startdate.substring(8,10) }}:{{ RecruitDetail.startdate.substring(10,) }}
+                ~ {{RecruitDetail.deadline.substring(0,4)}}.{{RecruitDetail.deadline.substring(4,6)}}.{{RecruitDetail.deadline.substring(6,8)}} 
+                {{ RecruitDetail.deadline.substring(8,10) }}:{{ RecruitDetail.deadline.substring(10,) }}</p>
             </div>
             <div class='recruit-modal-body'>
-              <img src="#" alt="">
+              <img :src="'http://localhost:8000' + RecruitDetail.image" alt="">
             </div>
             <div class="recruit-modal-footer">
-              <div class="recruit-modal-btn">전체목록</div>
-              <div class="recruit-modal-btn">저장목록</div>
+              <div v-if="UserInfo.flag===0" class="recruit-modal-btn" @click="goApplicant">지원자목록</div>
+              <div v-else class="recruit-modal-btn" @click="onModal(UserInfo.id, 'individual')">지원하기</div>
             </div>
           </div>
         </div>
       </div>
+
+      <UserModal v-if="showModal" @close="showModal= false"/>
     </div>
   </transition>
 </template>
@@ -27,31 +33,62 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import './css/recruit-modal.css'
-// import axios from 'axios'
+import UserModal from '../components/UserModal.vue';
+import axios from 'axios'
 
-// const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'http://127.0.0.1:8000/'
 
 export default {
   name: 'RecruitModal',
   data() {
     return {
+      showModal: false,
       name: '',
-      majorList: [],
+      RecruitDetail: [],
     }
+  },
+  components: {
+    UserModal,
   },
   watch: {
   },
   computed: {
-    ...mapState(['majorName', 'majorType', 'majorType2']),
+    ...mapState(['recruitId', 'UserInfo']),
   },
   created() {
   },
   mounted() {
-    
+    this.getRecruitDetail();
   },
   methods: {
-    ...mapMutations(['selectMajor', 'selectMajorType', 'selectMajorType2']),
-  }
+    ...mapMutations(['setUserModalId', 'setUserDivide', 'setRecruitId']),
+    getRecruitDetail() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}recruitments/${this.recruitId}/`, null, config)
+      .then(res => {
+        console.log(res,'get recruitment detail')
+        this.RecruitDetail = res.data
+      })
+      .catch((err) => console.log(err.response))
+    },
+    goApplicant() {
+      this.$router.push(`/corp/recruit/applicant/${this.recruitId}`).catch(()=>{})
+    },
+    onModal(id, type) {
+      this.setRecruitId(id);
+      this.setUserModalId(id);
+      this.setUserDivide(type)
+      this.showModal = true;
+    },
+  },
+  beforeDestroy () {
+    this.setRecruitId('')
+    this.setUserDivide('')
+  },
 }
 </script>
 
@@ -105,8 +142,8 @@ export default {
 
 .modal-enter .recruit-modal-wrap,
 .modal-leave-active .recruit-modal-wrap {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .recruit-modal-wrap {
@@ -129,6 +166,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 20px 30px;
+  position: relative;
 }
 
 

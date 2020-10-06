@@ -1,7 +1,7 @@
 <template>
   <transition name="modal">
     <div class="user-modal-mask">
-      <div @click.self="$emit('close')">
+      <div @mousedown.self="$emit('close')">
         <div class="user-modal-wrap">
           <div class="user-modal-content">
             <i class="fas fa-times" @click.self="$emit('close')"></i>
@@ -117,8 +117,31 @@
                   </div>
                 </div>
               </div>
+              <div v-if="UserDivide==='individual'" class="user-modal-content-box">
+                <p>자기소개서</p>
+                <div class="user-modal-self-box" v-for="(self,index) in selfList" :key='`self-${index}`'>
+                  <div class="user-modal-self-head">
+                    <p>{{ index+1 }}. {{ self.title }} <span>({{ self.number }}자)</span></p>
+                    <p v-if="mySelfList[index].content">{{mySelfList[index].content.length}}/{{self.number}}</p>
+                  </div>
+                  <textarea v-model="mySelfList[index].content" v-on:input="mySelfList[index].content = $event.target.value" name="" id="" cols="30" rows="10"></textarea>
+                </div>
+              </div>
+              <div v-if="UserDivide==='corp'" class="user-modal-content-box">
+                <p>자기소개서</p>
+                <div class="user-modal-self-box" v-for="(self,index) in selfList" :key='`self-${index}`'>
+                  <div class="user-modal-self-head">
+                    <p>{{ index+1 }}. {{ self.title }} <span>({{ self.number }}자)</span></p>
+                    <p v-if="mySelfList[index].content">{{mySelfList[index].content.length}}/{{self.number}}</p>
+                  </div>
+                  <div v-if="mySelfList[index].content" class="user-modal-self-area">{{ mySelfList[index].content }}</div>
+                </div>
+              </div>
             </div>
             <div class="user-modal-footer">
+              <div v-if="UserDivide==='individual'" class="user-modal-btn user-modal-btn-on" @click="saveSelf">저장하기</div>
+              <div v-if="(UserDivide==='individual')&&!isSameUser" class="user-modal-btn user-modal-btn-on" @click="applySelf">지원하기</div>
+              <div v-if="(UserDivide==='individual')&&isSameUser" class="user-modal-btn" @click="applySelf">취소하기</div>
               <div class="user-modal-btn" @click.self="$emit('close')">닫기</div>
             </div>
           </div>
@@ -145,19 +168,25 @@ export default {
       certifiedSchool: [[],[],[],[],[]],
       certifiedEtc: [[],[]],
       isCareerText: [],
+      selfList: [],
+      selfLength: 0,
+      isMySelf: false,
+      isSameUser: false,
+      mySelfList: [],
     }
   },
   watch: {
   },
   computed: {
-    ...mapState(['UserInfo', 'UserModalId']),
+    ...mapState(['UserInfo', 'UserModalId', 'UserDivide', 'recruitId']),
   },
   created() {
   },
   mounted() {
-    setTimeout(() => {
       this.getResume()
-    }, 1000);
+      this.getSelfList();
+      this.getApplicant();
+      this.getMySelf()
   },
   methods: {
     getResume() {
@@ -201,6 +230,57 @@ export default {
         }
       })
       .catch((err) => console.log(err.response))
+    },
+    getSelfList() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}recruitments/${this.recruitId}/introductions/`, null, config)
+      .then(res => {
+        console.log(res,'get self list')
+        this.selfList = res.data
+        for(let i=0; i<this.selfList.length; i++) {
+          this.selfLength += 1
+        }
+      })
+      .catch((err) => console.log(err.response))
+    },
+    getMySelf() {
+      const config = {
+          headers: {
+            Authorization: `Token ${this.$cookies.get('auth-token')}`
+          }
+        }
+        axios.get(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/`, null, config)
+        .then(res => {
+          console.log(res,'get mySelf')
+          this.mySelfList = res.data
+          if(res.data.length>0) {
+            this.isMySelf = true
+          } else {
+            this.isMySelf = false            
+          }
+        })
+        .catch((err) => console.log(err.response))
+    },
+    getApplicant() {
+      const config = {
+          headers: {
+            Authorization: `Token ${this.$cookies.get('auth-token')}`
+          }
+        }
+        axios.get(`${SERVER_URL}recruitments/${this.recruitId}/`, null, config)
+        .then(res => {
+          console.log(res,'get applicant')
+          for(let i=0; i<res.data.applicants.length; i++) {
+            if (res.data.applicants[i] == this.UserModalId) {
+              this.isSameUser = true
+            }
+          }
+        })
+        .catch((err) => console.log(err.response))
     },
     sortSchool() {
       if(this.getData.highschool_name) {
@@ -257,6 +337,74 @@ export default {
         this.isCareerText[idx] = false
       }
     },
+    saveSelf() {
+      if(this.isMySelf) {
+        for(let i=0; i<this.mySelfList.length; i++) {
+          const config = {
+            headers: {
+              Authorization: `Token ${this.$cookies.get('auth-token')}`
+            }
+          }
+          axios.put(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/${this.mySelfList[i].id}/`, {
+            article: this.UserModalId,
+            recruitment: this.recruitId,
+            content: this.mySelfList[i].content
+          }, config)
+          .then(res => {
+            console.log(res,'create self')
+          })
+          .catch((err) => console.log(err.response))
+        }
+      } else {
+        for(let i=0; i<this.mySelfList.length; i++) {
+          const config = {
+            headers: {
+              Authorization: `Token ${this.$cookies.get('auth-token')}`
+            }
+          }
+          axios.post(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/create/`, {
+            article: this.UserModalId,
+            recruitment: this.recruitId,
+            content: this.mySelfList[i].content
+          }, config)
+          .then(res => {
+            console.log(res,'create self')
+          })
+          .catch((err) => console.log(err.response))
+        }
+      }
+    },
+    applySelf() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      if(this.isMySelf) {
+        axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
+        .then(res => {
+          console.log(res,'apply!')
+        })
+        .catch((err) => console.log(err.response))
+      } else {
+        for(let i=0; i<this.mySelfList.length; i++) {
+          axios.post(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/create/`, {
+            article: this.UserModalId,
+            recruitment: this.recruitId,
+            content: this.mySelfList[i].content
+          }, config)
+          .then(res => {
+            console.log(res,'create self')
+            axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
+            .then(res => {
+              console.log(res,'apply!')
+            })
+            .catch((err) => console.log(err.response))
+          })
+          .catch((err) => console.log(err.response))
+        }
+      }
+    }
   }
 }
 </script>
@@ -401,17 +549,16 @@ export default {
 }
 
 .user-modal-footer > div {
-  margin: 0 50px;
-  width: 30%;
+  margin: 0 30px;
+  width: 200px;
   height: 50px;
   border-radius: 30px;
   box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
               -6px -6px 10px -1px #ffffff;
-  background-color: #0088ff;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #ffffff;
+  color: rgba(0,0,0,0.5);
   cursor: pointer;
   transition: box-shadow .3s;
 }
@@ -422,6 +569,11 @@ export default {
               inset 4px 4px 6px -1px rgba(0,0,0,0.2),
               inset -3px -3px 4px -1px #ffffff;
   font-weight: 700;
+}
+
+.user-modal-footer .user-modal-btn-on {
+  background-color: #0088ff;
+  color: #ffffff;
 }
 
 .user-modal-content-box .user-modal-data-content {
@@ -510,5 +662,55 @@ export default {
 
 .user-modal-mark-box .fa-check-circle {
   margin-right: 5px;
+}
+
+.user-modal-content-box .user-modal-self-box {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.user-modal-self-box .user-modal-self-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.user-modal-self-box .user-modal-self-area {
+  width: 94%;
+  padding: 15px 20px;
+  box-shadow: 0 0 0 0 rgba(0,0,0,0),
+              0 0 0 0 rgba(0,0,0,0),
+              inset 4px 4px 6px -1px rgba(0,0,0,0.2),
+              inset -3px -3px 4px -1px #ffffff;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.user-modal-self-head > p:nth-child(1) {
+  font-size: 14px;
+}
+
+.user-modal-self-head > p:nth-child(2) {
+  font-size: 12px;
+  color: rgba(0,0,0,0.7);
+  margin-right: 15px;
+}
+
+.user-modal-self-box textarea {
+  resize: none;
+  width: 94%;
+  padding: 10px 15px;
+  background-color: transparent;
+  border: none;
+  box-shadow: 0 0 0 0 rgba(0,0,0,0),
+              0 0 0 0 rgba(0,0,0,0),
+              inset 4px 4px 6px -1px rgba(0,0,0,0.2),
+              inset -3px -3px 4px -1px #ffffff;
+  border-radius: 20px;
+}
+
+.user-modal-self-box textarea:focus {
+  border: none;
+  outline: none;
 }
 </style>

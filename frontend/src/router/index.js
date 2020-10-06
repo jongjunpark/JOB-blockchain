@@ -50,7 +50,7 @@ Vue.use(VueRouter)
     component: RecruitWrite
   },
   {
-    path: '/corp/recruit/applicant',
+    path: '/corp/recruit/applicant/:recruitID',
     name: 'Applicant',
     component: Applicant
   },

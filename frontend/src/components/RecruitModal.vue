@@ -1,14 +1,14 @@
 <template>
   <transition name="modal">
     <div class="recruit-modal-mask">
-      <div @click.self="$emit('close')">
+      <div @mousedown.self="$emit('close')">
         <div class="recruit-modal-wrap">
           <div class="recruit-modal-content">
             <i class="fas fa-times" @click.self="$emit('close')"></i>
             <div class='recruit-modal-header'>
               <p class="recruit-modal-corp-name">{{ UserInfo.last_name }}</p>
               <p class="recruit-modal-name"><span>{{ RecruitDetail.division }}</span>{{ RecruitDetail.title }}</p>
-              <p class="recruit-modal-date">{{ RecruitDetail.startdate.substring(0,10) }} 
+              <p v-if="RecruitDetail.startdate" class="recruit-modal-date">{{ RecruitDetail.startdate.substring(0,10) }} 
                 {{ RecruitDetail.startdate.substring(10,12) }}:{{ RecruitDetail.startdate.substring(12,) }}
                 ~ {{ RecruitDetail.deadline.substring(0,10) }} 
                 {{ RecruitDetail.deadline.substring(10,12) }}:{{ RecruitDetail.deadline.substring(12,) }}</p>
@@ -17,18 +17,22 @@
               <img :src="'http://localhost:8000' + RecruitDetail.image" alt="">
             </div>
             <div class="recruit-modal-footer">
-              <div class="recruit-modal-btn" @click="goApplicant">지원자목록</div>
+              <div v-if="UserInfo.flag===0" class="recruit-modal-btn" @click="goApplicant">지원자목록</div>
+              <div v-else class="recruit-modal-btn" @click="onModal(UserInfo.id, 'individual')">지원하기</div>
             </div>
           </div>
         </div>
       </div>
+
+      <UserModal v-if="showModal" @close="showModal= false"/>
     </div>
   </transition>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import './css/recruit-modal.css'
+import UserModal from '../components/UserModal.vue';
 import axios from 'axios'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
@@ -37,9 +41,13 @@ export default {
   name: 'RecruitModal',
   data() {
     return {
+      showModal: false,
       name: '',
       RecruitDetail: [],
     }
+  },
+  components: {
+    UserModal,
   },
   watch: {
   },
@@ -49,9 +57,10 @@ export default {
   created() {
   },
   mounted() {
-    this.getRecruitDetail()
+    this.getRecruitDetail();
   },
   methods: {
+    ...mapMutations(['setUserModalId', 'setUserDivide', 'setRecruitId']),
     getRecruitDetail() {
       const config = {
         headers: {
@@ -66,9 +75,19 @@ export default {
       .catch((err) => console.log(err.response))
     },
     goApplicant() {
-      this.$router.push('/corp/recruit/applicant').catch(()=>{})
-    }
-  }
+      this.$router.push(`/corp/recruit/applicant/${this.recruitId}`).catch(()=>{})
+    },
+    onModal(id, type) {
+      this.setRecruitId(id);
+      this.setUserModalId(id);
+      this.setUserDivide(type)
+      this.showModal = true;
+    },
+  },
+  beforeDestroy () {
+    this.setRecruitId('')
+    this.setUserDivide('')
+  },
 }
 </script>
 

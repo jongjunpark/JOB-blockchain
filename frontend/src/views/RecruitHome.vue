@@ -19,15 +19,18 @@
       <div class="recruit-data-box">
         <div class="recruit-data-content-box">
           <p>작성한공고</p>
-          <div class="recruit-data-content" v-for="recruit in RecruitList" :key="recruit.id" @click="onModal(recruit.id)">
-            <div class="recruit-data-head">
-              <span class="recruit-data-sort">{{ recruit.division }}</span>
-              <span class="recruit-data-name">{{ recruit.title }}</span>
-            </div>
-            <div class="recruit-data-footer">
-              <span>마감일</span>
-              <span>{{ recruit.deadline.substring(0,10) }}</span>
-              <span>{{ recruit.deadline.substring(10,12) }}:{{ recruit.deadline.substring(12,) }}</span>
+          <p v-if="RecruitList.length===0">작성한 공고가 없습니다.</p>
+          <div v-for="recruit in RecruitList" :key="recruit.id" @click="onModal(recruit.id)">
+            <div class="recruit-data-content" v-if="recruit.user.email === UserInfo.email">
+              <div class="recruit-data-head">
+                <span class="recruit-data-sort">{{ recruit.division }}</span>
+                <span class="recruit-data-name">{{ recruit.title }}</span>
+              </div>
+              <div class="recruit-data-footer">
+                <span>마감일</span>
+                <span>{{ recruit.deadline.substring(0,10) }}</span>
+                <span>{{ recruit.deadline.substring(10,12) }}:{{ recruit.deadline.substring(12,) }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -273,6 +276,13 @@ export default {
   margin-bottom: 20px;
   font-weight: 500;
   font-size: 25px;
+}
+
+.recruit-data-content-box > p:nth-child(2) {
+  font-size: 13px;
+  font-family: "Noto Sans KR", sans-serif !important;
+  margin-left: 250px;
+  font-weight: 400;
 }
 
 .recruit-data-content-box .recruit-data-content {

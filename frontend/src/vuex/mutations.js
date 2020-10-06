@@ -86,5 +86,8 @@ export default {
   },
   setRecruitId(state, data) {
     state.recruitId = data
+  },
+  setUserDivide(state, data) {
+    state.UserDivide = data
   }
 }

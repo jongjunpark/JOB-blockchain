@@ -19,26 +19,15 @@
       <div class="recruit-data-box">
         <div class="recruit-data-content-box">
           <p>작성한공고</p>
-          <div class="recruit-data-content">
+          <div class="recruit-data-content" v-for="recruit in RecruitList" :key="recruit.id">
             <div class="recruit-data-head">
-              <span class="recruit-data-sort">경력</span>
-              <span class="recruit-data-name">물류 경력사원 채용</span>
+              <span class="recruit-data-sort">{{ recruit.division }}</span>
+              <span class="recruit-data-name">{{ recruit.title }}</span>
             </div>
             <div class="recruit-data-footer">
               <span>마감일</span>
-              <span>2020.11.01</span>
-              <span>18:00</span>
-            </div>
-          </div>
-          <div class="recruit-data-content">
-            <div class="recruit-data-head">
-              <span class="recruit-data-sort">경력</span>
-              <span class="recruit-data-name">물류 경력사원 채용</span>
-            </div>
-            <div class="recruit-data-footer">
-              <span>마감일</span>
-              <span>2020.11.01</span>
-              <span>18:00</span>
+              <span>{{ recruit.deadline.substring(0,10) }}</span>
+              <span>{{ recruit.deadline.substring(10,12) }}:{{ recruit.deadline.substring(12,) }}</span>
             </div>
           </div>
         </div>
@@ -59,6 +48,7 @@ export default {
     return {
       test: '',
       getData: [],
+      RecruitList: [],
       profileImg: '',
     }
   },
@@ -71,6 +61,7 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
   },
   mounted() {
+    this.getRecruit()
     setTimeout(() => {
       this.getResume()
     }, 1000);
@@ -105,6 +96,19 @@ export default {
         if(this.getData.image) {
           this.getData.image = 'http://localhost:8000' + this.getData.image
         }
+      })
+      .catch((err) => console.log(err.response))
+    },
+    getRecruit() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}recruitments/`, null, config)
+      .then(res => {
+        console.log(res,'get recruitment')
+        this.RecruitList = res.data
       })
       .catch((err) => console.log(err.response))
     },

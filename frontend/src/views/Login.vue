@@ -77,6 +77,7 @@ export default {
       isPasswordValid: false,
       isIndiv: true,
       passwordSchema: new PasswordValidator(),
+      private_key: '',
     }
   },
   components: {
@@ -273,6 +274,7 @@ export default {
                 console.log('finish')
                 // 개인키 발급 => 향후 이것으로 결제 . 자기 계정인것을 증명
                 console.log(res.data)
+                this.private_key = res.data
               })
           let timerInterval
           Swal.fire({
@@ -301,9 +303,9 @@ export default {
             if (result.dismiss === Swal.DismissReason.timer) {
               console.log('I was closed by the timer')
               if(this.isIndiv === false) {
-                this.$router.push('/corp/recruit').catch(()=>{})
+                this.$router.push({name:'RecruitHome', params:{first: true, private_key: this.private_key}}).catch(()=>{})
               } else {
-                this.$router.push('/resume/edit').catch(()=>{})
+                this.$router.push({name:'ResumeEdit', params:{first: true, private_key: this.private_key}}).catch(()=>{})
               }
             }
             // <int:article_pk>/certificates/create

@@ -1,64 +1,36 @@
 <template>
   <transition name="modal">
-    <div class="buy-search-modal-mask">
-      <div class="buy-search-modal-wrap">
-        <div class="buy-search-modal-content">
+    <div class="mail-modal-mask">
+      <div class="mail-modal-wrap">
+        <div class="mail-modal-content">
           <i class="fas fa-times" @click.self="$emit('close')"></i>
-          <div class='buy-search-modal-header'>영상을</div>
-          <div class='buy-search-modal-header'>구매하시겠습니까?</div>
-          <div class="buy-modal-buy">
-            가격 : <p class="price">1000000 (ETH)</p>
+          <div>
+            <h1>서멍해주세요</h1>
+            <input v-model="password" placeholder="비밀번호를 입력하세요">
+            <h1>개인키를 입력하세요</h1>
+            <input v-model="key">
           </div>
-          <div class="buy-modal-buy">
-            수수료 : <p class="price">121000 (gas)</p>
-          </div>
-          <div class="buy-modal-buy">
-            내 잔액 : <p class="price-eth">{{ eth }} (ETH)</p>
-          </div>
-          <div class="buyVideoActive" v-if="eth>1000000+121000" @click="isShow=true">구매하기</div>
-          <div class="buyVideoNoactive" v-else>구매하기</div>
+          <button @click="goBuy">확인</button>
         </div>
       </div>
-      <SignModal v-if="isShow" @close="isShow=false"/>
     </div>
   </transition>
 </template>
 
 <script>
-import './css/buymodal.css'
-import { mapState } from 'vuex';
-import axios from 'axios';
+import './css/mail-validation-modal.css'
 import Swal from 'sweetalert2'
-import SignModal from '../components/SignModal.vue'
+import axios from 'axios'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
 export default {
-  name: 'BuyModal',
-  props: {
-    videoName: String,
-  },
-  components: {
-    SignModal,
-  },
-  data() {
+  name: 'SignModal.vue',
+  data(){
     return {
-      eth: '',
       password: '',
-      private_key: '',
-      isShow: false,
+      key: '',
     }
-  },
-  watch: {
-  },
-  computed: {
-    ...mapState(['UserInfo']),
-  },
-  created() {
-  },
-  mounted() {
-    this.eth = this.UserInfo.balance
-    console.log(this.UserInfo)
   },
   methods: {
     goBuy() {
@@ -68,8 +40,8 @@ export default {
         }
       }
       const Data = {
-        "password": "qhdrb111",
-        "private_key": "0xfc99bd02ff720fa73bb3d5772806a14573cd59dfda9af34704ab1d42bbf573e3",
+        "password": this.password,
+        "private_key": this.key,
         "video": this.videoName
       }
       axios.post(`${SERVER_URL}accounts/video/${this.UserInfo.id}/`, Data, config)

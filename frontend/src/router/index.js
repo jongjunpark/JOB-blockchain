@@ -32,7 +32,8 @@ Vue.use(VueRouter)
   {
     path: '/resume/edit',
     name: 'ResumeEdit',
-    component: ResumeEdit
+    component: ResumeEdit,
+    props: true
   },
   {
     path: '/video',
@@ -42,7 +43,8 @@ Vue.use(VueRouter)
   {
     path: '/corp/recruit',
     name: 'RecruitHome',
-    component: RecruitHome
+    component: RecruitHome,
+    props: true
   },
   {
     path: '/corp/recruit/write',

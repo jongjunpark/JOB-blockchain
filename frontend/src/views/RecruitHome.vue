@@ -21,15 +21,15 @@
           <p>작성한공고</p>
           <p v-if="RecruitList.length===0">작성한 공고가 없습니다.</p>
           <div v-for="recruit in RecruitList" :key="recruit.id" @click="onModal(recruit.id)">
-            <div class="recruit-data-content" v-if="recruit.user.email === UserInfo.email">
+            <div class="recruit-data-content" v-if="(recruit.user.email === UserInfo.email)&&(recruit.deadline>nowTime)">
               <div class="recruit-data-head">
                 <span class="recruit-data-sort">{{ recruit.division }}</span>
                 <span class="recruit-data-name">{{ recruit.title }}</span>
               </div>
               <div class="recruit-data-footer">
                 <span>마감일</span>
-                <span>{{ recruit.deadline.substring(0,10) }}</span>
-                <span>{{ recruit.deadline.substring(10,12) }}:{{ recruit.deadline.substring(12,) }}</span>
+                <span>{{recruit.deadline.substring(0,4)}}.{{recruit.deadline.substring(4,6)}}.{{recruit.deadline.substring(6,8)}}</span>
+                <span>{{ recruit.deadline.substring(8,10) }}:{{ recruit.deadline.substring(10,) }}</span>
               </div>
             </div>
           </div>
@@ -57,6 +57,7 @@ export default {
       getData: [],
       RecruitList: [],
       profileImg: '',
+      nowTime: '',
     }
   },
   components: {
@@ -69,6 +70,7 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
   },
   mounted() {
+    this.setNowTime()
     this.getRecruit()
     setTimeout(() => {
       this.getResume()
@@ -143,6 +145,22 @@ export default {
       this.setRecruitId(id)
       this.showModal = true;
     },
+    setNowTime() {
+      let today = new Date();   
+      let year = today.getFullYear()
+      let month = today.getMonth()+1
+      let date = ''+today.getDate()
+      let hours = today.getHours()
+      let minutes = today.getMinutes()
+      if(month.length === 1) {
+        month = '0' + month
+      }
+      if (date.length === 1) {
+        date = '0' + date
+      }
+      this.nowTime = year + '' + month + '' + date + '' + hours + '' + minutes
+      console.log(this.nowTime)
+    }
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.handleScroll)

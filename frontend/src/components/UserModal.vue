@@ -17,7 +17,7 @@
                 <p>{{ getData.phone_number }}</p>
               </div>
             </div>
-            <div class='user-modal-body'>
+            <div class='user-modal-body user-modal-unlock'>
               <div class="user-modal-content-box">
                 <p>병역사항</p>
                 <div class="user-modal-data-content">
@@ -119,7 +119,9 @@
               </div>
             </div>
             <div class="user-modal-footer">
-              <div class="user-modal-btn" @click.self="$emit('close')">닫기</div>
+              <div class="user-modal-btn" @click="goBuy" v-if="UserModalId != UserInfo.id && !isBuy">구매하기</div>
+              <div class="user-modal-btn" @click="goBuy" v-if="UserModalId != UserInfo.id && isBuy">보러가기</div>
+              <div class="user-modal-btn" @click.self="$emit('close')" style="background-color:red">닫기</div>
             </div>
           </div>
         </div>
@@ -130,7 +132,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import axios from 'axios'
+import axios from 'axios';
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -145,6 +147,7 @@ export default {
       certifiedSchool: [[],[],[],[],[]],
       certifiedEtc: [[],[]],
       isCareerText: [],
+      isBuy: false,
     }
   },
   watch: {
@@ -158,8 +161,28 @@ export default {
     setTimeout(() => {
       this.getResume()
     }, 1000);
+    const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.post(`${SERVER_URL}accounts/item/list/${this.UserModalId}/`, null, config)
+      .then(res => {
+        if (res.data.result == 1) {
+          this.isBuy = true
+          const Lock = document.querySelector('.user-modal-unlock')
+          Lock.classList.remove('user-modal-unlock')
+        }
+        else {
+          this.isBuy = false
+        }
+      })
+      .catch((err) => console.log(err.response))
   },
   methods: {
+    goBuy() {
+      this.$router.push(`/otherresume/${this.UserModalId}`)
+    },
     getResume() {
       const config = {
         headers: {
@@ -510,5 +533,9 @@ export default {
 
 .user-modal-mark-box .fa-check-circle {
   margin-right: 5px;
+}
+
+.user-modal-unlock {
+  filter: blur(3px);
 }
 </style>

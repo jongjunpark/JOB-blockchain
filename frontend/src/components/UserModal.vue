@@ -17,7 +17,7 @@
                 <p>{{ getData.phone_number }}</p>
               </div>
             </div>
-            <div class='user-modal-body'>
+            <div class='user-modal-body user-modal-unlock'>
               <div class="user-modal-content-box">
                 <p>병역사항</p>
                 <div class="user-modal-data-content">
@@ -139,6 +139,9 @@
               </div>
             </div>
             <div class="user-modal-footer">
+              <div class="user-modal-btn" @click="goBuy" v-if="UserModalId != UserInfo.id && !isBuy">구매하기</div>
+              <div class="user-modal-btn" @click="goBuy" v-if="UserModalId != UserInfo.id && isBuy">보러가기</div>
+              <div class="user-modal-btn" @click.self="$emit('close')" style="background-color:red">닫기</div>
               <div v-if="UserDivide==='individual'" class="user-modal-btn user-modal-btn-on" @click="saveSelf">저장하기</div>
               <div v-if="(UserDivide==='individual')&&!isSameUser" class="user-modal-btn user-modal-btn-on" @click="applySelf">지원하기</div>
               <div v-if="(UserDivide==='individual')&&isSameUser" class="user-modal-btn" @click="applySelf">취소하기</div>
@@ -153,7 +156,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import axios from 'axios'
+import axios from 'axios';
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -174,6 +177,7 @@ export default {
       isMySelf: false,
       isSameUser: false,
       mySelfList: [],
+      isBuy: false,
     }
   },
   watch: {
@@ -187,8 +191,29 @@ export default {
     this.getResume()
     this.getSelfList();
     this.getApplicant();
+    this.getMySelf()
+    const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.post(`${SERVER_URL}accounts/item/list/${this.UserModalId}/`, null, config)
+      .then(res => {
+        if (res.data.result == 1) {
+          this.isBuy = true
+          const Lock = document.querySelector('.user-modal-unlock')
+          Lock.classList.remove('user-modal-unlock')
+        }
+        else {
+          this.isBuy = false
+        }
+      })
+      .catch((err) => console.log(err.response))
   },
   methods: {
+    goBuy() {
+      this.$router.push(`/otherresume/${this.UserModalId}`)
+    },
     getResume() {
       const config = {
         headers: {
@@ -742,5 +767,9 @@ export default {
 .user-modal-self-box textarea:focus {
   border: none;
   outline: none;
+}
+
+.user-modal-unlock {
+  filter: blur(3px);
 }
 </style>

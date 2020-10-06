@@ -15,10 +15,11 @@
           <div class="buy-modal-buy">
             내 잔액 : <p class="price-eth">{{ eth }} (ETH)</p>
           </div>
-          <div class="buyVideoActive" v-if="eth>1000000+121000" @click="goBuy">구매하기</div>
+          <div class="buyVideoActive" v-if="eth>1000000+121000" @click="isShow=true">구매하기</div>
           <div class="buyVideoNoactive" v-else>구매하기</div>
         </div>
       </div>
+      <SignModal v-if="isShow" @close="isShow=false"/>
     </div>
   </transition>
 </template>
@@ -28,21 +29,25 @@ import './css/buymodal.css'
 import { mapState } from 'vuex';
 import axios from 'axios';
 import Swal from 'sweetalert2'
+import SignModal from '../components/SignModal.vue'
+
 const SERVER_URL = 'http://127.0.0.1:8000/'
-
-
 
 export default {
   name: 'BuyModal',
   props: {
     videoName: String,
   },
-
+  components: {
+    SignModal,
+  },
   data() {
     return {
       eth: '',
       password: '',
       private_key: '',
+      isShow: false,
+      ans : false,
     }
   },
   watch: {
@@ -65,19 +70,24 @@ export default {
       }
       const Data = {
         "password": "qhdrb111",
-        "private_key": "0xfc99bd02ff720fa73bb3d5772806a14573cd59dfda9af34704ab1d42bbf573e3",
+        "private_key": "0x3951c3125fc62c25fb17d715b576f825e4fcb710e74cfcb139476244a8b260a1",
         "video": this.videoName
       }
       axios.post(`${SERVER_URL}accounts/video/${this.UserInfo.id}/`, Data, config)
       .then(res => {
         console.log(res.data)
+        if (res.data.result == 'fail') {
+          this.ans = true
+        } else {
+          this.ans = false
+        }
       })
       .catch((err) => console.log(err.response))
       let timerInterval
           Swal.fire({
             title: '잠시만 기다려주세요!',
             html: '상품을 구매중입니다',
-            timer: 7000,
+            timer: 8000,
             timerProgressBar: true,
             showConfirmButton: false,
             willOpen: () => {
@@ -99,7 +109,16 @@ export default {
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
               console.log('I was closed by the timer')
-              this.$router.go('/video')
+              if (this.ans == true) {
+              Swal.fire({
+                icon: 'error',
+                title: '구매에 실패하였습니다.',
+                text: '비밀번호 혹은 서명을 확인해주세요!'
+              })} 
+              else {
+                this.$router.go('/video')
+              }
+                
             }
             // <int:article_pk>/certificates/create
             // this.createCertificate()

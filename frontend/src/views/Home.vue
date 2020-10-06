@@ -3,7 +3,7 @@
     <div class="wrap-container home-container">
       <div class="schedule-box">
         <div class="recruit-box">
-          <p class="recruit-header">추천공고</p>
+          <p class="recruit-header">마감임박 공고</p>
           <div id="recruit-slider">
             <input type="radio" name='slider' id='recruit-slide1' checked>
             <input type="radio" name='slider' id='recruit-slide2'>
@@ -36,42 +36,6 @@
           </div>          
         </div>
       </div>
-      <div class="calendar-box">
-        <p class="calendar-header">일정</p>
-        <div class="calendar">
-          <SingleDatePicker class='test' @selectDate='selectDate'/>
-          <div class="calendar-content">
-            <div v-if="!isSelect">
-              <span>오늘의 일정</span>
-              <div class='calendar-select-box'>
-                <div v-for="recruit in todayRecruits" :key="recruit" class='calendar-recruit-box'>
-                  <div class='calendar-select-type'>채용</div>
-                  {{ recruit }}
-                </div>
-                <div v-for="test in todayTests" :key="test" class='calendar-test-box'>
-                  <div class='calendar-select-type'>시험</div>
-                  {{ test }}
-                </div>
-              </div>
-            </div>
-            <div v-if='isSelect'>
-              <span>{{ selectYear.substring(0,2) }}.</span>
-              <span>{{ selectMonth }}.</span>
-              <span>{{ selectDay }} 일정 </span>
-              <div class='calendar-select-box'>
-                <div v-for="recruit in selectRecruits" :key="recruit" class='calendar-recruit-box'>
-                  <div class='calendar-select-type'>채용</div>
-                  {{ recruit }}
-                </div>
-                <div v-for="test in selectTests" :key="test" class='calendar-test-box'>
-                  <div class='calendar-select-type'>시험</div>
-                  {{ test }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <RecruitModal v-if="showModal" @close="showModal= false"/>
@@ -81,9 +45,7 @@
 <script>
 import axios from 'axios'
 import { mapMutations } from 'vuex';
-import SingleDatePicker from 'vue-single-date-picker';
 import RecruitModal from '../components/RecruitModal.vue'
-import 'vue-single-date-picker/dist/vue-single-date-picker.css';
 import '../components/css/home.css'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
@@ -125,7 +87,6 @@ export default {
     }
   },
   components: {
-    SingleDatePicker,
     RecruitModal
   },
   mounted() {

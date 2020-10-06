@@ -21,7 +21,7 @@
         </div>
         <div class="menu-bar-box">
           <div class="menu-bar" @click="goResume">이력서</div>
-          <div class="menu-bar">취업달력</div>
+          <div class="menu-bar" @click="goCalendar">취업달력</div>
           <div class="menu-bar" @click="goVideo">교육</div>
           <div class="menu-bar" @click="goSearch">검색</div>
         </div>
@@ -75,6 +75,9 @@ export default {
     },
     goVideo() {
       this.$router.push('/video').catch(()=>{})
+    },
+    goCalendar() {
+      this.$router.push('/calendar').catch(()=>{})
     },
     goSearch() {
       this.$router.push('/search').catch(()=>{})

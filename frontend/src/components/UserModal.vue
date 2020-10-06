@@ -139,6 +139,9 @@
               </div>
             </div>
             <div class="user-modal-footer">
+              <div class="user-modal-btn" @click="goBuy" v-if="UserModalId != UserInfo.id && !isBuy">구매하기</div>
+              <div class="user-modal-btn" @click="goBuy" v-if="UserModalId != UserInfo.id && isBuy">보러가기</div>
+              <div class="user-modal-btn" @click.self="$emit('close')" style="background-color:red">닫기</div>
               <div v-if="UserDivide==='individual'" class="user-modal-btn user-modal-btn-on" @click="saveSelf">저장하기</div>
               <div v-if="(UserDivide==='individual')&&!isSameUser" class="user-modal-btn user-modal-btn-on" @click="applySelf">지원하기</div>
               <div v-if="(UserDivide==='individual')&&isSameUser" class="user-modal-btn" @click="applySelf">취소하기</div>
@@ -173,6 +176,7 @@ export default {
       isMySelf: false,
       isSameUser: false,
       mySelfList: [],
+      isBuy: false,
     }
   },
   watch: {
@@ -183,8 +187,10 @@ export default {
   created() {
   },
   mounted() {
-      this.getResume()
-    }, 1000);
+    this.getResume()
+    this.getSelfList();
+    this.getApplicant();
+    this.getMySelf()
     const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -734,5 +740,9 @@ export default {
 .user-modal-self-box textarea:focus {
   border: none;
   outline: none;
+}
+
+.user-modal-unlock {
+  filter: blur(3px);
 }
 </style>

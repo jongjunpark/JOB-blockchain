@@ -278,8 +278,9 @@ export default {
           Swal.fire({
             title: '잠시만 기다려주세요!',
             html: '현재 지갑을 생성중입니다',
-            timer: 6000,
+            timer: 7000,
             timerProgressBar: true,
+            showConfirmButton: false,
             willOpen: () => {
               Swal.showLoading()
               timerInterval = setInterval(() => {

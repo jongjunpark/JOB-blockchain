@@ -16,7 +16,8 @@ class UserSerializer(serializers.ModelSerializer):
   password2 = serializers.CharField(required=True, write_only=True)
   class Meta:
     model = User
-    fields = ('id', 'email', 'flag', 'first_name', 'last_name', 'password1', 'password2', 'wallet_addr', 'balance')
+    fields = ('id', 'email', 'flag', 'first_name', 'last_name', 'password1', 'password2', 'wallet_addr', 'balance', 'it', 'electric'
+    , 'semiconductor', 'design', 'eng')
 
   def validate_password1(self, password):
       return get_adapter().clean_password(password)

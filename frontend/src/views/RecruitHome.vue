@@ -19,37 +19,29 @@
       <div class="recruit-data-box">
         <div class="recruit-data-content-box">
           <p>작성한공고</p>
-          <div class="recruit-data-content">
+          <div class="recruit-data-content" v-for="recruit in RecruitList" :key="recruit.id" @click="onModal(recruit.id)">
             <div class="recruit-data-head">
-              <span class="recruit-data-sort">경력</span>
-              <span class="recruit-data-name">물류 경력사원 채용</span>
+              <span class="recruit-data-sort">{{ recruit.division }}</span>
+              <span class="recruit-data-name">{{ recruit.title }}</span>
             </div>
             <div class="recruit-data-footer">
               <span>마감일</span>
-              <span>2020.11.01</span>
-              <span>18:00</span>
-            </div>
-          </div>
-          <div class="recruit-data-content">
-            <div class="recruit-data-head">
-              <span class="recruit-data-sort">경력</span>
-              <span class="recruit-data-name">물류 경력사원 채용</span>
-            </div>
-            <div class="recruit-data-footer">
-              <span>마감일</span>
-              <span>2020.11.01</span>
-              <span>18:00</span>
+              <span>{{ recruit.deadline.substring(0,10) }}</span>
+              <span>{{ recruit.deadline.substring(10,12) }}:{{ recruit.deadline.substring(12,) }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <RecruitModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
+import RecruitModal from '../components/RecruitModal.vue'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -57,12 +49,15 @@ export default {
   name: 'RecruitHome',
   data() {
     return {
+      showModal: false,
       test: '',
       getData: [],
+      RecruitList: [],
       profileImg: '',
     }
   },
   components: {
+    RecruitModal,
   },
   computed: {
     ...mapState(['UserInfo']),
@@ -71,6 +66,7 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
   },
   mounted() {
+    this.getRecruit()
     setTimeout(() => {
       this.getResume()
     }, 1000);
@@ -78,6 +74,7 @@ export default {
   watch: {
   },
   methods: {
+    ...mapMutations(['setRecruitId']),
     handleScroll() {
       const ORIGIN = 0
       let TOP = window.scrollY
@@ -108,6 +105,19 @@ export default {
       })
       .catch((err) => console.log(err.response))
     },
+    getRecruit() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}recruitments/`, null, config)
+      .then(res => {
+        console.log(res,'get recruitment')
+        this.RecruitList = res.data
+      })
+      .catch((err) => console.log(err.response))
+    },
     editResume() {
       let data = new FormData();
       data.append('image', this.profileImg);
@@ -125,6 +135,10 @@ export default {
         })
         .catch((err) => console.log(err.response))
       }
+    },
+    onModal(id) {
+      this.setRecruitId(id)
+      this.showModal = true;
     },
   },
   beforeDestroy () {

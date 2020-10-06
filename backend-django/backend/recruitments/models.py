@@ -18,4 +18,4 @@ class Introduction(models.Model):
     recruitment = models.ForeignKey(Recruitment, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    number = models.IntegerField()
+    number = models.CharField(max_length=100)

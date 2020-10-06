@@ -18,7 +18,7 @@ class RecruitmentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class IntroductionSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(required=False)
     class Meta:
         model = Introduction
         fields = '__all__'

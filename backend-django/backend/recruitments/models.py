@@ -10,7 +10,7 @@ class Recruitment(models.Model):
     title = models.CharField(max_length=100)
     startdate = models.CharField(max_length=100)
     deadline = models.CharField(max_length=100)
-    applicants = models.ManyToManyField("articles.Article", related_name='applicants_set')
+    applicants = models.ManyToManyField("articles.Article", related_name='applicants_set', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -5,10 +5,10 @@ from accounts.serializers import UserSerializer
 
 class RecruitmentListSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    images = serializers.ImageField(use_url=True)
+    image = serializers.ImageField(use_url=True)
     class Meta:
-        Model = Recruitment
-        fields = ('division', 'title', 'startdate', 'deadline', 'images')
+        model = Recruitment
+        fields = ('user', 'division', 'title', 'startdate', 'deadline', 'image', 'id')
 
 class RecruitmentSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)

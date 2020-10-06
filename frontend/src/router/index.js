@@ -11,6 +11,7 @@ import Applicant from '../views/Applicant.vue'
 import Mypage from '../views/Mypage.vue'
 import Search from '../views/Search.vue'
 import OtherResume from '../views/OtherResume.vue'
+import Calendar from '../views/Calendar.vue'
 
 Vue.use(VueRouter)
 
@@ -72,6 +73,11 @@ Vue.use(VueRouter)
     name: 'OtherResume',
     component: OtherResume
   },
+  {
+    path: '/calendar',
+    name: 'Calendar',
+    component: Calendar
+  }
 ]
 
 const router = new VueRouter({

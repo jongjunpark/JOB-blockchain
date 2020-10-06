@@ -19,7 +19,7 @@
       <div class="recruit-data-box">
         <div class="recruit-data-content-box">
           <p>작성한공고</p>
-          <div class="recruit-data-content" v-for="recruit in RecruitList" :key="recruit.id">
+          <div class="recruit-data-content" v-for="recruit in RecruitList" :key="recruit.id" @click="onModal(recruit.id)">
             <div class="recruit-data-head">
               <span class="recruit-data-sort">{{ recruit.division }}</span>
               <span class="recruit-data-name">{{ recruit.title }}</span>
@@ -33,12 +33,15 @@
         </div>
       </div>
     </div>
+
+    <RecruitModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
+import RecruitModal from '../components/RecruitModal.vue'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -46,6 +49,7 @@ export default {
   name: 'RecruitHome',
   data() {
     return {
+      showModal: false,
       test: '',
       getData: [],
       RecruitList: [],
@@ -53,6 +57,7 @@ export default {
     }
   },
   components: {
+    RecruitModal,
   },
   computed: {
     ...mapState(['UserInfo']),
@@ -69,6 +74,7 @@ export default {
   watch: {
   },
   methods: {
+    ...mapMutations(['setRecruitId']),
     handleScroll() {
       const ORIGIN = 0
       let TOP = window.scrollY
@@ -129,6 +135,10 @@ export default {
         })
         .catch((err) => console.log(err.response))
       }
+    },
+    onModal(id) {
+      this.setRecruitId(id)
+      this.showModal = true;
     },
   },
   beforeDestroy () {

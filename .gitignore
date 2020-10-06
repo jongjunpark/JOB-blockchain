@@ -394,4 +394,4 @@ dmypy.json
 .prof
 
 # End of https://www.toptal.com/developers/gitignore/api/django
-/backend-django/backend/dev/
+/backend-django/backend/dev/chaindata

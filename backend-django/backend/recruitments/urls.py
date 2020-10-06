@@ -6,6 +6,7 @@ app_name = 'recruitments'
 urlpatterns = [
     path('', views.index, name='index'),
     path('showlist/', views.showlist, name='showlist'),
+    path('showlist2/', views.showlist2, name='showlist2'),
     path('calendar/<str:date>/', views.calendar, name='calendar'),
     path('create/', views.create, name='create'),
     path('<int:recruitment_pk>/', views.detail, name='detail'),

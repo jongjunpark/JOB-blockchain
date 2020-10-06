@@ -122,9 +122,9 @@
                 <div class="user-modal-self-box" v-for="(self,index) in selfList" :key='`self-${index}`'>
                   <div class="user-modal-self-head">
                     <p>{{ index+1 }}. {{ self.title }} <span>({{ self.number }}자)</span></p>
-                    <p v-if="mySelfList[index]">{{mySelfList[index].content.length}}/{{self.number}}</p>
+                    <p>{{mySelfList[index].content.length}}/{{self.number}}</p>
                   </div>
-                  <textarea v-if="mySelfList[index]" v-model="mySelfList[index].content" v-on:input="mySelfList[index].content = $event.target.value" name="" id="" cols="30" rows="10"></textarea>
+                  <textarea v-model="mySelfList[index].content" v-on:input="mySelfList[index].content = $event.target.value" name="" id="" cols="30" rows="10"></textarea>
                 </div>
               </div>
               <div v-if="UserDivide==='corp'" class="user-modal-content-box">
@@ -171,6 +171,7 @@ export default {
       certifiedSchool: [[],[],[],[],[]],
       certifiedEtc: [[],[]],
       isCareerText: [],
+      selfListTmp: [],
       selfList: [],
       selfLength: 0,
       isMySelf: false,
@@ -264,10 +265,9 @@ export default {
       axios.get(`${SERVER_URL}recruitments/${this.recruitId}/introductions/`, null, config)
       .then(res => {
         console.log(res,'get self list')
-        this.selfList = res.data
-        for(let i=0; i<this.selfList.length; i++) {
-          this.selfLength += 1
-        }
+        this.selfListTmp = res.data
+        this.selfLength = res.data.length
+        this.getMySelf();
       })
       .catch((err) => console.log(err.response))
     },
@@ -280,12 +280,18 @@ export default {
         axios.get(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/`, null, config)
         .then(res => {
           console.log(res,'get mySelf')
-          this.mySelfList = res.data
           if(res.data.length>0) {
             this.isMySelf = true
+            this.mySelfList = res.data
+            this.selfList = this.selfListTmp
           } else {
-            this.isMySelf = false            
+            this.isMySelf = false
+            for(let i=0; i<this.selfLength; i++) {
+              this.mySelfList.push({content:''})       
+            }
+            this.selfList = this.selfListTmp
           }
+          console.log(this.isMySelf, '33')
         })
         .catch((err) => console.log(err.response))
     },
@@ -407,12 +413,31 @@ export default {
         }
       }
       if(this.isMySelf) {
-        axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
-        .then(res => {
-          console.log(res,'apply!')
-          this.$emit('close')
-        })
-        .catch((err) => console.log(err.response))
+        for(let i=0; i<this.mySelfList.length; i++) {
+          const config = {
+            headers: {
+              Authorization: `Token ${this.$cookies.get('auth-token')}`
+            }
+          }
+          axios.put(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/${this.mySelfList[i].id}/`, {
+            article: this.UserModalId,
+            recruitment: this.recruitId,
+            content: this.mySelfList[i].content
+          }, config)
+          .then(res => {
+            console.log(res,'save self')
+            if (i===this.mySelfList.length-1) {
+              axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
+              .then(res => {
+                console.log(res,'apply!')
+                this.$emit('close')
+              })
+              .catch((err) => console.log(err.response))
+            }
+          })
+          .catch((err) => console.log(err.response))
+        }
+        
       } else {
         for(let i=0; i<this.mySelfList.length; i++) {
           axios.post(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/create/`, {
@@ -422,12 +447,14 @@ export default {
           }, config)
           .then(res => {
             console.log(res,'create self')
-            axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
-            .then(res => {
-              console.log(res,'apply!')
-              this.$emit('close')
-            })
-            .catch((err) => console.log(err.response))
+            if (i===this.mySelfList.length-1) {
+              axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
+              .then(res => {
+                console.log(res,'apply!')
+                this.$emit('close')
+              })
+              .catch((err) => console.log(err.response))
+            }
           })
           .catch((err) => console.log(err.response))
         }

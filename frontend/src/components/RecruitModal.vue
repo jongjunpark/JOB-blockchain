@@ -8,10 +8,11 @@
             <div class='recruit-modal-header'>
               <p class="recruit-modal-corp-name">{{ UserInfo.last_name }}</p>
               <p class="recruit-modal-name"><span>{{ RecruitDetail.division }}</span>{{ RecruitDetail.title }}</p>
-              <p v-if="RecruitDetail.startdate" class="recruit-modal-date">{{ RecruitDetail.startdate.substring(0,10) }} 
-                {{ RecruitDetail.startdate.substring(10,12) }}:{{ RecruitDetail.startdate.substring(12,) }}
-                ~ {{ RecruitDetail.deadline.substring(0,10) }} 
-                {{ RecruitDetail.deadline.substring(10,12) }}:{{ RecruitDetail.deadline.substring(12,) }}</p>
+              <p v-if="RecruitDetail.startdate" class="recruit-modal-date">
+                {{RecruitDetail.startdate.substring(0,4)}}.{{RecruitDetail.startdate.substring(4,6)}}.{{RecruitDetail.startdate.substring(6,8)}} 
+                {{ RecruitDetail.startdate.substring(8,10) }}:{{ RecruitDetail.startdate.substring(10,) }}
+                ~ {{RecruitDetail.deadline.substring(0,4)}}.{{RecruitDetail.deadline.substring(4,6)}}.{{RecruitDetail.deadline.substring(6,8)}} 
+                {{ RecruitDetail.deadline.substring(8,10) }}:{{ RecruitDetail.deadline.substring(10,) }}</p>
             </div>
             <div class='recruit-modal-body'>
               <img :src="'http://localhost:8000' + RecruitDetail.image" alt="">
@@ -67,7 +68,7 @@ export default {
           Authorization: `Token ${this.$cookies.get('auth-token')}`
         }
       }
-      axios.get(`${SERVER_URL}recruitments/${this.recruitId}`, null, config)
+      axios.get(`${SERVER_URL}recruitments/${this.recruitId}/`, null, config)
       .then(res => {
         console.log(res,'get recruitment detail')
         this.RecruitDetail = res.data
@@ -141,8 +142,8 @@ export default {
 
 .modal-enter .recruit-modal-wrap,
 .modal-leave-active .recruit-modal-wrap {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .recruit-modal-wrap {

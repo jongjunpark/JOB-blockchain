@@ -122,9 +122,9 @@
                 <div class="user-modal-self-box" v-for="(self,index) in selfList" :key='`self-${index}`'>
                   <div class="user-modal-self-head">
                     <p>{{ index+1 }}. {{ self.title }} <span>({{ self.number }}자)</span></p>
-                    <p v-if="mySelfList[index].content">{{mySelfList[index].content.length}}/{{self.number}}</p>
+                    <p v-if="mySelfList[index]">{{mySelfList[index].content.length}}/{{self.number}}</p>
                   </div>
-                  <textarea v-model="mySelfList[index].content" v-on:input="mySelfList[index].content = $event.target.value" name="" id="" cols="30" rows="10"></textarea>
+                  <textarea v-if="mySelfList[index]" v-model="mySelfList[index].content" v-on:input="mySelfList[index].content = $event.target.value" name="" id="" cols="30" rows="10"></textarea>
                 </div>
               </div>
               <div v-if="UserDivide==='corp'" class="user-modal-content-box">
@@ -351,7 +351,8 @@ export default {
             content: this.mySelfList[i].content
           }, config)
           .then(res => {
-            console.log(res,'create self')
+            console.log(res,'save self')
+            this.$emit('close')
           })
           .catch((err) => console.log(err.response))
         }
@@ -369,6 +370,7 @@ export default {
           }, config)
           .then(res => {
             console.log(res,'create self')
+            this.$emit('close')
           })
           .catch((err) => console.log(err.response))
         }
@@ -384,6 +386,7 @@ export default {
         axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
         .then(res => {
           console.log(res,'apply!')
+          this.$emit('close')
         })
         .catch((err) => console.log(err.response))
       } else {
@@ -398,6 +401,7 @@ export default {
             axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
             .then(res => {
               console.log(res,'apply!')
+              this.$emit('close')
             })
             .catch((err) => console.log(err.response))
           })
@@ -459,8 +463,8 @@ export default {
 
 .modal-enter .user-modal-wrap,
 .modal-leave-active .user-modal-wrap {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .user-modal-wrap {

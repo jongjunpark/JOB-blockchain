@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from .models import User, Transaction
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer, ItemListSerializer
+from .serializers import UserSerializer, ItemListSerializer, TransListSerializer
 from rest_framework.response import Response
 from django.core.mail import EmailMessage
 from articles.models import Article
+from django.db.models import Q
 
 import random
 import json
@@ -288,8 +289,8 @@ def item_purchase(request, id):
             blockNumber=pending_transactions[0]['blockNumber'],
             from_adrr=pending_transactions[0]['from'],
             to_addr=pending_transactions[0]['to'],
-            from_pk=another.id,
-            to_pk=user.id,
+            from_pk=user.id,
+            to_pk=another.id,
             gas=pending_transactions[0]['gas'],
             gasPrice=pending_transactions[0]['gasPrice'],
             nonce=pending_transactions[0]['nonce'],
@@ -381,3 +382,15 @@ def video_purchase(request, id):
 
 
     return Response({"result": "sucess"})
+
+## 내역 조회
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def trans(request):
+    user = request.user
+    print(user)
+    trans = Transaction.objects.filter(Q(from_pk=user.id) | Q(to_pk=user.id)).order_by('-pk')
+    serializer = TransListSerializer(trans, many=True)
+
+    return Response(serializer.data)

@@ -54,7 +54,7 @@ import UserModal from '../components/UserModal.vue';
 import '../components/css/applicant.css'
 import { mapMutations } from 'vuex';
 
-const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
 export default {
   name: 'Applicant',

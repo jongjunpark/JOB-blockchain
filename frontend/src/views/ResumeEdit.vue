@@ -657,7 +657,7 @@ import '../components/css/resume-edit.css';
 import Swal from 'sweetalert2';
 import swal from 'sweetalert';
 
-const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
 export default {
   name: 'ResumeEdit',
@@ -823,7 +823,9 @@ export default {
     else {
       this.setIsLoggedIn(false);
     }
-    swal(`warning\n`, `${this.private_key.result}\n\n1. 지갑 비밀키를 잃어버리지 마세요! 한 번 잃어버리면 복구 할 수 없습니다.\n2. 공유하지 마세요! 비밀키가 악위적인 사이트에 노출되면 당신의 자산이 유실될 수 있습니다.\n3. 백업을 만들어 두세요! 종이에 적어서 오프라인으로 관리하세요.`, "warning")
+    if (this.first === true) {
+      swal(`warning\n`, `${this.private_key.result}\n\n1. 지갑 비밀키를 잃어버리지 마세요! 한 번 잃어버리면 복구 할 수 없습니다.\n2. 공유하지 마세요! 비밀키가 악위적인 사이트에 노출되면 당신의 자산이 유실될 수 있습니다.\n3. 백업을 만들어 두세요! 종이에 적어서 오프라인으로 관리하세요.`, "warning")
+    }
   },
   computed: {
     ...mapState(['selectedSchool', 'selectedSchoolType', 'selectedMajor', 'selectedMajorType', 'selectedMajorType2', 'UserInfo']),
@@ -1205,7 +1207,7 @@ export default {
         console.log(res,'get resume')
         this.getData = res.data
         if(this.getData.image) {
-          this.getData.image = 'http://localhost:8000' + this.getData.image
+          this.getData.image = 'https://j3b104.p.ssafy.io' + this.getData.image
         }
         this.sortSchool()
         this.sortEtc()

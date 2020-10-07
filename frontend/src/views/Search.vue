@@ -8,7 +8,7 @@
             <p v-if="userList.length===0" key='-1'>검색결과가 없습니다.</p>
             <div class='search-user-item' v-for='user in userList' :key='user.user.id' @click="onModal(user.user.id, 'search')">
               <div class="search-user-img">
-                <img v-show="user.image" :src="'http://localhost:8000' + user.image" alt="#">
+                <img v-show="user.image" :src="'https://j3b104.p.ssafy.io/' + user.image" alt="#">
                 <img v-show="!user.image" src="../assets/images/default-user.png" alt="#">
               </div>
               <div class="search-user-content">
@@ -30,7 +30,7 @@ import UserModal from '../components/UserModal.vue';
 import '../components/css/search.css';
 import { mapMutations } from 'vuex';
 
-const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
 export default {
   name: 'Search',

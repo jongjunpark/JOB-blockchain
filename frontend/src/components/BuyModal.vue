@@ -31,7 +31,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import SignModal from '../components/SignModal.vue'
 
-const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
 export default {
   name: 'BuyModal',

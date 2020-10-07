@@ -23,7 +23,7 @@
                       <div class="recruit-card-box">
                         <div class="recruit-card" v-for="recruit in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
                           <div class="recruit-card-img-box">
-                            <img v-if="recruitImg2[recruit.user.id]" :src="'http://localhost:8000'+recruitImg2[recruit.user.id]" alt="">
+                            <img v-if="recruitImg2[recruit.user.id]" :src="'https://j3b104.p.ssafy.io'+recruitImg2[recruit.user.id]" alt="">
                             <img v-else src="@/assets/images/company2.png" alt="">
                           </div>
                           <p>{{ recruit.user.last_name }}</p>
@@ -63,7 +63,7 @@
                       <div class="test-card-box">
                         <div class="test-card" v-for="recruit in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
                           <div class="test-card-img-box">
-                            <img v-if="recruitImg[recruit.user.id]" :src="'http://localhost:8000'+recruitImg[recruit.user.id]" alt="">
+                            <img v-if="recruitImg[recruit.user.id]" :src="'https://j3b104.p.ssafy.io'+recruitImg[recruit.user.id]" alt="">
                             <img v-else src="@/assets/images/company2.png" alt="">
                           </div>
                           <p>{{ recruit.user.last_name }}</p>
@@ -93,7 +93,7 @@ import { mapState, mapMutations } from 'vuex';
 import RecruitModal from '../components/RecruitModal.vue'
 import '../components/css/home.css'
 
-const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 // const WORK_API_KEY = process.env.VUE_APP_WORK_API_KEY
 
 export default {

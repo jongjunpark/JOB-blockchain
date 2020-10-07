@@ -15,7 +15,7 @@
                 {{ RecruitDetail.deadline.substring(8,10) }}:{{ RecruitDetail.deadline.substring(10,) }}</p>
             </div>
             <div class='recruit-modal-body'>
-              <img :src="'https://j3b104.p.ssafy.io' + RecruitDetail.image" alt="">
+              <img :src="'https://j3b104.p.ssafy.io/' + RecruitDetail.image" alt="">
             </div>
             <div class="recruit-modal-footer">
               <div v-if="UserInfo.flag===0" class="recruit-modal-btn" @click="goApplicant">지원자목록</div>

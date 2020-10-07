@@ -103,7 +103,6 @@ export default {
       }
       axios.get(`${SERVER_URL}recruitments/${this.recruitID}`, null, config)
       .then(res => {
-        console.log(res,'get recruitment detail2')
         this.RecruitDetail = res.data
         for (let i=0; i<res.data.applicants.length; i++) {
           const config = {
@@ -113,19 +112,17 @@ export default {
           }
           axios.get(`${SERVER_URL}articles/${res.data.applicants[i]}/`, null, config)
           .then(res => {
-            console.log(res,'get resume detail')
             this.userList.push(res.data) 
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     onModal(id, type) {
       this.setUserModalId(id);
       this.setUserDivide(type)
       this.setRecruitId(this.recruitID)
-      console.log(id, type, this.recruitID)
       this.showModal = true;
     },
   },

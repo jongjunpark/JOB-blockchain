@@ -19,7 +19,7 @@
             </div>
             <div class="recruit-modal-footer">
               <div v-if="UserInfo.flag===0" class="recruit-modal-btn" @click="goApplicant">지원자목록</div>
-              <div v-else class="recruit-modal-btn" @click="onModal(UserInfo.id, 'individual')">지원하기</div>
+              <div v-if="UserInfo.flag===1" class="recruit-modal-btn" @click="onModal(UserInfo.id, 'individual')">지원하기</div>
             </div>
           </div>
         </div>
@@ -71,11 +71,10 @@ export default {
       }
       axios.get(`${SERVER_URL}recruitments/${this.recruitId}/`, null, config)
       .then(res => {
-        console.log(res,'get recruitment detail')
         this.RecruitDetail = res.data
         this.RecruitName = res.data.user.last_name
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     goApplicant() {
       this.$router.push(`/corp/recruit/applicant/${this.recruitId}`).catch(()=>{})

@@ -107,6 +107,7 @@ export default {
           this.$cookies.remove('auth-token')
           this.setToken(null)
           this.setIsLoggedIn(false)
+          this.setUserInfo()
           // if (this.$route.name === 'Home') {
           //   this.$router.go(this.$router.currentRoute)
           // } else {
@@ -114,8 +115,7 @@ export default {
           // }
           this.$router.push('/').catch(()=>{})
         })
-        .catch(err => {
-          console.log(err.response)
+        .catch(() => {
         })
     }
   },

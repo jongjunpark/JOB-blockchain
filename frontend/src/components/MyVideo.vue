@@ -86,10 +86,9 @@ export default {
       .then(res => {
         this.videoList.push(res.data.items.slice(0,4))
         this.videoList.push(res.data.items.slice(4,))
-        console.log(this.videoList)
       })
-      .catch(err =>{
-        console.log(err.response)
+      .catch(() =>{
+        
       })},
     moreVideo(name) {
       let num = this.videoList.length * 4 + 10
@@ -108,10 +107,8 @@ export default {
       .then(res => {
         this.videoList.push(res.data.items.slice(-8,-4))
         this.videoList.push(res.data.items.slice(-4,))
-        console.log(this.videoList)
       })
-      .catch(err =>{
-        console.log(err.response)
+      .catch(() =>{
       })}
 
   },

@@ -181,36 +181,32 @@ export default {
       }
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/`, null, config)
       .then(res => {
-        console.log(res,'get resume')
         this.getData = res.data
         this.sortSchool()
         this.sortEtc()
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/`, null, config)
       .then(res => {
-        console.log(res,'get license')
         this.getLicense = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/languages/`, null, config)
       .then(res => {
-        console.log(res,'get lang')
         this.getLang = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/careers/`, null, config)
       .then(res => {
-        console.log(res,'get career')
         this.getCareer = res.data
         for(let i=0; i<res.data.length; i++) {
           this.isCareerText.push(false)
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     sortSchool() {
       if(this.getData.highschool_name) {

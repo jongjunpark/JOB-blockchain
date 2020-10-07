@@ -1006,12 +1006,10 @@ export default {
     checkEtc() {
       if (this.getData.veterans_number && (this.getData.veterans_classification && this.getData.veterans_classification != '선택') && this.isVeteran) {
         this.formVeteran = true; this.formDisorder = false; this.isEtc = true;
-        console.log(this.formVeteran, 'on')
       } else if ((this.getData.obstacle_classification && this.getData.obstacle_classification != '선택') && (this.getData.obstacle_grade && this.getData.obstacle_grade != '선택') && this.isDisorder) {
         this.formDisorder = true; this.formVeteran = false; this.isEtc = true;
       } else {
         this.formVeteran = false; this.formDisorder = false; this.isEtc = false;
-        console.log(this.formVeteran, 'off')
       }
     },
     checkgetDataForm() {
@@ -1150,7 +1148,6 @@ export default {
     delLang(type, id, idx) {
       if (type === 'certified') {
         this.delLangList.push(id)
-        console.log(this.delLangList)
         this.getLang[idx] = []
         let tmp = this.lang.name; this.lang.name = null; this.lang.name = tmp;
       } else {
@@ -1187,18 +1184,14 @@ export default {
     onCareerText1(text, idx) {
       if (text === 'on') {
         this.isCareerText1[idx] = true
-        console.log(this.isCareerText1)
-        console.log(this.isCareerText2)
       } else {
         this.isCareerText1[idx] = false
       }
     },
     onCareerText2(text, idx) {
-      console.log(this.isCareerText2,';')
       if (text === 'on') {
         this.isCareerText2[idx] = true
         this.isCareerText2[idx] = true
-        console.log(this.isCareerText2[idx],';;')
       } else {
         this.isCareerText2[idx] = false
       }
@@ -1216,7 +1209,6 @@ export default {
       }
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/`, null, config)
       .then(res => {
-        console.log(res,'get resume')
         this.getData = res.data
         if(this.getData.image) {
           this.getData.image = 'https://j3b104.p.ssafy.io' + this.getData.image
@@ -1224,31 +1216,28 @@ export default {
         this.sortSchool()
         this.sortEtc()
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/`, null, config)
       .then(res => {
-        console.log(res,'get license')
         this.getLicense = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/languages/`, null, config)
       .then(res => {
-        console.log(res,'get lang')
         this.getLang = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/careers/`, null, config)
       .then(res => {
-        console.log(res,'get career')
         for(let i=0; i<res.data.length; i++) {
           this.isCareerText1.push(false)
         }
         this.getCareer = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     editResume() {
       this.editLicense()
@@ -1257,8 +1246,6 @@ export default {
       this.cleanObj(this.getData)
       let data = new FormData();
       data.append('image', this.profileImg);
-      for (var key of data.keys()) {console.log(key);}
-      for (var value of data.values()) {console.log(value);}
       const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -1266,18 +1253,16 @@ export default {
       }
       if (this.profileImg) {
         axios.put(`${SERVER_URL}articles/${this.UserInfo.id}/`, data, config)
-        .then(res => {
-          console.log(res,'put resume image')
+        .then(() => {
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
       }
 
       axios.put(`${SERVER_URL}articles/${this.UserInfo.id}/`, this.setData, config)
-      .then(res => {
-        console.log(res,'put resume')
+      .then(() => {
         this.$router.push('/resume').catch(()=>{})
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     cleanObj(obj) {
       let propNames = Object.getOwnPropertyNames(obj);
@@ -1352,10 +1337,9 @@ export default {
             publisher : this.certifiedLicense[i][1],
             date : this.certifiedLicense[i][2]
           }, config)
-          .then(res => {
-            console.log(res,'create license')
+          .then(() => {
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
         }
       }
       for (let i=0; i<this.delLicenseList; i++) {
@@ -1366,10 +1350,9 @@ export default {
         }
         // '<int:article_pk>/certificates/<int:certificate_pk>/'
         axios.delete(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/${this.delLicenseList[i]}/`, null, config)
-        .then(res => {
-          console.log(res,'delete license')
+        .then(() => {
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
       }
     },
     goConfirm() {
@@ -1379,10 +1362,9 @@ export default {
           }
         }
       axios.post(`${SERVER_URL}accounts/register/${this.UserInfo.id}/`, null, config)
-        .then(res => {
-          console.log(res)
+        .then(() => {
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
       let timerInterval
           Swal.fire({
             title: '잠시만 기다려주세요!',
@@ -1405,17 +1387,15 @@ export default {
             onClose: () => {
               clearInterval(timerInterval)
             }
-          }).then((result) => {
+          }).then(() => {
             /* Read more about handling dismissals below */
-            if (result.dismiss === Swal.DismissReason.timer) {
-              console.log('I was closed by the timer')
-            }
+          
             // <int:article_pk>/certificates/create
             // this.createCertificate()
             // this.createLang()
             // this.createCareer()
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
       
     },
     editLang() {
@@ -1433,10 +1413,9 @@ export default {
             score : this.certifiedLang[i][2],
             date : this.certifiedLang[i][3]
           }, config)
-          .then(res => {
-            console.log(res,'create LangcertifiedLang')
+          .then(() => {
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
         }
       }
       for (let i=0; i<this.delLangList.length; i++) {
@@ -1447,10 +1426,9 @@ export default {
         }
         // '<int:article_pk>/certificates/<int:certificate_pk>/'
         axios.delete(`${SERVER_URL}articles/${this.UserInfo.id}/languages/${this.delLangList[i]}/`, null, config)
-        .then(res => {
-          console.log(res,'delete Lang')
+        .then(() => {
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
       }
     },
     editCareer() {
@@ -1472,10 +1450,9 @@ export default {
             duty: this.certifiedCareer[i][6],
             statement: this.certifiedCareer[i][7]
           }, config)
-          .then(res => {
-            console.log(res,'create Career')
+          .then(() => {
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
         }
       }
       for (let i=0; i<this.delCareerList.length; i++) {
@@ -1486,10 +1463,9 @@ export default {
         }
         // '<int:article_pk>/certificates/<int:certificate_pk>/'
         axios.delete(`${SERVER_URL}articles/${this.UserInfo.id}/careers/${this.delCareerList[i]}/`, null, config)
-        .then(res => {
-          console.log(res,'delete Career')
+        .then(() => {
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
       }
     }
   },

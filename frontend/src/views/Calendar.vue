@@ -138,10 +138,9 @@ export default {
       }
       axios.post(`${SERVER_URL}recruitments/calendar/${date}/`, null, config)
       .then(res => {
-        console.log(res)
         this.selectData = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
       // console.log(this.defaultSchedule[date])
       // console.log(this.defaultSchedule[date].recruit)
       // console.log(this.defaultSchedule[date].test)

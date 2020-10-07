@@ -3,7 +3,6 @@ const SERVER_URL = 'https://j3b104.p.ssafy.io/api/';
 
 export default {
   setUserInfo(context) {
-    console.log('sdsdsdsdsd')
     if (context.state.authToken) {
       const config = {
         headers: {

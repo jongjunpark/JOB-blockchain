@@ -132,7 +132,6 @@ export default {
       }
       axios.get(`${SERVER_URL}recruitments/showlist/`, null, config)
       .then(res => {
-        console.log(res,'get showlist')
         for(let k=0; k<res.data.length; k++) {
           this.recruitImg[res.data[k].user.id] = '';
         }
@@ -146,7 +145,7 @@ export default {
               this.recruitList = tmp
             }
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
         }
         let tmp = []
         if(res.data.length>5) {
@@ -175,7 +174,7 @@ export default {
           }, 1000);
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     getRecruit2() {
       const config = {
@@ -185,7 +184,6 @@ export default {
       }
       axios.get(`${SERVER_URL}recruitments/showlist2/`, null, config)
       .then(res => {
-        console.log(res,'get showlist2')
         for(let k=0; k<res.data.length; k++) {
           this.recruitImg2[res.data[k].user.id] = '';
         }
@@ -199,7 +197,7 @@ export default {
               this.recruitList2 = tmp2
             }
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
         }
         let tmp2 = []
         if(res.data.length>5) {
@@ -228,7 +226,7 @@ export default {
           }, 1000);
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     }
     // getRecruitInform() {
     //   console.log(WORK_API_KEY)

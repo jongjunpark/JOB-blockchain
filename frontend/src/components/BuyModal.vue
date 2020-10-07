@@ -59,7 +59,6 @@ export default {
   },
   mounted() {
     this.eth = this.UserInfo.balance
-    console.log(this.UserInfo)
   },
   methods: {
     goBuy() {
@@ -75,14 +74,13 @@ export default {
       }
       axios.post(`${SERVER_URL}accounts/video/${this.UserInfo.id}/`, Data, config)
       .then(res => {
-        console.log(res.data)
         if (res.data.result == 'fail') {
           this.ans = true
         } else {
           this.ans = false
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
       let timerInterval
           Swal.fire({
             title: '잠시만 기다려주세요!',
@@ -108,7 +106,6 @@ export default {
           }).then((result) => {
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
-              console.log('I was closed by the timer')
               if (this.ans == true) {
               Swal.fire({
                 icon: 'error',

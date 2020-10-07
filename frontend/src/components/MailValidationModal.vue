@@ -55,7 +55,6 @@ export default {
     },
     codeValidation() {
       if (this.validInput == this.mailCode) {
-        console.log('success')
         Swal.fire({
           icon: 'success',
           title: '인증번호가 일치합니다.',
@@ -67,7 +66,6 @@ export default {
           }
         })
       } else {
-        console.log('no')
         this.setMailValid(false)
         Swal.fire({
           icon: 'error',
@@ -79,11 +77,11 @@ export default {
     reSubmit() {
       axios.post(SERVER_URL + `accounts/${this.email}/`)
         .then(res => {
-          console.log(res.data.result)
           this.setMailCode(res.data.result)
+          console.log(res.data.result)
         })
-        .catch((err) =>
-          console.log(err.data))
+        .catch(() =>
+          {})
     }
   }
 }

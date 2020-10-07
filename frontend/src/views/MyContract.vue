@@ -69,11 +69,9 @@ export default {
       }
     axios.post(`${SERVER_URL}accounts/transaction/list/`, null, config)
       .then(res => {
-        console.log(res.data)
         this.data.push(res.data)
-        console.log(this.data)
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
   },
   methods: {
   } 

@@ -42,14 +42,11 @@ export default {
       }
     axios.post(`${SERVER_URL}accounts/item/list/`, null, config)
         .then((res) => {
-          console.log(res.data)
           if (res.data.length != 0 ){
             this.data.push(res.data)
           }
-          console.log(this.data)
         })
-        .catch(err => {
-          console.log(err.response)
+        .catch(() => {
         })
   },
   watch: {

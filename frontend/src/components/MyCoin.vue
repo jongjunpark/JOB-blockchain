@@ -67,15 +67,13 @@ export default {
       }
     axios.post(`${SERVER_URL}accounts/`, null, config)
         .then((res) => {
-          console.log(res.data)
           this.money = res.data.balance
           this.name = res.data.first_name
           this.email = res.data.email
           this.addr = res.data.wallet_addr
           this.last_name = res.data.last_name
         })
-        .catch(err => {
-          console.log(err.response)
+        .catch(() => {
         })
   },
   watch: {

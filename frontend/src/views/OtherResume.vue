@@ -156,7 +156,6 @@ export default {
       this.getResume()
     }, 1000);
     this.id = this.$route.params.id
-    console.log(this.id)
     const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -173,12 +172,11 @@ export default {
           this.isBuy = false
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
   },
   watch: {
     showModal() {
       this.id = this.$route.params.id
-      console.log(this.id)
       const config = {
           headers: {
             Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -195,7 +193,7 @@ export default {
             this.isBuy = false
           }
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
     },
   },
   methods: {
@@ -222,36 +220,32 @@ export default {
       }
       axios.get(`${SERVER_URL}articles/${this.id}/`, null, config)
       .then(res => {
-        console.log(res,'get resume')
         this.getData = res.data
         this.sortSchool()
         this.sortEtc()
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.id}/certificates/`, null, config)
       .then(res => {
-        console.log(res,'get license')
         this.getLicense = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.id}/languages/`, null, config)
       .then(res => {
-        console.log(res,'get lang')
         this.getLang = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.id}/careers/`, null, config)
       .then(res => {
-        console.log(res,'get career')
         this.getCareer = res.data
         for(let i=0; i<res.data.length; i++) {
           this.isCareerText.push(false)
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     sortSchool() {
       if(this.getData.highschool_name) {

@@ -58,7 +58,6 @@ export default {
     SignResume,
   },
   mounted() {
-    console.log(this.id)
     const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -66,11 +65,9 @@ export default {
       }
     axios.post(`${SERVER_URL}accounts/`, null, config)
         .then((res) => {
-          console.log(res.data)
           this.eth = res.data.balance
         })
-        .catch(err => {
-          console.log(err.response)
+        .catch(() => {
         })
   },
   methods: {

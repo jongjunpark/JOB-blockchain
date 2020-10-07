@@ -75,7 +75,6 @@ export default {
   },
   mounted() {
     this.onVideo('it 강의')
-    console.log(1)
     if (this.UserInfo.it == 1) {
       this.isVideo = false
     }
@@ -99,10 +98,8 @@ export default {
       .then(res => {
         this.videoList.push(res.data.items.slice(0,4))
         this.videoList.push(res.data.items.slice(4,))
-        console.log(this.videoList)
       })
-      .catch(err =>{
-        console.log(err.response)
+      .catch(() =>{
       })
     },
     moreVideo(name) {
@@ -122,10 +119,8 @@ export default {
       .then(res => {
         this.videoList.push(res.data.items.slice(-8,-4))
         this.videoList.push(res.data.items.slice(-4,))
-        console.log(this.videoList)
       })
-      .catch(err =>{
-        console.log(err.response)
+      .catch(() =>{
       })
     },
     goShow() {

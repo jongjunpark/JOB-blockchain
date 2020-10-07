@@ -59,7 +59,6 @@ export default {
   methods: {
     ...mapMutations(['setUserModalId', 'setUserDivide']),
     searchUser() {
-      console.log(this.username)
       const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -67,14 +66,13 @@ export default {
       }
       axios.post(`${SERVER_URL}articles/search/${this.username}/`, null, config)
       .then(res => {
-        console.log(res,'get search')
         if(res.data) {
           this.userList = res.data
         } else {
           this.userList = []
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     onModal(id, type) {
       this.setUserModalId(id);

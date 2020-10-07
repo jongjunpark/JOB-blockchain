@@ -7,7 +7,6 @@ export default {
   },
   setUser(state, data) {
     state.UserInfo = data
-    console.log(state.UserInfo)
   },
   // setUserInfo(state, data) {
   //   if (data !== false) {

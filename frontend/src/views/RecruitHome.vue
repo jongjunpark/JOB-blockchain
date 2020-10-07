@@ -115,13 +115,12 @@ export default {
       }
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/`, null, config)
       .then(res => {
-        console.log(res,'get resume')
         this.getData = res.data
         if(this.getData.image) {
           this.getData.image = 'https://j3b104.p.ssafy.io' + this.getData.image
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     getRecruit() {
       const config = {
@@ -131,16 +130,13 @@ export default {
       }
       axios.get(`${SERVER_URL}recruitments/`, null, config)
       .then(res => {
-        console.log(res,'get recruitment')
         this.RecruitList = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     editResume() {
       let data = new FormData();
       data.append('image', this.profileImg);
-      for (var key of data.keys()) {console.log(key);}
-      for (var value of data.values()) {console.log(value);}
       const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -148,10 +144,9 @@ export default {
       }
       if (this.profileImg) {
         axios.put(`${SERVER_URL}articles/${this.UserInfo.id}/`, data, config)
-        .then(res => {
-          console.log(res,'put resume image')
+        .then(() => {
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
       }
     },
     onModal(id) {
@@ -172,7 +167,6 @@ export default {
         date = '0' + date
       }
       this.nowTime = year + '' + month + '' + date + '' + hours + '' + minutes
-      console.log(this.nowTime)
     }
   },
   beforeDestroy () {

@@ -68,10 +68,8 @@ export default {
           ARR.push(res.data.dataSearch.content[i].schoolName)
         }
         this.schoolList = Array.from(new Set(ARR))
-        console.log(this.schoolList)
       })
-      .catch(err =>{
-        console.log(err.response)
+      .catch(() =>{
       })
     } else {
       axios.get('http://www.career.go.kr/cnet/openapi/getOpenApi', {
@@ -90,10 +88,8 @@ export default {
           ARR.push(res.data.dataSearch.content[i].schoolName)
         }
         this.schoolList = Array.from(new Set(ARR))
-        console.log(this.schoolList)
       })
-      .catch(err =>{
-        console.log(err.response)
+      .catch(() =>{
       })
     }
       

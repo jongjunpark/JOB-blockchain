@@ -185,7 +185,6 @@ export default {
   },
   watch: {
     mySelfList() {
-      console.log(this.mySelfList)
     }
   },
   components: {
@@ -222,7 +221,7 @@ export default {
           this.isBuy = false
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
   },
   methods: {
     ...mapMutations(['setCareerDetail']),
@@ -237,7 +236,6 @@ export default {
       }
       axios.get(`${SERVER_URL}articles/${this.UserModalId}/`, null, config)
       .then(res => {
-        console.log(res,'get resume')
         this.getData = res.data
         this.sortSchool()
         this.sortEtc()
@@ -245,31 +243,28 @@ export default {
           this.getData.image = 'https://j3b104.p.ssafy.io' + this.getData.image
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.UserModalId}/certificates/`, null, config)
       .then(res => {
-        console.log(res,'get license')
         this.getLicense = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.UserModalId}/languages/`, null, config)
       .then(res => {
-        console.log(res,'get lang')
         this.getLang = res.data
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
 
       axios.get(`${SERVER_URL}articles/${this.UserModalId}/careers/`, null, config)
       .then(res => {
-        console.log(res,'get career')
         this.getCareer = res.data
         for(let i=0; i<res.data.length; i++) {
           this.isCareerText.push(false)
         }
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     getSelfList() {
       const config = {
@@ -279,12 +274,11 @@ export default {
       }
       axios.get(`${SERVER_URL}recruitments/${this.recruitId}/introductions/`, null, config)
       .then(res => {
-        console.log(res,'get self list')
         this.selfListTmp = res.data
         this.selfLength = res.data.length
         this.getMySelf();
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     getMySelf() {
       const config = {
@@ -294,7 +288,6 @@ export default {
         }
         axios.get(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/`, null, config)
         .then(res => {
-          console.log(res,'get mySelf')
           if(res.data.length>0) {
             this.isMySelf = true
             this.mySelfList = res.data
@@ -307,9 +300,8 @@ export default {
             }
             this.selfList = this.selfListTmp
           }
-          console.log(this.isMySelf, '33')
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
     },
     getApplicant() {
       const config = {
@@ -319,14 +311,13 @@ export default {
         }
         axios.get(`${SERVER_URL}recruitments/${this.recruitId}/`, null, config)
         .then(res => {
-          console.log(res,'get applicant')
           for(let i=0; i<res.data.applicants.length; i++) {
             if (res.data.applicants[i] == this.UserModalId) {
               this.isSameUser = true
             }
           }
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
     },
     sortSchool() {
       if(this.getData.highschool_name) {
@@ -385,9 +376,7 @@ export default {
     },
     saveSelf() {
       if(this.isMySelf) {
-        console.log(this.mySelfList.length,'length1')
         for(let i=0; i<this.mySelfList.length; i++) {
-          console.log(this.mySelfList[i],'1111')
           const config = {
             headers: {
               Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -398,14 +387,12 @@ export default {
             recruitment: this.recruitId,
             content: this.mySelfList[i].content
           }, config)
-          .then(res => {
-            console.log(res,'save self')
+          .then(() => {
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
         }
       } else {
         for(let i=0; i<this.mySelfList.length; i++) {
-          console.log(this.mySelfList[i],'2222')
           const config = {
             headers: {
               Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -417,10 +404,9 @@ export default {
               recruitment: this.recruitId,
               content: this.mySelfList[i].content
             }, config)
-            .then(res => {
-              console.log(res,'create self')
+            .then(() => {
             })
-            .catch((err) => console.log(err.response))
+            .catch(() => {})
           }, 100 + i*100);
         } 
       }
@@ -444,41 +430,36 @@ export default {
             recruitment: this.recruitId,
             content: this.mySelfList[i].content
           }, config)
-          .then(res => {
-            console.log(res,'save self')
+          .then(() => {
             if (i===this.mySelfList.length-1) {
               axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
-              .then(res => {
-                console.log(res,'apply!')
+              .then(() => {
                 this.$emit('close')
               })
-              .catch((err) => console.log(err.response))
+              .catch(() => {})
             }
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
         }
         
       } else {
         for(let i=0; i<this.mySelfList.length; i++) {
-          console.log(this.mySelfList[i])
           setTimeout(() => {
             axios.post(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/create/`, {
               article: this.UserModalId,
               recruitment: this.recruitId,
               content: this.mySelfList[i].content
             }, config)
-            .then(res => {
-              console.log(res,'create self')
+            .then(() => {
               if (i===this.mySelfList.length-1) {
                 axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
-                .then(res => {
-                  console.log(res,'apply!')
+                .then(() => {
                   this.$emit('close')
                 })
-                .catch((err) => console.log(err.response))
+                .catch(() => {})
               }
             })
-            .catch((err) => console.log(err.response))
+            .catch(() => {})
           }, 100 + 100*i);
         }
       }

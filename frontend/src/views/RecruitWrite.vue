@@ -128,19 +128,15 @@ export default {
       data.append('title', this.recruit.name);
       data.append('startdate', this.recruit.startDate + this.recruit.startHour + this.recruit.startMin)
       data.append('deadline', this.recruit.endDate + this.recruit.endHour + this.recruit.endMin)
-      for (var key of data.keys()) {console.log(key);}
-      for (var value of data.values()) {console.log(value);}
       const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get('auth-token')}`
         }
       }
       axios.post(`${SERVER_URL}recruitments/create/`, data, config)
-      .then(res => {
-        console.log(res,'create recruit')
+      .then(() => {
         axios.get(`${SERVER_URL}recruitments/`, null, config)
         .then(res => {
-          console.log(res)
           this.recruit.id = res.data[res.data.length-1].id
           // 리스트에서 마지막 배열의 id를 받아와야함
           for (let i=0; i<this.certifiedSelf.length; i++) {
@@ -149,16 +145,15 @@ export default {
               number : this.certifiedSelf[i][1],
               recruitment : this.recruit.id
             }, config)
-            .then(res => {
-              console.log(res,'create self')
+            .then(() => {
               this.$router.push('/corp/recruit').catch(()=>{})
             })
-            .catch((err) => console.log(err.response))
+            .catch(() => {})
           }
         })
-        .catch((err) => console.log(err.response))
+        .catch(() => {})
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     checkSelfForm() {
       if (this.self.name && this.self.length) {

@@ -67,10 +67,8 @@ export default {
           ARR.push(res.data.dataSearch.content[i].mClass)
         }
         this.majorList = Array.from(new Set(ARR))
-        console.log(this.majorList)
       })
-      .catch(err =>{
-        console.log(err.response)
+      .catch(() =>{
       })
     },
     setMajor(name, type, type2) {

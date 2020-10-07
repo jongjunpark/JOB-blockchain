@@ -49,7 +49,8 @@
                  {{data.deadline.substring(8,10)}}:{{data.deadline.substring(10,)}}
               </p>
             </div>
-            <p><span>{{ data.division }}</span>{{ data.title }}</p>
+            <p v-if="data.title.length<15"><span>{{ data.division }}</span>{{ data.title }}</p>
+            <p v-else><span>{{ data.division }}</span>{{ data.title.substring(0,15) + '...' }}</p>
           </div>
         </transition-group>
       </div>

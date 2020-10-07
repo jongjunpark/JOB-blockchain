@@ -52,7 +52,7 @@ export default {
   methods: {
     ...mapMutations(['selectMajor', 'selectMajorType', 'selectMajorType2']),
     getMajor(name) {
-        axios.get('http://www.career.go.kr/cnet/openapi/getOpenApi', {
+        axios.get('https://www.career.go.kr/cnet/openapi/getOpenApi', {
         params: {
           apiKey: API_KEY,
           svcType: 'api',

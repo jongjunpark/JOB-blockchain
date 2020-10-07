@@ -144,11 +144,12 @@
 }
 
 .buy-modal-buy {
+  width: 100%;
   color: grey;
   display: flex;
   margin-top: 15px;
+  margin-left: 15px;
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 
@@ -168,27 +169,37 @@
 
 .buyVideoActive {
   background-color: #0088ff;
-  width: 100px;
+  width: 120px;
   height: 50px;
   box-sizing: border-box;
-  border-radius: 1.5vh;
+  border-radius: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 30px;
   color: #ffffff;
   cursor: pointer;
+  transition: box-shadow .5s;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2),
+              -6px -6px 10px -1px #ffffff;
+}
+
+.buyVideoActive:hover {
+  box-shadow: 0 0 0 0 rgba(0,0,0,0),
+              0 0 0 0 rgba(0,0,0,0),
+              inset 4px 4px 6px -1px rgba(0,0,0,0.2),
+              inset -3px -3px 4px -1px #ffffff;
 }
 
 .buyVideoNoactive {
   background-color: grey;
-  width: 100px;
+  width: 120px;
   height: 50px;
   box-sizing: border-box;
-  border-radius: 1.5vh;
+  border-radius: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 30px;
   color: #ffffff;
 }

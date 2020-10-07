@@ -82,7 +82,6 @@ export default {
   mounted() {
     this.setNowTime()
     this.getRecruit()
-    this.getResume()
     setTimeout(() => {
       this.getResume()
     }, 1000);

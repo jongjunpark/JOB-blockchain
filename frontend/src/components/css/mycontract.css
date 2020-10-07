@@ -1,7 +1,7 @@
 .contract {
   transition: 0.3s ease;
   margin: 0 auto;
-  margin-top: calc(30px + 3vh);
+  margin-top: calc(60px + 3vh);
   width: 1300px;
   padding: 0 30px;
 }
@@ -20,9 +20,10 @@
   box-sizing: border-box;
   width: 60%;
   height: 170px;
-  background-color: rgba(0, 0,0, 0.2);
-  padding: 2vh;
-  margin: 20px;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.2), 
+              -6px -6px 10px -1px #ffffff;
+  padding: 10px;
+  margin-bottom: 20px;
   border-radius: 20px;
 }
 
@@ -36,4 +37,8 @@
 
 .item-comment > p {
   margin-top: 3px;
+}
+
+.item-comment > p:nth-child(1) {
+  font-weight: 700;
 }

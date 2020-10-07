@@ -5,12 +5,12 @@
         <div class="mail-modal-content">
           <i class="fas fa-times" @click.self="$emit('close')"></i>
           <div>
-            <h1>비밀번호를 입력하세요</h1>
+            <h2>비밀번호를 입력하세요</h2>
             <input type="password" class='mail-valid-input' v-model="password" placeholder="비밀번호를 입력하세요">
-            <h1>서명을 해주세요</h1>
+            <h2>서명을 해주세요</h2>
             <input class='mail-valid-input' v-model="key" placeholder="개인키를 입력하세요">
           </div>
-          <button class='mail-valid-btn mail-modal-submit' @click="goBuy">확인</button>
+          <div class='mail-valid-btn mail-modal-submit' @click="goBuy">확인</div>
         </div>
       </div>
     </div>

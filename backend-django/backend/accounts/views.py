@@ -159,7 +159,7 @@ def register(request, id):
     user = request.user
     # truffle development blockchain address
     web3.geth.personal.unlockAccount(web3.eth.accounts[0], "asd", 0)
-    with open('./dev/keystore/UTC--2020-09-28T08-50-34.942900700Z--d776c545ad24020bb363c4b62a5ea4969cb28b57') as keyfile:
+    with open('./dev/keystore/UTC--2020-10-07T02-28-55.790261900Z--ea1b3aa3acb1171554345f63b4554b7534cc6fb1') as keyfile:
         encrypted_key = keyfile.read()
         private_key = web3.eth.account.decrypt(
             encrypted_key, 'asd')  # '123'은 개인 password
@@ -241,7 +241,10 @@ def item_purchase(request, id):
         pass
     else:
         user = request.user
-        web3.geth.personal.unlockAccount(user.wallet_addr, pwd, 0)
+        try:
+            web3.geth.personal.unlockAccount(user.wallet_addr, pwd, 0)
+        except Exception:
+            return Response({'result': 'fail'})
         # Path to the compiled contract JSON file
         path = "./dev/keystore"
         file_list = os.listdir(path)
@@ -314,7 +317,10 @@ def video_purchase(request, id):
     print(key, 2)
 
     user = request.user
-    web3.geth.personal.unlockAccount(user.wallet_addr, pwd, 0)
+    try:
+        web3.geth.personal.unlockAccount(user.wallet_addr, pwd, 0)
+    except Exception:
+        return Response({'result': 'fail'})
     # Path to the compiled contract JSON file
     path = "./dev/keystore"
     file_list = os.listdir(path)
@@ -330,7 +336,7 @@ def video_purchase(request, id):
                 web3.eth.sendTransaction(
                     {'to': web3.eth.accounts[0], 'from': user.wallet_addr, 'value': web3.toWei(1, "ether")})
             else: 
-                    return Response({'result': 'fail'})
+                return Response({'result': 'fail'})
 
     tx_hash = web3.eth.getBlock(
         block_identifier='pending', full_transactions=True)

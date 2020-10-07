@@ -280,7 +280,7 @@ export default {
           Swal.fire({
             title: '잠시만 기다려주세요!',
             html: '현재 지갑을 생성중입니다',
-            timer: 8000,
+            timer: 15000,
             timerProgressBar: true,
             showConfirmButton: false,
             willOpen: () => {
@@ -329,7 +329,7 @@ export default {
         let timerInterval
         Swal.fire({
           title: '아이디 생성중입니다!',
-          timer: 5000,
+          timer: 10000,
           timerProgressBar: true,
           showConfirmButton: false,
           willOpen: () => {

@@ -114,14 +114,14 @@
         </div>
       </div>
     </div>
-    <ResumeBuy :id="id" v-if="showModal" @close="showModal= false"/>
+    <BuyResume :id="id" v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import { mapState } from 'vuex';
-import ResumeBuy from '../components/BuyResume.vue';
+import BuyResume from '../components/BuyResume.vue';
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
@@ -142,7 +142,7 @@ export default {
     }
   },
   components: {
-    ResumeBuy
+    BuyResume
   },
   computed: {
     ...mapState(['UserInfo']),

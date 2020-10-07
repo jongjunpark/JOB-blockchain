@@ -7,7 +7,7 @@
         <div class="login-toggle-btn signup-toggle" @click="onSignup">Signup</div>
       </div>
       <div class="login-logo-img" @click="goHome">
-        <img src="@/assets/images/KakaoTalk_20201007_204737312.png" alt="">
+        <img src="@/assets/logo/KakaoTalk_20201007_204737312.png" alt="">
       </div>
       <p class='login-logo-text' @click="goHome">JOB이로운세상</p>
       <form id="login" class="login-input-group">
@@ -173,7 +173,6 @@ export default {
 
       axios.post(SERVER_URL + 'rest-auth/login/', loginData)
         .then(res => {
-          console.log(res.data)
           this.isLoginValid = true
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
@@ -188,11 +187,10 @@ export default {
       this.setMailInput(this.signUpMail)
       axios.post(SERVER_URL + `accounts/${this.signUpMail}/`)
         .then(res => {
-          console.log(res.data.result)
           this.setMailCode(res.data.result)
         })
-        .catch((err) =>
-          console.log(err.data))
+        .catch(() => {}
+         )
     },
     checkSingupForm() {
       if(this.signUpMail && ((this.signUpFirst && this.signUpLast) || this.signUpCorpNum ) && this.signUpPassword && 
@@ -230,7 +228,6 @@ export default {
       }
       axios.post(SERVER_URL + 'rest-auth/signup/', signupData)
         .then(res => {
-          console.log(res.data)
           this.$cookies.set('auth-token', res.data.key)
           this.setToken(res.data.key)
           this.setIsLoggedIn(true)
@@ -241,11 +238,10 @@ export default {
               }
             }
             axios.post(`${SERVER_URL}accounts/0/`, null, config)
-              .then(res => {
-                console.log(res)
+              .then(() => {
                 this.setUserInfo();
               })
-            .catch((err) => console.log(err.response))
+            .catch(() => {})
           } else {
             this.setUserInfo();
           }
@@ -258,12 +254,9 @@ export default {
             name: this.signUpLast + this.signUpFirst,
             email: this.signUpMail
           }, config)
-          .then(res => {
-            console.log(res)
+          .then(() => {
           })
-          .catch((err) => console.log(err.response))        
-          console.log(this.signUpPassword)
-          console.log(this.$cookies.get('auth-token'))
+          .catch(() => {})        
           axios.post(SERVER_URL + `accounts/wallet/${this.signUpPassword}/`, {}, {
                         headers: {
                           Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -271,9 +264,7 @@ export default {
                       }
                 )
               .then(res => {
-                console.log('finish')
                 // 개인키 발급 => 향후 이것으로 결제 . 자기 계정인것을 증명
-                console.log(res.data)
                 this.private_key = res.data
               })
           let timerInterval
@@ -301,7 +292,6 @@ export default {
           }).then((result) => {
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
-              console.log('I was closed by the timer')
               if(this.isIndiv === false) {
                 this.$router.push({name:'RecruitHome', params:{first: true, private_key: this.private_key}}).catch(()=>{})
               } else {
@@ -313,7 +303,7 @@ export default {
             // this.createLang()
             // this.createCareer()
           })
-          .catch((err) => console.log(err.response))
+          .catch(() => {})
 
           
         })
@@ -347,11 +337,9 @@ export default {
           onClose: () => {
             clearInterval(timerInterval)
           }
-        }).then((result) => {
+        }).then(() => {
           /* Read more about handling dismissals below */
-          if (result.dismiss === Swal.DismissReason.timer) {
-            console.log('I was closed by the timer')
-          }
+
         })
     },
     signupSort(type) {
@@ -372,10 +360,9 @@ export default {
       let data = new FormData();
       data.append('article', this.UserInfo.id);
       axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/create/`, data, config)
-      .then(res => {
-        console.log(res, 'certifi')
+      .then(() => {
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     createLang() {
       const config = {
@@ -386,10 +373,9 @@ export default {
       let data = new FormData();
       data.append('article', this.UserInfo.id);
       axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/languages/create/`, data, config)
-      .then(res => {
-        console.log(res, 'lang')
+      .then(() => {
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     },
     createCareer() {
       const config = {
@@ -400,8 +386,7 @@ export default {
       let data = new FormData();
       data.append('article', this.UserInfo.id);
       axios.post(`${SERVER_URL}articles/${this.UserInfo.id}/careers/create/`, data, config)
-      .then(res => {
-        console.log(res, 'career')
+      .then(() => {
         Swal.fire({
           icon: 'success',
           title: '환영합니다',
@@ -412,7 +397,7 @@ export default {
           }
         })
       })
-      .catch((err) => console.log(err.response))
+      .catch(() => {})
     }
   },
   beforeDestroy() { 

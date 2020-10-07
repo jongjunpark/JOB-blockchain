@@ -165,7 +165,6 @@ export default {
             }
             tmp.push(ARR)
           }
-          console.log(this.recruitList,'List1,2')
         } else {
           let ARR = []
           for(let i=0; i<res.data.length; i++) {
@@ -215,7 +214,6 @@ export default {
             }
             tmp2.push(ARR)
           }
-          console.log(this.recruitList,'List2,2')
         } else {
           let ARR = []
           for(let i=0; i<res.data.length; i++) {

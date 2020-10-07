@@ -13,6 +13,9 @@ import Search from '../views/Search.vue'
 import OtherResume from '../views/OtherResume.vue'
 import Mycontract from '../views/MyContract.vue'
 import Calendar from '../views/Calendar.vue'
+import axios from 'axios';
+
+const SERVER_URL = 'http://127.0.0.1:8000/';
 
 Vue.use(VueRouter)
 
@@ -20,59 +23,139 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    beforeEnter(to, from, next) {
+      if (Vue.$cookies.isKey('auth-token')) {
+        const config = {
+          headers: {
+            Authorization: `Token ${Vue.$cookies.get('auth-token')}`
+          },
+        }
+        axios.post(`${SERVER_URL}accounts/`, null, config)
+        .then((res)=>{
+          if(res.data.flag===0) {
+            next('/corp/recruit')
+          } else {
+            next()
+          }
+        })
+        .catch(()=>{
+        });
+      } else {
+        next()
+      }    }  
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    beforeEnter(to, from, next) {
+      if (Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/resume',
     name: 'Resume',
-    component: Resume
+    component: Resume,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/resume/edit',
     name: 'ResumeEdit',
     component: ResumeEdit,
-    props: true
+    props: true,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/video',
     name: 'Video',
-    component: Video
+    component: Video,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/corp/recruit',
     name: 'RecruitHome',
     component: RecruitHome,
-    props: true
+    props: true,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/corp/recruit/write',
     name: 'RecruitWrite',
-    component: RecruitWrite
+    component: RecruitWrite,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/corp/recruit/applicant/:recruitID',
     name: 'Applicant',
-    component: Applicant
+    component: Applicant,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/mypage',
     name: 'Mypage',
-    component: Mypage
+    component: Mypage,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/search',
     name: 'Search',
-    component: Search
+    component: Search,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/otherresume/:id',
     name: 'OtherResume',
-    component: OtherResume
+    component: OtherResume,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/mycontract',
@@ -82,7 +165,13 @@ Vue.use(VueRouter)
   {
     path: '/calendar',
     name: 'Calendar',
-    component: Calendar
+    component: Calendar,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/login')
+      } else {
+        next()
+      }    }
   }
 ]
 

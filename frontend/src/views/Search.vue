@@ -6,7 +6,7 @@
         <input type="text" class="search-input" placeholder="유저이름을 검색하세요" v-model="username" v-on:input="username = $event.target.value">
           <transition-group v-show="username" name='fade' tag="div" class="search-user-group" mode="in-out">
             <p v-if="userList.length===0" key='-1'>검색결과가 없습니다.</p>
-            <div class='search-user-item' v-for='user in userList' :key='user.user.id' @click="onModal(user.user.id)">
+            <div class='search-user-item' v-for='user in userList' :key='user.user.id' @click="onModal(user.user.id, 'search')">
               <div class="search-user-img">
                 <img v-show="user.image" :src="'http://localhost:8000' + user.image" alt="#">
                 <img v-show="!user.image" src="../assets/images/default-user.png" alt="#">
@@ -56,7 +56,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setUserModalId']),
+    ...mapMutations(['setUserModalId', 'setUserDivide']),
     searchUser() {
       console.log(this.username)
       const config = {
@@ -75,8 +75,9 @@ export default {
       })
       .catch((err) => console.log(err.response))
     },
-    onModal(id) {
+    onModal(id, type) {
       this.setUserModalId(id);
+      this.setUserDivide(type)
       this.showModal = true;
     },
   },

@@ -21,9 +21,10 @@
                   <div class="recruit-slide slide_1" v-for="(recruitArr,index1) in recruitList2" :key="`recruitArr-${index1}`">
                     <div class="recruit-slide-content">
                       <div class="recruit-card-box">
-                        <div class="recruit-card" v-for="(recruit,index2) in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
+                        <div class="recruit-card" v-for="recruit in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
                           <div class="recruit-card-img-box">
-                            <img :src="'http://localhost:8000'+recruitImg2[index1*5+index2]" alt="">
+                            <img v-if="recruitImg2[recruit.user.id]" :src="'http://localhost:8000'+recruitImg2[recruit.user.id]" alt="">
+                            <img v-else src="@/assets/images/company2.png" alt="">
                           </div>
                           <p>{{ recruit.user.last_name }}</p>
                           <p>{{ recruit.title }}</p>
@@ -60,9 +61,10 @@
                   <div class="test-slide slide_1" v-for="(recruitArr,index1) in recruitList" :key="`recruitArr-${index1}`">
                     <div class="test-slide-content">
                       <div class="test-card-box">
-                        <div class="test-card" v-for="(recruit,index2) in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
+                        <div class="test-card" v-for="recruit in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
                           <div class="test-card-img-box">
-                            <img :src="'http://localhost:8000'+recruitImg[index1*5+index2]" alt="">
+                            <img v-if="recruitImg[recruit.user.id]" :src="'http://localhost:8000'+recruitImg[recruit.user.id]" alt="">
+                            <img v-else src="@/assets/images/company2.png" alt="">
                           </div>
                           <p>{{ recruit.user.last_name }}</p>
                           <p>{{ recruit.title }}</p>
@@ -87,7 +89,7 @@
 
 <script>
 import axios from 'axios'
-import { mapMutations } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import RecruitModal from '../components/RecruitModal.vue'
 import '../components/css/home.css'
 
@@ -99,14 +101,17 @@ export default {
   data() {
     return {
       showModal: false,
-      recruitImg: [],
-      recruitImg2: [],
+      recruitImg: {},
+      recruitImg2: {},
       recruitList: [],
       recruitList2: [],
     }
   },
   components: {
     RecruitModal
+  },
+  computed: {
+    ...mapState(['UserInfo']),
   },
   mounted() {
     this.getRecruit()
@@ -128,6 +133,22 @@ export default {
       axios.get(`${SERVER_URL}recruitments/showlist/`, null, config)
       .then(res => {
         console.log(res,'get showlist')
+        for(let k=0; k<res.data.length; k++) {
+          this.recruitImg[res.data[k].user.id] = '';
+        }
+        let cnt = 0
+        for(let key in this.recruitImg) {
+          axios.get(`${SERVER_URL}articles/${key}/`, null, config)
+          .then(response => {
+            this.recruitImg[key] = response.data.image
+            cnt += 1
+            if (cnt === Object.keys(this.recruitImg).length) {
+              this.recruitList = tmp
+            }
+          })
+          .catch((err) => console.log(err.response))
+        }
+        let tmp = []
         if(res.data.length>5) {
           for(let j=0; j<res.data.length/5; j++){
             let ARR = []
@@ -138,21 +159,20 @@ export default {
                 ARR.push(res.data[j*5+i])
               }
             }
-            this.recruitList.push(ARR)
+            tmp.push(ARR)
+            setTimeout(() => {
+              this.recruitList.push(ARR)
+            }, 1000);
           } 
         } else {
           let ARR = []
           for(let i=0; i<res.data.length; i++) {
               ARR.push(res.data[i])
           }
-          this.recruitList.push(ARR)
-        }
-        for(let i=0; i<res.data.length; i++) {
-          axios.get(`${SERVER_URL}articles/${res.data[i].user.id}/`, null, config)
-          .then(response => {
-            this.recruitImg.push(response.data.image)
-          })
-          .catch((err) => console.log(err.response))
+          tmp.push(ARR)
+          setTimeout(() => {
+            this.recruitList.push(ARR)
+          }, 1000);
         }
       })
       .catch((err) => console.log(err.response))
@@ -166,6 +186,22 @@ export default {
       axios.get(`${SERVER_URL}recruitments/showlist2/`, null, config)
       .then(res => {
         console.log(res,'get showlist2')
+        for(let k=0; k<res.data.length; k++) {
+          this.recruitImg2[res.data[k].user.id] = '';
+        }
+        let cnt2 = 0
+        for(let key in this.recruitImg2) {
+          axios.get(`${SERVER_URL}articles/${key}/`, null, config)
+          .then(response => {
+            this.recruitImg2[key] = response.data.image
+            cnt2 += 1
+            if (cnt2 === Object.keys(this.recruitImg2).length) {
+              this.recruitList2 = tmp2
+            }
+          })
+          .catch((err) => console.log(err.response))
+        }
+        let tmp2 = []
         if(res.data.length>5) {
           for(let j=0; j<res.data.length/5; j++){
             let ARR = []
@@ -176,21 +212,20 @@ export default {
                 ARR.push(res.data[j*5+i])
               }
             }
-            this.recruitList2.push(ARR)
+            tmp2.push(ARR)
+            setTimeout(() => {
+              this.recruitList2.push(ARR)
+            }, 1000);
           } 
         } else {
           let ARR = []
           for(let i=0; i<res.data.length; i++) {
               ARR.push(res.data[i])
           }
-          this.recruitList2.push(ARR)
-        }
-        for(let i=0; i<res.data.length; i++) {
-            axios.get(`${SERVER_URL}articles/${res.data[i].user.id}/`, null, config)
-            .then(response => {
-              this.recruitImg2.push(response.data.image)
-            })
-            .catch((err) => console.log(err.response))
+          tmp2.push(ARR)
+          setTimeout(() => {
+            this.recruitList2.push(ARR)
+          }, 1000);
         }
       })
       .catch((err) => console.log(err.response))

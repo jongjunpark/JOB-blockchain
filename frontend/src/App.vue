@@ -93,6 +93,9 @@ export default {
       }
       this.$router.push('/login').catch(()=>{})
     },
+    goMypage() {
+      this.$router.push('/mypage').catch(()=>{})
+    },
     goLogout() {
       const config = {
         headers: {

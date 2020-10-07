@@ -4,7 +4,7 @@
     <div class="list-container"  v-for='(items, idx) in data' :key='`items-${idx}`'>
       <div class="list-box" v-for='(item, index) in items' :key='`item-${index}`'>
         <div class="list-box-in">
-          <img v-if="item.image" :src="'https://j3b104.p.ssafy.io/api'+item.image" alt="" class="list-box-img">
+          <img v-if="item.image" :src="'https://j3b104.p.ssafy.io/'+item.image" alt="" class="list-box-img">
           <img v-if="!item.image" src="@/assets/images/default-user.png" alt="#" class="list-box-img">
         </div>
         <p class="list-ment">{{ item.name }}님의 이력서</p>

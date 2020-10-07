@@ -90,9 +90,8 @@
                 <div class="resume-detail">{{ career.end_term }}</div>
                 <div class="resume-detail">{{ career.retirement_reason }}</div><div class="resume-detail">{{ career.department }}</div>
                 <div class="resume-detail">{{ career.rank }}</div><div class="resume-detail">{{ career.duty }}</div>
-                <div class="resume-detail resume-detail-career-text" @mouseenter="onCareerText1('on', index1)" @mouseleave="onCareerText1('off', index1)">
+                <div class="resume-detail resume-detail-career-text" @click="onModal3(career.statement)">
                   경력기술서
-                  <div v-if="isCareerText[index1]">{{ career.statement }}</div>
                 </div>
                 <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
               </div>
@@ -114,6 +113,8 @@
         </div>
       </div>
     </div>
+
+    <CareerModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
@@ -121,6 +122,7 @@
 import axios from 'axios';
 import { mapState } from 'vuex';
 import '../components/css/resume.css'
+import CareerModal from '../components/CareerModal.vue';
 
 const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
@@ -128,6 +130,7 @@ export default {
   name: 'Resume',
   data() {
     return {
+      showModal: false,
       getData: [],
       getLicense: [],
       getLang: [],
@@ -138,6 +141,7 @@ export default {
     }
   },
   components: {
+    CareerModal,
   },
   computed: {
     ...mapState(['UserInfo']),

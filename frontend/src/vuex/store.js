@@ -28,6 +28,7 @@ const state = {
   UserModalId: '',
   recruitId: '',
   UserDivide: '',
+  careerDetail: '',
 }
 
 Vue.use(Vuex)

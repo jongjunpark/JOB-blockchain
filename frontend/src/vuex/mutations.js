@@ -89,5 +89,8 @@ export default {
   },
   setUserDivide(state, data) {
     state.UserDivide = data
+  },
+  setCareerDetail(state, data) {
+    state.careerDetail = data
   }
 }

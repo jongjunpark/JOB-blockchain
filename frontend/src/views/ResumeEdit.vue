@@ -496,9 +496,8 @@
                 <div class="certified-detail">{{ career.end_term }}</div>
                 <div class="certified-detail">{{ career.retirement_reason }}</div><div class="certified-detail">{{ career.department }}</div>
                 <div class="certified-detail">{{ career.rank }}</div><div class="certified-detail">{{ career.duty }}</div>
-                <div class="certified-detail certified-detail-career-text" @mouseenter="onCareerText1('on', index1)" @mouseleave="onCareerText1('off', index1)">
+                <div class="certified-detail certified-detail-career-text" @click="onModal3(career.statement)">
                   경력기술서
-                  <div v-if="isCareerText1[index1]">{{ career.statement }}</div>
                 </div>
                 <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
                 <div class="certified-detail certified-del-box" @click="delCareer('certified', career.id, index1)">x</div>
@@ -512,9 +511,8 @@
                 <div class="certified-detail">{{ career[2] }}</div>
                 <div class="certified-detail">{{ career[3] }}</div><div class="certified-detail">{{ career[4] }}</div>
                 <div class="certified-detail">{{ career[5] }}</div><div class="certified-detail">{{ career[6] }}</div>
-                <div class="certified-detail certified-detail-career-text" @mouseenter="onCareerText2('on', index2)" @mouseleave="onCareerText2('off', index2)">
+                <div class="certified-detail certified-detail-career-text" @click="onModal3(career[7])">
                   경력기술서
-                  <div v-if="isCareerText2[index2]">{{ career[7] }}</div>
                 </div>
                 <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
                 <div class="certified-detail certified-del-box" @click="delCareer('tmp', null, index2)">x</div>
@@ -644,6 +642,7 @@
 
     <SchoolSearch v-if="showModal" @close="showModal= false"/>
     <MajorSearch v-if="showModal2" @close="showModal2= false"/>
+    <CareerModal v-if="showModal3" @close="showModal3= false"/>
     
   </div>
 </template>
@@ -653,6 +652,7 @@ import { mapState,mapMutations,mapActions } from 'vuex';
 import axios from 'axios';
 import SchoolSearch from '../components/SchoolSearch.vue';
 import MajorSearch from '../components/MajorSearch.vue';
+import CareerModal from '../components/CareerModal.vue';
 import '../components/css/resume-edit.css';
 import Swal from 'sweetalert2';
 import swal from 'sweetalert';
@@ -673,6 +673,7 @@ export default {
     return {
       showModal: false,
       showModal2: false,
+      showModal3: false,
       profileImg: '',
       isSchool: false,
       isEtc: false,
@@ -734,6 +735,7 @@ export default {
   components: {
     SchoolSearch,
     MajorSearch,
+    CareerModal,
   },
   watch: {
     selectedSchool() {
@@ -831,7 +833,7 @@ export default {
     ...mapState(['selectedSchool', 'selectedSchoolType', 'selectedMajor', 'selectedMajorType', 'selectedMajorType2', 'UserInfo']),
   },
   methods: {
-    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2', 'setMajorName', 'setMajorType', 'setMajorType2', 'setIsLoggedIn', 'setToken', 'setLoginPath', 'setUser']),
+    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2', 'setMajorName', 'setMajorType', 'setMajorType2', 'setIsLoggedIn', 'setToken', 'setLoginPath', 'setUser', 'setCareerDetail']),
     ...mapActions(['setUserInfo']),
     setProfileImg() {
       const photoFile = document.getElementById("resume-edit-user-img-edit");
@@ -948,6 +950,10 @@ export default {
       this.setMajorName(name);
       this.setMajorType(type);
       this.setMajorType2(type2);
+    },
+    onModal3(detail) {
+      this.setCareerDetail(detail)
+      this.showModal3 = true;
     },
     checkSchoolForm() {
       if ((this.getData.highschool_classification && this.getData.highschool_classification != '선택') && (this.getData.highschool_location && this.getData.highschool_location != '선택')
@@ -1070,10 +1076,11 @@ export default {
     },
     addCareer() {
       this.goConfirm()
+      this.isCareerText2.push(false);
       let ARR = []
       ARR.push(this.career.name); ARR.push(this.career.startDate); ARR.push(this.career.endDate); ARR.push(this.career.reason); 
       ARR.push(this.career.department); ARR.push(this.career.position); ARR.push(this.career.duties); ARR.push(this.career.text)
-      this.certifiedCareer.push(ARR); this.isCareerText2.push(false);
+      this.certifiedCareer.push(ARR);
       this.career.name = ''; this.career.startDate = ''; this.career.endDate = ''; this.career.reason = '선택'; 
       this.career.department = ''; this.career.position = ''; this.career.duties = ''; this.career.text = '';
     },
@@ -1187,8 +1194,11 @@ export default {
       }
     },
     onCareerText2(text, idx) {
+      console.log(this.isCareerText2,';')
       if (text === 'on') {
         this.isCareerText2[idx] = true
+        this.isCareerText2[idx] = true
+        console.log(this.isCareerText2[idx],';;')
       } else {
         this.isCareerText2[idx] = false
       }
@@ -1233,10 +1243,10 @@ export default {
       axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/careers/`, null, config)
       .then(res => {
         console.log(res,'get career')
-        this.getCareer = res.data
         for(let i=0; i<res.data.length; i++) {
           this.isCareerText1.push(false)
         }
+        this.getCareer = res.data
       })
       .catch((err) => console.log(err.response))
     },

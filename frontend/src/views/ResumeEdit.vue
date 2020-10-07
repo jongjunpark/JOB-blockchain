@@ -1089,11 +1089,13 @@ export default {
       if (type === 'veteran') {
         let ARR = ['보훈']
         ARR.push(this.getData.veterans_classification); ARR.push(this.getData.veterans_number);
-        this.certifiedEtc.push(ARR)
+        this.certifiedEtc[0] = ARR
+        let tmp = this.getData.veterans_classification; this.getData.veterans_classification = null; this.getData.veterans_classification = tmp; 
       } else if (type === 'disorder'){
         let ARR = ['장애']
         ARR.push(this.getData.obstacle_classification); ARR.push(this.getData.obstacle_grade); 
-        this.certifiedEtc.push(ARR)
+        this.certifiedEtc[1] = ARR
+        let tmp = this.getData.obstacle_classification; this.getData.obstacle_classification = null; this.getData.obstacle_classification = tmp;
       }
     },
     delSchool(type) {
@@ -1145,7 +1147,7 @@ export default {
         this.getLang[idx] = []
         let tmp = this.lang.name; this.lang.name = null; this.lang.name = tmp;
       } else {
-        this.certifiedlang[idx] = []
+        this.certifiedLang[idx] = []
         let tmp = this.lang.name; this.lang.name = null; this.lang.name = tmp;
       }
     },

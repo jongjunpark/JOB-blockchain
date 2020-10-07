@@ -95,9 +95,8 @@
                       <div class="user-modal-detail">{{ career.end_term }}</div>
                       <div class="user-modal-detail">{{ career.retirement_reason }}</div><div class="user-modal-detail">{{ career.department }}</div>
                       <div class="user-modal-detail">{{ career.rank }}</div><div class="user-modal-detail">{{ career.duty }}</div>
-                      <div class="user-modal-detail user-modal-detail-career-text" @mouseenter="onCareerText('on', index1)" @mouseleave="onCareerText('off', index1)">
+                      <div class="user-modal-detail user-modal-detail-career-text" @click="onModal(career.statement)">
                         경력기술서
-                        <div v-if="isCareerText[index1]">{{ career.statement }}</div>
                       </div>
                       <div class="user-modal-detail user-modal-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
                     </div>
@@ -149,14 +148,17 @@
           </div>
         </div>
       </div>
+
+      <CareerModal v-if="showModal" @close="showModal= false"/>
     </div>
   </transition>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import './css/user-modal.css'
 import axios from 'axios';
+import CareerModal from '../components/CareerModal.vue';
 
 const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
@@ -164,6 +166,7 @@ export default {
   name: 'UserModal',
   data() {
     return {
+      showModal: false,
       getData: [],
       getLicense: [],
       getLang: [],
@@ -184,6 +187,9 @@ export default {
     mySelfList() {
       console.log(this.mySelfList)
     }
+  },
+  components: {
+    CareerModal,
   },
   computed: {
     ...mapState(['UserInfo', 'UserModalId', 'UserDivide', 'recruitId']),
@@ -219,6 +225,7 @@ export default {
       .catch((err) => console.log(err.response))
   },
   methods: {
+    ...mapMutations(['setCareerDetail']),
     goBuy() {
       this.$router.push(`/otherresume/${this.UserModalId}`)
     },
@@ -475,7 +482,11 @@ export default {
           }, 100 + 100*i);
         }
       }
-    }
+    },
+    onModal(detail) {
+      this.setCareerDetail(detail)
+      this.showModal = true;
+    },
   }
 }
 </script>

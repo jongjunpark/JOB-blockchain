@@ -5,6 +5,7 @@
         <div class="career-modal-content">
           <i class="fas fa-times" @click.self="$emit('close')"></i>
           <div>
+            <p class="career-modal-head">경력기술서</p>
             <textarea v-model="careerDetail" readonly></textarea>
           </div>
         </div>

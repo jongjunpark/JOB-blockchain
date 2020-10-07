@@ -120,9 +120,10 @@ export default {
       .catch((err) => console.log(err.response))
     },
     onModal(id, type) {
-      this.setRecruitId(id);
       this.setUserModalId(id);
       this.setUserDivide(type)
+      this.setRecruitId(this.recruitID)
+      console.log(id, type, this.recruitID)
       this.showModal = true;
     },
   },

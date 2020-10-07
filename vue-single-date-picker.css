@@ -1,5 +1,5 @@
 .single-date-picker__calendar-month-header[data-v-1179a6d7]{
-  padding:20px 30px 10px 30px;
+  padding:40px 30px 20px 30px;
   display:-webkit-box;display:
   -ms-flexbox;display:flex;
   -webkit-box-pack:justify;
@@ -73,4 +73,7 @@ tr[data-v-12521860]{color:#614a52}.single-date-picker__calendar-month[data-v-21b
   color:#0d1e44
 } 
 
-td {vertical-align: middle !important;}
+td {
+  vertical-align: middle !important;
+  height: 60px;
+}

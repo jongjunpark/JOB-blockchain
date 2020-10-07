@@ -85,6 +85,9 @@ export default {
     goRecruit() {
       this.$router.push('/corp/recruit').catch(()=>{})
     },
+    goMypage() {
+      this.$router.push('/mypage').catch(()=>{})
+    },
     goLogin(path) {
       if(path === 'login') {
         this.setLoginPath(path)

@@ -70,7 +70,7 @@ export default {
       }
       const Data = {
         "password": "qhdrb111",
-        "private_key": "0x3951c3125fc62c25fb17d715b576f825e4fcb710e74cfcb139476244a8b260a1",
+        "private_key": "0x7cd2b121a879d9f38cde85e37bd3102ee707bd093878e4327ed4c97846445c95",
         "video": this.videoName
       }
       axios.post(`${SERVER_URL}accounts/video/${this.UserInfo.id}/`, Data, config)

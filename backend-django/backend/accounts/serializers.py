@@ -7,6 +7,7 @@ from allauth.utils import email_address_exists
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 
+from .models import Transaction
 from articles.models import Article
 
 User = get_user_model()
@@ -52,4 +53,10 @@ class ItemListSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Article
+        fields = '__all__'
+
+## 트랜잭션 목록
+class TransListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
         fields = '__all__'

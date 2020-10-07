@@ -27,7 +27,8 @@
                             <img v-else src="@/assets/images/company2.png" alt="">
                           </div>
                           <p>{{ recruit.user.last_name }}</p>
-                          <p>{{ recruit.title }}</p>
+                          <p v-if="recruit.title.length<18">{{ recruit.title }}</p>
+                          <p v-else>{{ recruit.title.substring(0,18) + '...' }}</p>
                           <p>~ {{recruit.deadline.substring(0,4)}}.{{recruit.deadline.substring(4,6)}}.{{recruit.deadline.substring(6,8)}}
                              {{recruit.deadline.substring(8,10)}}:{{recruit.deadline.substring(10,)}}
                           </p>
@@ -67,7 +68,8 @@
                             <img v-else src="@/assets/images/company2.png" alt="">
                           </div>
                           <p>{{ recruit.user.last_name }}</p>
-                          <p>{{ recruit.title }}</p>
+                          <p v-if="recruit.title.length<18">{{ recruit.title }}</p>
+                          <p v-else>{{ recruit.title.substring(0,18) + '...' }}</p>
                           <p>~ {{recruit.deadline.substring(0,4)}}.{{recruit.deadline.substring(4,6)}}.{{recruit.deadline.substring(6,8)}}
                              {{recruit.deadline.substring(8,10)}}:{{recruit.deadline.substring(10,)}}
                           </p>
@@ -143,7 +145,6 @@ export default {
             cnt += 1
             if (cnt === Object.keys(this.recruitImg).length) {
               this.recruitList = tmp
-              console.log(this.recruitList,'List1,1')
             }
           })
           .catch(() => {})
@@ -163,10 +164,6 @@ export default {
               }
             }
             tmp.push(ARR)
-            setTimeout(() => {
-              this.recruitList.push(ARR)
-              console.log(this.recruitList,'List1,detail')
-            }, 1000);
           }
           console.log(this.recruitList,'List1,2')
         } else {
@@ -175,9 +172,6 @@ export default {
               ARR.push(res.data[i])
           }
           tmp.push(ARR)
-          setTimeout(() => {
-            this.recruitList.push(ARR)
-          }, 1000);
         }
       })
       .catch(() => {})
@@ -201,7 +195,6 @@ export default {
             cnt2 += 1
             if (cnt2 === Object.keys(this.recruitImg2).length) {
               this.recruitList2 = tmp2
-              console.log(this.recruitList,'List2,1')
             }
           })
           .catch(() => {})
@@ -221,10 +214,6 @@ export default {
               }
             }
             tmp2.push(ARR)
-            setTimeout(() => {
-              this.recruitList2.push(ARR)
-              console.log(this.recruitList,'List2,detail')
-            }, 1000);
           }
           console.log(this.recruitList,'List2,2')
         } else {
@@ -233,9 +222,6 @@ export default {
               ARR.push(res.data[i])
           }
           tmp2.push(ARR)
-          setTimeout(() => {
-            this.recruitList2.push(ARR)
-          }, 1000);
         }
       })
       .catch(() => {})

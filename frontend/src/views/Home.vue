@@ -18,10 +18,10 @@
             <div id="recruit-slides">
               <div id="recruit-overflow">
                 <div class="recruit-inner">
-                  <div class="recruit-slide slide_1" v-for="(recruitArr,index1) in recruitList2" :key="`recruitArr-${index1}`">
+                  <div class="recruit-slide slide_1" v-for="(recruitArr1,index1) in recruitList2" :key="`recruitArr1-${index1}`">
                     <div class="recruit-slide-content">
                       <div class="recruit-card-box">
-                        <div class="recruit-card" v-for="recruit in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
+                        <div class="recruit-card" v-for="recruit in recruitArr1" :key="recruit.id" @click="onModal(recruit.id,'individual')">
                           <div class="recruit-card-img-box">
                             <img v-if="recruitImg2[recruit.user.id]" :src="'https://j3b104.p.ssafy.io'+recruitImg2[recruit.user.id]" alt="">
                             <img v-else src="@/assets/images/company2.png" alt="">
@@ -58,10 +58,10 @@
             <div id="test-slides">
               <div id="test-overflow">
                 <div class="test-inner">
-                  <div class="test-slide slide_1" v-for="(recruitArr,index1) in recruitList" :key="`recruitArr-${index1}`">
+                  <div class="test-slide slide_1" v-for="(recruitArr2,index2) in recruitList" :key="`recruitArr2-${index2}`">
                     <div class="test-slide-content">
                       <div class="test-card-box">
-                        <div class="test-card" v-for="recruit in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
+                        <div class="test-card" v-for="recruit in recruitArr2" :key="recruit.id" @click="onModal(recruit.id,'individual')">
                           <div class="test-card-img-box">
                             <img v-if="recruitImg[recruit.user.id]" :src="'https://j3b104.p.ssafy.io'+recruitImg[recruit.user.id]" alt="">
                             <img v-else src="@/assets/images/company2.png" alt="">
@@ -143,6 +143,7 @@ export default {
             cnt += 1
             if (cnt === Object.keys(this.recruitImg).length) {
               this.recruitList = tmp
+              console.log(this.recruitList,'List1,1')
             }
           })
           .catch(() => {})
@@ -150,6 +151,9 @@ export default {
         let tmp = []
         if(res.data.length>5) {
           for(let j=0; j<res.data.length/5; j++){
+            if(j==4) {
+              break
+            }
             let ARR = []
             for(let i=0; i<5; i++) {
               if(res.data.length<=j*5+i){
@@ -161,8 +165,10 @@ export default {
             tmp.push(ARR)
             setTimeout(() => {
               this.recruitList.push(ARR)
+              console.log(this.recruitList,'List1,detail')
             }, 1000);
-          } 
+          }
+          console.log(this.recruitList,'List1,2')
         } else {
           let ARR = []
           for(let i=0; i<res.data.length; i++) {
@@ -195,6 +201,7 @@ export default {
             cnt2 += 1
             if (cnt2 === Object.keys(this.recruitImg2).length) {
               this.recruitList2 = tmp2
+              console.log(this.recruitList,'List2,1')
             }
           })
           .catch(() => {})
@@ -202,6 +209,9 @@ export default {
         let tmp2 = []
         if(res.data.length>5) {
           for(let j=0; j<res.data.length/5; j++){
+            if(j==4) {
+              break
+            }
             let ARR = []
             for(let i=0; i<5; i++) {
               if(res.data.length<=j*5+i){
@@ -213,8 +223,10 @@ export default {
             tmp2.push(ARR)
             setTimeout(() => {
               this.recruitList2.push(ARR)
+              console.log(this.recruitList,'List2,detail')
             }, 1000);
-          } 
+          }
+          console.log(this.recruitList,'List2,2')
         } else {
           let ARR = []
           for(let i=0; i<res.data.length; i++) {

@@ -114,3 +114,14 @@ eth.pendingTransactions
 miner.start()
 miner.stop()
 eth.pendingTransactions
+miner.start()
+miner.stop()
+eth.pendingTransactions
+miner.start()
+miner.stop()
+eth.coinbase
+eth.getBalance(eth.coinbase)
+miner.start(4)
+miner.stop()
+eth.pendingTransactions
+eth.getBalance(eth.coinbase)

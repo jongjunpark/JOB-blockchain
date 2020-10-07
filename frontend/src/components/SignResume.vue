@@ -26,7 +26,7 @@ import { mapState } from 'vuex';
 const SERVER_URL = 'http://127.0.0.1:8000/'
 
 export default {
-  name: 'SignModal.vue',
+  name: 'SignResume.vue',
   data(){
     return {
       password: '',
@@ -34,8 +34,7 @@ export default {
     }
   },
   props: {
-    videoName: String,
-    id: Number,
+    id: String,
   },
   computed: {
     ...mapState(['UserInfo']),
@@ -44,7 +43,7 @@ export default {
     console.log(this.UserInfo.id)
   },
   methods: {
-    goBuy() {
+        goBuy() {
       const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -52,10 +51,9 @@ export default {
       }
       const Data = {
         "password": this.password,
-        "private_key": this.key,
-        "video": this.videoName
+        "private_key": this.key
       }
-      axios.post(`${SERVER_URL}accounts/video/${this.UserInfo.id}/`, Data, config)
+      axios.post(`${SERVER_URL}accounts/item/${this.id}/`, Data, config)
       .then(res => {
         console.log(res.data)
         if (res.data.result == 'fail') {
@@ -66,47 +64,47 @@ export default {
       })
       .catch((err) => console.log(err.response))
       let timerInterval
-          Swal.fire({
-            title: '잠시만 기다려주세요!',
-            html: '상품을 구매중입니다',
-            timer: 8000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            willOpen: () => {
-              Swal.showLoading()
-              timerInterval = setInterval(() => {
-                const content = Swal.getContent()
-                if (content) {
-                  const b = content.querySelector('b')
-                  if (b) {
-                    b.textContent = Swal.getTimerLeft()
-                  }
+        Swal.fire({
+          title: '잠시만 기다려주세요!',
+          html: '상품을 구매중입니다',
+          timer: 8000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          willOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+              const content = Swal.getContent()
+              if (content) {
+                const b = content.querySelector('b')
+                if (b) {
+                  b.textContent = Swal.getTimerLeft()
                 }
-              }, 100)
-            },
-            onClose: () => {
-              clearInterval(timerInterval)
-            }
-          }).then((result) => {
-            /* Read more about handling dismissals below */
-            if (result.dismiss === Swal.DismissReason.timer) {
-              console.log('I was closed by the timer')
-              if (this.ans == true) {
+              }
+            }, 100)
+          },
+          onClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer')
+            if (this.ans == true) {
               Swal.fire({
                 icon: 'error',
                 title: '구매에 실패하였습니다.',
                 text: '비밀번호 혹은 서명을 확인해주세요!'
               })} 
-              else {
-                this.$router.go('/video')
-              }
-                
+            else {
+              this.$emit('close')
+
             }
-            // <int:article_pk>/certificates/create
-            // this.createCertificate()
-            // this.createLang()
-            // this.createCareer()
-          })
+          }
+          // <int:article_pk>/certificates/create
+          // this.createCertificate()
+          // this.createLang()
+          // this.createCareer()
+        })
     }
   },
 }

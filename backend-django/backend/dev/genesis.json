@@ -7,7 +7,7 @@
       "eip158Block": 0
     },
     "difficulty": "0x10",
-    "gasLimit": "9999999",
+    "gasLimit": "999999999",
     "nonce": "0xdeadbeefdeadbeef",
     "extraData": "",
     "alloc": {}

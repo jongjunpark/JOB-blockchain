@@ -18,7 +18,7 @@
     </div>
     <div class="coin-detail">
       <div class="coin-name">
-        <p class="coin-name-in">{{ last_name }} {{ name }}</p>
+        <p class="coin-name-in">{{ last_name }}{{ name }}</p>
       </div>
       <div class="coin-balance">
         <p class="coin-balance-in">{{ money }} (ETH)</p>

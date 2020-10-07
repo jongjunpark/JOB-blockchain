@@ -19,7 +19,7 @@
           <div class="buyVideoNoactive" v-else>구매하기</div>
         </div>
       </div>
-      <SignModal v-if="isShow" @close="isShow=false"/>
+      <SignModal v-if="isShow" @close="isShow=false" :videoName="videoName"/>
     </div>
   </transition>
 </template>

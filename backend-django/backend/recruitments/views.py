@@ -26,6 +26,13 @@ def showlist(request):
     serializer = RecruitmentListSerializer(recruitments, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def showlist2(request):
+    today = datetime.today().strftime("%Y%m%d%H%M")
+    recruitments = Recruitment.objects.filter(deadline__gte=today).order_by('?')
+    serializer = RecruitmentListSerializer(recruitments, many=True)
+    return Response(serializer.data)
+
 @api_view(['POST'])
 def calendar(request, date):
     recruitments = Recruitment.objects.filter(startdate__lte=date, deadline__gte=date)

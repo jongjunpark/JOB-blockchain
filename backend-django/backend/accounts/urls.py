@@ -24,7 +24,10 @@ urlpatterns = [
   path('item/list/<int:id>/', views.item_read_ather),
 
   ## 영상 구매
-  path('video/<int:id>/', views.video_purchase)
+  path('video/<int:id>/', views.video_purchase),
+
+  ## 구매 내역 조회
+  path('transaction/list/', views.trans),
 
 ]
 

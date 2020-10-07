@@ -30,6 +30,7 @@
     <div class="coin-address">
       <p class="coin-address-in">내 주소 : </p>
       <p class="coin-address-under">{{ addr }}</p>
+      <div class="coin-btn"><p class="coin-contract" @click="goMycontract">구매내역 보러가기</p></div>
     </div>
   </div>
 </template>
@@ -80,7 +81,9 @@ export default {
   watch: {
   },
   methods: {
-
+    goMycontract() {
+      this.$router.push('/mycontract')
+    }
   },
 }
 </script>

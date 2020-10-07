@@ -6,7 +6,7 @@
           <div class="recruit-modal-content">
             <i class="fas fa-times" @click.self="$emit('close')"></i>
             <div class='recruit-modal-header'>
-              <p class="recruit-modal-corp-name">{{ UserInfo.last_name }}</p>
+              <p class="recruit-modal-corp-name">{{ RecruitName }}</p>
               <p class="recruit-modal-name"><span>{{ RecruitDetail.division }}</span>{{ RecruitDetail.title }}</p>
               <p v-if="RecruitDetail.startdate" class="recruit-modal-date">
                 {{RecruitDetail.startdate.substring(0,4)}}.{{RecruitDetail.startdate.substring(4,6)}}.{{RecruitDetail.startdate.substring(6,8)}} 
@@ -45,6 +45,7 @@ export default {
       showModal: false,
       name: '',
       RecruitDetail: [],
+      RecruitName: '',
     }
   },
   components: {
@@ -72,6 +73,7 @@ export default {
       .then(res => {
         console.log(res,'get recruitment detail')
         this.RecruitDetail = res.data
+        this.RecruitName = res.data.user.last_name
       })
       .catch((err) => console.log(err.response))
     },
@@ -79,7 +81,6 @@ export default {
       this.$router.push(`/corp/recruit/applicant/${this.recruitId}`).catch(()=>{})
     },
     onModal(id, type) {
-      this.setRecruitId(id);
       this.setUserModalId(id);
       this.setUserDivide(type)
       this.showModal = true;

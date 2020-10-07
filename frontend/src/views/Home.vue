@@ -1,6 +1,6 @@
 <template>
   <div class='wrap'>
-    <div class="wrap-container home-container">
+    <div class="wrap-container">
       <div class="schedule-box">
         <div class="recruit-box">
           <p class="recruit-header">추천공고</p>
@@ -18,14 +18,18 @@
             <div id="recruit-slides">
               <div id="recruit-overflow">
                 <div class="recruit-inner">
-                  <div class="recruit-slide slide_1" v-for="(recruitArr,index1) in recruitList" :key="`recruitArr-${index1}`">
+                  <div class="recruit-slide slide_1" v-for="(recruitArr,index1) in recruitList2" :key="`recruitArr-${index1}`">
                     <div class="recruit-slide-content">
                       <div class="recruit-card-box">
                         <div class="recruit-card" v-for="(recruit,index2) in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
                           <div class="recruit-card-img-box">
-                            <img :src="'http://localhost:8000'+recruitImg[index1*3+index2]" alt="">
+                            <img :src="'http://localhost:8000'+recruitImg2[index1*5+index2]" alt="">
                           </div>
                           <p>{{ recruit.user.last_name }}</p>
+                          <p>{{ recruit.title }}</p>
+                          <p>~ {{recruit.deadline.substring(0,4)}}.{{recruit.deadline.substring(4,6)}}.{{recruit.deadline.substring(6,8)}}
+                             {{recruit.deadline.substring(8,10)}}:{{recruit.deadline.substring(10,)}}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -36,40 +40,43 @@
           </div>          
         </div>
       </div>
-      <div class="calendar-box">
-        <p class="calendar-header">일정</p>
-        <div class="calendar">
-          <SingleDatePicker class='test' @selectDate='selectDate'/>
-          <div class="calendar-content">
-            <div v-if="!isSelect">
-              <span>오늘의 일정</span>
-              <div class='calendar-select-box'>
-                <div v-for="recruit in todayRecruits" :key="recruit" class='calendar-recruit-box'>
-                  <div class='calendar-select-type'>채용</div>
-                  {{ recruit }}
-                </div>
-                <div v-for="test in todayTests" :key="test" class='calendar-test-box'>
-                  <div class='calendar-select-type'>시험</div>
-                  {{ test }}
+      <div class="schedule-box">
+        <div class="test-box">
+          <p class="test-header">마감임박 공고</p>
+          <div id="test-slider">
+            <input type="radio" name='slider2' id='test-slide1' checked>
+            <input type="radio" name='slider2' id='test-slide2'>
+            <input type="radio" name='slider2' id='test-slide3'>
+            <input type="radio" name='slider2' id='test-slide4'>
+            <div id="test-controls">
+              <label for="test-slide1"></label>
+              <label for="test-slide2"></label>
+              <label for="test-slide3"></label>
+              <label for="test-slide4"></label>
+            </div>
+            <div id="test-slides">
+              <div id="test-overflow">
+                <div class="test-inner">
+                  <div class="test-slide slide_1" v-for="(recruitArr,index1) in recruitList" :key="`recruitArr-${index1}`">
+                    <div class="test-slide-content">
+                      <div class="test-card-box">
+                        <div class="test-card" v-for="(recruit,index2) in recruitArr" :key="recruit.id" @click="onModal(recruit.id,'individual')">
+                          <div class="test-card-img-box">
+                            <img :src="'http://localhost:8000'+recruitImg[index1*5+index2]" alt="">
+                          </div>
+                          <p>{{ recruit.user.last_name }}</p>
+                          <p>{{ recruit.title }}</p>
+                          <p>~ {{recruit.deadline.substring(0,4)}}.{{recruit.deadline.substring(4,6)}}.{{recruit.deadline.substring(6,8)}}
+                             {{recruit.deadline.substring(8,10)}}:{{recruit.deadline.substring(10,)}}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div v-if='isSelect'>
-              <span>{{ selectYear.substring(0,2) }}.</span>
-              <span>{{ selectMonth }}.</span>
-              <span>{{ selectDay }} 일정 </span>
-              <div class='calendar-select-box'>
-                <div v-for="recruit in selectRecruits" :key="recruit" class='calendar-recruit-box'>
-                  <div class='calendar-select-type'>채용</div>
-                  {{ recruit }}
-                </div>
-                <div v-for="test in selectTests" :key="test" class='calendar-test-box'>
-                  <div class='calendar-select-type'>시험</div>
-                  {{ test }}
-                </div>
-              </div>
-            </div>
-          </div>
+          </div>          
         </div>
       </div>
     </div>
@@ -81,9 +88,7 @@
 <script>
 import axios from 'axios'
 import { mapMutations } from 'vuex';
-import SingleDatePicker from 'vue-single-date-picker';
 import RecruitModal from '../components/RecruitModal.vue'
-import 'vue-single-date-picker/dist/vue-single-date-picker.css';
 import '../components/css/home.css'
 
 const SERVER_URL = 'http://127.0.0.1:8000/'
@@ -94,84 +99,21 @@ export default {
   data() {
     return {
       showModal: false,
-      selectYear: '',
-      selectMonth: '',
-      selectDay: '',
-      isSelect: false,
-      defaultSchedule: {
-        200916 : {
-          recruit: ['네이버', '삼성전자'],
-          test: ['제49회 SQLD', '기사 제4회 실기시험'],
-        },
-        200917 : {
-          recruit: ['네이버', '삼성전자'],
-          test: ['제49회 SQLD', '기사 제4회 실기시험'],
-        },
-        200918 : {
-          recruit: ['네이버', '삼성전자'],
-          test: ['제49회 SQLD', '기사 제4회 실기시험'],
-        },
-        200930 : {
-          recruit: ['삼성전자', '카카오'],
-          test: ['기사 제4회 실기시험'],
-        },
-      },
-      todayRecruits: [],
-      todayTests: [],
-      selectRecruits: [],
-      selectTests: [],
       recruitImg: [],
+      recruitImg2: [],
       recruitList: [],
+      recruitList2: [],
     }
   },
   components: {
-    SingleDatePicker,
     RecruitModal
   },
   mounted() {
-    // let today = new Date();   
-    // let year = String(today.getFullYear()).substring(0,2);
-    // let month = '0' + String(today.getMonth() + 1);
-    // let date = String(today.getDate());
-    // let custom_date = Number(year + month + date)
-    // this.todatSchedule(custom_date)
-    // this.getRecruitInform()
     this.getRecruit()
+    this.getRecruit2()
   },
   methods: {
     ...mapMutations(['setUserDivide', 'setRecruitId']),
-    selectDate() {
-      this.isSelect = true
-      const Day = event.path[0].innerText
-      if (Day.length == 1) {
-        this.selectDay = '0' + Day
-      } else {
-        this.selectDay = Day
-      }
-      const Month = event.path[5].childNodes[0].childNodes[1].innerText.split(' ')[0].substring(0,3)
-      this.setMonth(Month)
-      this.selectYear = event.path[5].childNodes[0].childNodes[1].innerText.split(' ')[1]
-      this.selectSchedule(Number(this.selectYear.substring(0,2)+this.selectMonth+this.selectDay))
-    },
-    setMonth(month) {
-      if (month === 'Jan') {this.selectMonth = '01'} else if (month === 'Feb') {this.selectMonth = '02'}
-      else if (month === 'Mar') {this.selectMonth = '03'} else if (month === 'Apr') {this.selectMonth = '04'}
-      else if (month === 'May') {this.selectMonth = '05'} else if (month === 'Jun') {this.selectMonth = '06'}
-      else if (month === 'Jul') {this.selectMonth = '07'} else if (month === 'Aug') {this.selectMonth = '08'}
-      else if (month === 'Sep') {this.selectMonth = '09'} else if (month === 'Oct') {this.selectMonth = '10'}
-      else if (month === 'Nov') {this.selectMonth = '11'} else {this.selectMonth = '12'}
-    },
-    selectSchedule(date) {
-      // console.log(this.defaultSchedule[date])
-      // console.log(this.defaultSchedule[date].recruit)
-      // console.log(this.defaultSchedule[date].test)
-      this.selectRecruits = this.defaultSchedule[date].recruit
-      this.selectTests = this.defaultSchedule[date].test
-    },
-    todatSchedule(date) {
-      this.todayRecruits = this.defaultSchedule[date].recruit
-      this.todayTests = this.defaultSchedule[date].test
-    },
     onModal(id, type) {
       this.setRecruitId(id)
       this.setUserDivide(type)
@@ -205,14 +147,50 @@ export default {
           }
           this.recruitList.push(ARR)
         }
-        console.log(this.recruitList,'dsdsds')
         for(let i=0; i<res.data.length; i++) {
           axios.get(`${SERVER_URL}articles/${res.data[i].user.id}/`, null, config)
-          .then(res => {
-            this.recruitImg.push(res.data.image)
-            console.log(this.recruitImg)
+          .then(response => {
+            this.recruitImg.push(response.data.image)
           })
           .catch((err) => console.log(err.response))
+        }
+      })
+      .catch((err) => console.log(err.response))
+    },
+    getRecruit2() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}recruitments/showlist2/`, null, config)
+      .then(res => {
+        console.log(res,'get showlist2')
+        if(res.data.length>5) {
+          for(let j=0; j<res.data.length/5; j++){
+            let ARR = []
+            for(let i=0; i<5; i++) {
+              if(res.data.length<=j*5+i){
+                break
+              } else {
+                ARR.push(res.data[j*5+i])
+              }
+            }
+            this.recruitList2.push(ARR)
+          } 
+        } else {
+          let ARR = []
+          for(let i=0; i<res.data.length; i++) {
+              ARR.push(res.data[i])
+          }
+          this.recruitList2.push(ARR)
+        }
+        for(let i=0; i<res.data.length; i++) {
+            axios.get(`${SERVER_URL}articles/${res.data[i].user.id}/`, null, config)
+            .then(response => {
+              this.recruitImg2.push(response.data.image)
+            })
+            .catch((err) => console.log(err.response))
         }
       })
       .catch((err) => console.log(err.response))

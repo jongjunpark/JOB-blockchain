@@ -155,7 +155,7 @@ def career_detail(request, article_pk, career_pk):
 
 @api_view(['GET'])
 def selfintroduction_list(request, article_pk, recruitment_pk):
-    selfintroductions = SelfIntroduction.objects.filter(recruitment_id=recruitment_pk)
+    selfintroductions = SelfIntroduction.objects.filter(recruitment_id=recruitment_pk, article_id=article_pk)
     serializer = SelfintroductionSerializer(selfintroductions, many=True)
     return Response(serializer.data)
 

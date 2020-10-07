@@ -17,7 +17,7 @@
                 <p>{{ getData.phone_number }}</p>
               </div>
             </div>
-            <div class='user-modal-body user-modal-unlock'>
+            <div class='user-modal-body'>
               <div class="user-modal-content-box">
                 <p>병역사항</p>
                 <div class="user-modal-data-content">
@@ -139,9 +139,8 @@
               </div>
             </div>
             <div class="user-modal-footer">
-              <div class="user-modal-btn" @click="goBuy" v-if="UserModalId != UserInfo.id && !isBuy">구매하기</div>
-              <div class="user-modal-btn" @click="goBuy" v-if="UserModalId != UserInfo.id && isBuy">보러가기</div>
-              <div class="user-modal-btn" @click.self="$emit('close')" style="background-color:red">닫기</div>
+              <div class="user-modal-btn user-modal-btn-on" @click="goBuy" v-if="(UserModalId != UserInfo.id) && !isBuy && (UserDivide==='search')">구매하기</div>
+              <div class="user-modal-btn" @click="goBuy" v-if="(UserModalId != UserInfo.id) && isBuy && (UserDivide==='search')">보러가기</div>
               <div v-if="UserDivide==='individual'" class="user-modal-btn user-modal-btn-on" @click="saveSelf">저장하기</div>
               <div v-if="(UserDivide==='individual')&&!isSameUser" class="user-modal-btn user-modal-btn-on" @click="applySelf">지원하기</div>
               <div v-if="(UserDivide==='individual')&&isSameUser" class="user-modal-btn" @click="applySelf">취소하기</div>
@@ -181,6 +180,9 @@ export default {
     }
   },
   watch: {
+    mySelfList() {
+      console.log(this.mySelfList)
+    }
   },
   computed: {
     ...mapState(['UserInfo', 'UserModalId', 'UserDivide', 'recruitId']),
@@ -188,6 +190,10 @@ export default {
   created() {
   },
   mounted() {
+    const Lock = document.querySelector('.user-modal-body')
+    if(this.UserDivide === 'search') {
+      Lock.classList.add('user-modal-unlock')
+    }
     this.getResume()
     this.getSelfList();
     this.getApplicant();
@@ -201,7 +207,6 @@ export default {
       .then(res => {
         if (res.data.result == 1) {
           this.isBuy = true
-          const Lock = document.querySelector('.user-modal-unlock')
           Lock.classList.remove('user-modal-unlock')
         }
         else {
@@ -286,8 +291,9 @@ export default {
             this.selfList = this.selfListTmp
           } else {
             this.isMySelf = false
+            this.mySelfList = []
             for(let i=0; i<this.selfLength; i++) {
-              this.mySelfList.push({content:''})       
+              this.mySelfList.push({content:''})
             }
             this.selfList = this.selfListTmp
           }
@@ -369,7 +375,9 @@ export default {
     },
     saveSelf() {
       if(this.isMySelf) {
+        console.log(this.mySelfList.length,'length1')
         for(let i=0; i<this.mySelfList.length; i++) {
+          console.log(this.mySelfList[i],'1111')
           const config = {
             headers: {
               Authorization: `Token ${this.$cookies.get('auth-token')}`
@@ -382,29 +390,31 @@ export default {
           }, config)
           .then(res => {
             console.log(res,'save self')
-            this.$emit('close')
           })
           .catch((err) => console.log(err.response))
         }
       } else {
         for(let i=0; i<this.mySelfList.length; i++) {
+          console.log(this.mySelfList[i],'2222')
           const config = {
             headers: {
               Authorization: `Token ${this.$cookies.get('auth-token')}`
             }
           }
-          axios.post(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/create/`, {
-            article: this.UserModalId,
-            recruitment: this.recruitId,
-            content: this.mySelfList[i].content
-          }, config)
-          .then(res => {
-            console.log(res,'create self')
-            this.$emit('close')
-          })
-          .catch((err) => console.log(err.response))
-        }
+          setTimeout(() => {
+            axios.post(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/create/`, {
+              article: this.UserModalId,
+              recruitment: this.recruitId,
+              content: this.mySelfList[i].content
+            }, config)
+            .then(res => {
+              console.log(res,'create self')
+            })
+            .catch((err) => console.log(err.response))
+          }, 100 + i*100);
+        } 
       }
+      this.$emit('close')
     },
     applySelf() {
       const config = {
@@ -440,23 +450,26 @@ export default {
         
       } else {
         for(let i=0; i<this.mySelfList.length; i++) {
-          axios.post(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/create/`, {
-            article: this.UserModalId,
-            recruitment: this.recruitId,
-            content: this.mySelfList[i].content
-          }, config)
-          .then(res => {
-            console.log(res,'create self')
-            if (i===this.mySelfList.length-1) {
-              axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
-              .then(res => {
-                console.log(res,'apply!')
-                this.$emit('close')
-              })
-              .catch((err) => console.log(err.response))
-            }
-          })
-          .catch((err) => console.log(err.response))
+          console.log(this.mySelfList[i])
+          setTimeout(() => {
+            axios.post(`${SERVER_URL}articles/${this.UserModalId}/selfintroductions/${this.recruitId}/create/`, {
+              article: this.UserModalId,
+              recruitment: this.recruitId,
+              content: this.mySelfList[i].content
+            }, config)
+            .then(res => {
+              console.log(res,'create self')
+              if (i===this.mySelfList.length-1) {
+                axios.get(`${SERVER_URL}recruitments/${this.recruitId}/apply/${this.UserModalId}`, null, config)
+                .then(res => {
+                  console.log(res,'apply!')
+                  this.$emit('close')
+                })
+                .catch((err) => console.log(err.response))
+              }
+            })
+            .catch((err) => console.log(err.response))
+          }, 100 + 100*i);
         }
       }
     }

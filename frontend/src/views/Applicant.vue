@@ -13,6 +13,7 @@
         </div> -->
       </div>
       <div v-if="!isSome" class="apply-body">
+        <p v-if="userList.length===0">현재 지원자가 없습니다.</p>
         <div class="applicant-card" v-for="user in userList" :key="user.user.id" @click="onModal(user.user.id, 'corp')">
           <div class="applicant-img-box">
             <img v-if="!user.image" src="@/assets/images/default-user.png" alt="#">
@@ -210,7 +211,7 @@ export default {
 .apply-container .apply-body {
   margin-top: 10px;
   width: 100%;
-  height: 450px;
+  max-height: 450px;
   box-shadow: 0 0 0 0 rgba(0,0,0,0),
               0 0 0 0 rgba(0,0,0,0),
               inset 4px 4px 6px -1px rgba(0,0,0,0.2),
@@ -230,6 +231,12 @@ export default {
 /* 스크롤바 색 */
 ::-webkit-scrollbar-button { display: none; }
 /* 스크롤바 버튼 */
+
+.apply-body > p {
+  font-size: 12px;
+  margin-left: 50%;
+  transform: translate(-50%, 0);
+}
 
 .applicant-card {
   width: calc(30% - 24px);

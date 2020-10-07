@@ -130,7 +130,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken']),
+    ...mapMutations(['setIsLogin', 'setMailInput', 'setMailCode', 'setIsLoggedIn', 'setToken', 'setMailValid']),
     ...mapActions(['setUserInfo']),
     onLogin() {
       const LOGIN = document.getElementById('login');
@@ -417,6 +417,7 @@ export default {
   },
   beforeDestroy() { 
     this.setIsLogin(false)
+    this.setMailValid(false)
   }
 }
 </script>

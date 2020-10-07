@@ -25,7 +25,7 @@
   margin: 30px 0 0px 30px;
   font-size: 20px;
   font-weight: 500;
-  color: #0088ff;
+  color: rgba(0,0,0,0.8);
 }
 
 .recruit-box .recruit-card-box {
@@ -102,7 +102,7 @@
   margin: 20px 0 0px 30px;
   font-size: 20px;
   font-weight: 500;
-  color: #0088ff;
+  color: rgba(0,0,0,0.8);
 }
 
 .test-box .test-card-box {

@@ -23,7 +23,7 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import { mapState } from 'vuex';
 
-const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
 export default {
   name: 'SignResume.vue',
@@ -67,7 +67,7 @@ export default {
         Swal.fire({
           title: '잠시만 기다려주세요!',
           html: '상품을 구매중입니다',
-          timer: 8000,
+          timer: 10000,
           timerProgressBar: true,
           showConfirmButton: false,
           willOpen: () => {

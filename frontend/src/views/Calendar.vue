@@ -66,7 +66,7 @@ import SingleDatePicker from 'vue-single-date-picker';
 import RecruitModal from '../components/RecruitModal.vue'
 import 'vue-single-date-picker/dist/vue-single-date-picker.css';
 
-const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
 export default {
   name: 'Calendar',

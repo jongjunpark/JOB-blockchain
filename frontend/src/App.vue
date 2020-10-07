@@ -26,7 +26,7 @@
           <div v-show="isLoggedIn" class="menu-bar" @click="goSearch">검색</div>
         </div>
         <div class="user-box">
-          <div v-show="isLoggedIn" class="user-name-bar">{{ UserInfo.last_name }}{{ UserInfo.first_name }}님 환영합니다</div>
+          <div v-show="isLoggedIn" class="user-name-bar" @click="goMypage">{{ UserInfo.last_name }}{{ UserInfo.first_name }}님 환영합니다</div>
           <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('login')">로그인</div>
           <div v-show="!isLoggedIn" class="user-bar" @click="goLogin('signup')">회원가입</div>
           <div v-show="isLoggedIn" class="user-bar" @click="goLogout">로그아웃</div>
@@ -42,7 +42,7 @@ import "../public/css/common.css";
 import { mapState, mapMutations, mapActions } from 'vuex';
 import axios from 'axios';
 
-const SERVER_URL = 'http://127.0.0.1:8000/';
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/';
 
 export default {
   name: 'App',
@@ -84,9 +84,6 @@ export default {
     },
     goRecruit() {
       this.$router.push('/corp/recruit').catch(()=>{})
-    },
-    goMypage() {
-      this.$router.push('/mypage').catch(()=>{})
     },
     goLogin(path) {
       if(path === 'login') {

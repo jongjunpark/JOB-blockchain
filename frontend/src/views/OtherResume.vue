@@ -4,7 +4,7 @@
       <div class="resume-user-box">
         <div class="resume-user-content">
           <img v-if="!getData.image" src="@/assets/images/default-user.png" alt="#">
-          <img v-if="getData.image" :src="'http://localhost:8000' + getData.image" alt="#">
+          <img v-if="getData.image" :src="'https://j3b104.p.ssafy.io' + getData.image" alt="#">
           <p class="resume-user-name">{{ getData.name }}</p>
           <p class="resume-user-birth">{{ getData.date_of_birth }}</p>
           <p class="resume-user-email">{{ getData.email }}</p>
@@ -123,7 +123,7 @@ import axios from 'axios';
 import { mapState } from 'vuex';
 import BuyResume from '../components/BuyResume.vue';
 
-const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
 export default {
   name: 'Resume',

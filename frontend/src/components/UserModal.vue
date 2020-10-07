@@ -195,9 +195,11 @@ export default {
       Lock.classList.add('user-modal-unlock')
     }
     this.getResume()
-    this.getSelfList();
-    this.getApplicant();
-    this.getMySelf()
+    if(this.UserDivide !== 'search') {
+      this.getSelfList();
+      this.getApplicant();
+      this.getMySelf()
+    }
     const config = {
         headers: {
           Authorization: `Token ${this.$cookies.get('auth-token')}`

@@ -90,7 +90,7 @@
                 <div class="resume-detail">{{ career.end_term }}</div>
                 <div class="resume-detail">{{ career.retirement_reason }}</div><div class="resume-detail">{{ career.department }}</div>
                 <div class="resume-detail">{{ career.rank }}</div><div class="resume-detail">{{ career.duty }}</div>
-                <div class="resume-detail resume-detail-career-text" @click="onModal3(career.statement)">
+                <div class="resume-detail resume-detail-career-text" @click="onModal(career.statement)">
                   경력기술서
                 </div>
                 <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
@@ -120,7 +120,7 @@
 
 <script>
 import axios from 'axios';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import '../components/css/resume.css'
 import CareerModal from '../components/CareerModal.vue';
 
@@ -157,6 +157,7 @@ export default {
   watch: {
   },
   methods: {
+    ...mapMutations(['setCareerDetail']),
     goResumeEdit() {
       this.$router.push('/resume/edit').catch(()=>{})
     },
@@ -258,7 +259,11 @@ export default {
         ARR.push(this.getData.obstacle_classification); ARR.push(this.getData.obstacle_grade);
         this.certifiedEtc[1] = ARR
       }
-    }
+    },
+    onModal(detail) {
+      this.setCareerDetail(detail)
+      this.showModal = true;
+    },
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.handleScroll)

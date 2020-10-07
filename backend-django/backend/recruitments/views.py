@@ -29,7 +29,7 @@ def showlist(request):
 @api_view(['GET'])
 def showlist2(request):
     today = datetime.today().strftime("%Y%m%d%H%M")
-    recruitments = Recruitment.objects.filter(deadline__gte=today)
+    recruitments = Recruitment.objects.filter(deadline__gte=today).order_by('?')
     serializer = RecruitmentListSerializer(recruitments, many=True)
     return Response(serializer.data)
 

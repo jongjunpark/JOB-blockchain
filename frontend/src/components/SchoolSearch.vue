@@ -23,7 +23,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-import './css/schoolsearch.css'
+import './css/school-search.css'
 import axios from 'axios'
 
 // const SERVER_URL = 'http://127.0.0.1:8000/'
@@ -53,7 +53,7 @@ export default {
     ...mapMutations(['selectSchool', 'selectSchoolType']),
     getSchool(type, name, num) {
       if (num === 0) {
-        axios.get('http://www.career.go.kr/cnet/openapi/getOpenApi', {
+        axios.get('https://www.career.go.kr/cnet/openapi/getOpenApi', {
         params: {
           apiKey: API_KEY,
           svcType: 'api',
@@ -68,13 +68,11 @@ export default {
           ARR.push(res.data.dataSearch.content[i].schoolName)
         }
         this.schoolList = Array.from(new Set(ARR))
-        console.log(this.schoolList)
       })
-      .catch(err =>{
-        console.log(err.response)
+      .catch(() =>{
       })
     } else {
-      axios.get('http://www.career.go.kr/cnet/openapi/getOpenApi', {
+      axios.get('https://www.career.go.kr/cnet/openapi/getOpenApi', {
         params: {
           apiKey: API_KEY,
           svcType: 'api',
@@ -90,10 +88,8 @@ export default {
           ARR.push(res.data.dataSearch.content[i].schoolName)
         }
         this.schoolList = Array.from(new Set(ARR))
-        console.log(this.schoolList)
       })
-      .catch(err =>{
-        console.log(err.response)
+      .catch(() =>{
       })
     }
       

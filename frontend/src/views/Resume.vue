@@ -1,618 +1,268 @@
 <template>
-  <div class="wrap">
-    <div class="wrap-container">
-      <div class="resume-box resume-user-box">
-        <p>개인정보</p>
+  <div class="wrap resume-wrap">
+    <div class="wrap-container resume-container">
+      <div class="resume-user-box">
         <div class="resume-user-content">
-          <label for="resume-user-img-edit">
-            <div class='resume-user-img-box'>
-                <i v-if="!profileImg" class="far fa-images"><i class="fas fa-plus"></i></i>
-                <input type="file" id="resume-user-img-edit" accept="image/*" @change="setProfileImg">
-              <p v-if="!profileImg">프로필 사진을 등록해주세요</p>
-              <img v-if='profileImg' class="resume-user-img" :src="profileImg" alt="#">
-            </div>
-          </label>
-          <div class="resume-user-profile">
-            <div class="resume-user-name-box resume-user-profile-box">
-              <span>이름</span>
-              <input type="text" class="resume-user-input">
-            </div>
-            <div class="resume-user-birth-box resume-user-profile-box">
-              <span>생년월일</span>
-              <input type="text" class="resume-user-input">
-            </div>
-            <div class="resume-user-mail-box resume-user-profile-box">
-              <span>이메일</span>
-              <input type="text" class="resume-user-input">
-            </div>
-            <div class="resume-user-num-box resume-user-profile-box">
-              <span>휴대폰</span>
-              <input type="text" class="resume-user-input">
+          <img v-if="!getData.image" src="@/assets/images/default-user.png" alt="#">
+          <img v-if="getData.image" :src="'https://j3b104.p.ssafy.io' + getData.image" alt="#">
+          <p class="resume-user-name">{{ getData.name }}</p>
+          <p class="resume-user-birth">{{ getData.date_of_birth }}</p>
+          <p class="resume-user-email">{{ getData.email }}</p>
+          <p class="resume-user-number">{{ getData.phone_number }}</p>
+          <div class="resume-user-btn" @click="goResumeEdit">수정하기</div>
+        </div>
+      </div>
+      <div class="resume-data-box">
+        <div class="resume-data-content-box">
+          <p>병역사항</p>
+          <div class="resume-data-content">
+            <p v-if="!getData.military_classification">인증된 병력사항이 없습니다.</p>
+            <div v-if="getData.military_classification" class="resume-license-certified-list">
+              <div class="resume-detail resume-type">{{ getData.military_classification }}</div>
+              <div class="resume-detail">{{ getData.military_branch }}</div>
+              <div class="resume-detail">{{ getData.military_rank }}</div>
+              <div class="resume-detail">{{ getData.military_completed }}</div>
+              <div v-if="getData.military_completed_reason" class="resume-detail">{{ getData.military_completed_reason }}</div>
+              <div class="resume-detail resume-detail-non-margin">{{ getData.military_start }}</div>
+              <div class="resume-detail resume-detail-non-margin">~</div>
+              <div class="resume-detail">{{ getData.military_end }}</div>
+              <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="resume-box resume-school-box">
-        <p>학력사항</p>
-        <div class="resume-license-content">
-          <div class="resume-license-certify-box">
-            <p v-if="certifiedSchool.length===0">인증된 학력이 없습니다.</p>
-            <div class="resume-license-certified-list" v-for='(certified, index) in certifiedSchool' :key='`certified-${index}`'>
-              <div class="certified-detail certified-type">{{ certified[0] }}</div>
-              <div class="certified-detail">{{ certified[1] }}</div><div class="certified-detail">{{ certified[2] }}</div>
-              <div class="certified-detail">{{ certified[3] }}</div><div class="certified-detail certified-detail-non-margin">{{ certified[4] }}</div>
-              <div class="certified-detail certified-detail-non-margin">~</div><div class="certified-detail">{{ certified[5] }}</div>
-              <div v-if="certified[6]" class="certified-detail certified-detail-non-margin">{{ certified[6] }}</div>
-              <div v-if="certified[6]" class="certified-detail certified-detail-non-margin">/</div>
-              <div v-if="certified[7]" class="certified-detail">{{ certified[7] }}</div>
-              <div v-if="certified[8]" class="certified-detail certified-detail-non-margin">{{ certified[8] }}</div>
-              <div v-if="certified[8]" class="certified-detail certified-detail-non-margin">/</div><div v-if="certified[9]" class="certified-detail">{{ certified[9] }}</div>
-              <div class="certified-detail certified-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
-            </div>
-          </div>
-          <div class="resume-license-school-box">
-            <div class="resume-license-school-btn high-school-btn" @click="onHighSchool">고등학교</div>
-            <div class="resume-license-school-btn tec-univ-btn" @click="onTecUniv">전문대학</div>
-            <div class="resume-license-school-btn univ-btn" @click="onUniv">대학교</div>
-            <div class="resume-license-school-btn master-btn" @click="onMaster">석사</div>
-            <div class="resume-license-school-btn doctor-btn" @click="onDoctor">박사</div>
-          </div>
-
-          <div v-if="isHighSchool" class="resume-license-high-school-input-box resume-input-box">
-            <div class="resume-input-inner-box">
-              <div class="inner-box school-name-input">
-                <label for="">학교명</label>
-                <input v-model="highSchool.name" type="text" v-on:input="highSchool.name = $event.target.value" @keydown.enter="onModal('high_list', highSchool.name, 0, 'high')">
-                <i class="fab fa-sistrix" @click="onModal('high_list', highSchool.name, 0, 'high')"></i>
-              </div>
-              <div class="inner-box graduate-select-input">
-                <label for="gradu-combo">졸업구분</label>
-                <select v-model='highSchool.graduate' name="graduation" id="gradu-combo">
-                  <option disabled selected>선택</option>
-                  <option>졸업</option><option>졸업예정</option>
-                  <option>중퇴</option><option>수료</option><option>재학</option>
-                </select>
-              </div>
-              <div class="inner-box location-input">
-                <label for="school-location">소재지</label>
-                <select v-model='highSchool.location' name="location" id="school-location">
-                  <option disabled selected>선택</option>
-                  <option>서울</option><option>인천</option><option>부산</option>
-                  <option>대전</option><option>대구</option><option>광주</option>
-                  <option>울산</option><option>강원</option><option>경기</option>
-                  <option>경남</option><option>경북</option><option>전남</option>
-                  <option>전북</option><option>충남</option><option>충북</option><option>제주</option>
-                </select>
+        <div class="resume-data-content-box">
+          <p>학력사항</p>
+          <div class="resume-data-content">
+            <p v-if="(certifiedSchool[0].length+certifiedSchool[1].length+certifiedSchool[2].length
+            +certifiedSchool[3].length+certifiedSchool[4].length)===0">인증된 학력사항이 없습니다.</p>
+            <div class="resume-license-resume-list" v-for='(certified, index) in certifiedSchool' :key='`certified-${index}`'>
+              <div class="resume-license-certified-list" v-if="certified[0]">
+                <div class="resume-detail resume-type">{{ certified[0] }}</div>
+                <div class="resume-detail">{{ certified[1] }}</div><div class="resume-detail">{{ certified[2] }}</div>
+                <div class="resume-detail">{{ certified[3] }}</div><div class="resume-detail resume-detail-non-margin">{{ certified[4] }}</div>
+                <div class="resume-detail resume-detail-non-margin">~</div><div class="resume-detail">{{ certified[5] }}</div>
+                <div v-if="certified[6]" class="resume-detail resume-detail-non-margin">{{ certified[6] }}</div>
+                <div v-if="certified[6]" class="resume-detail resume-detail-non-margin">/</div>
+                <div v-if="certified[7]" class="resume-detail">{{ certified[7] }}</div>
+                <div v-if="certified[8]" class="resume-detail resume-detail-non-margin">{{ certified[8] }}</div>
+                <div v-if="certified[8]" class="resume-detail resume-detail-non-margin">/</div><div v-if="certified[9]" class="resume-detail">{{ certified[9] }}</div>
+                <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
               </div>
             </div>
-            <div class="resume-input-inner-box">
-              <div class="inner-box entrance-date-input">
-                <label for="">입학년월</label><input type="text" v-model='highSchool.entranceDate' placeholder="YYYY . MM">
-              </div>
-              <div class="inner-box graduation-date-input">
-                <label for="">졸업년월</label><input type="text" v-model='highSchool.graduDate' placeholder="YYYY . MM">
-              </div>
-            </div>
-          </div>
-
-          <div v-if="isTecUniv" class="resume-license-tec-univ-input-box resume-input-box">
-            <div class="resume-input-inner-box">
-              <div class="inner-box school-name-input">
-                <label for="">학교명</label>
-                <input v-model="tecUniv.name" type="text" v-on:input="tecUniv.name = $event.target.value" @keydown.enter="onModal('univ_list', tecUniv.name, 100322, 'tecUniv')">
-                <i class="fab fa-sistrix" @click="onModal('univ_list', tecUniv.name, 100322, 'tecUniv')"></i>
-              </div>
-              <div class="inner-box graduate-select-input">
-                <label for="">졸업구분</label>
-                <select v-model='tecUniv.graduate' name="graduation" id="gradu-combo">
-                  <option disabled selected>선택</option>
-                  <option>졸업</option><option>졸업예정</option>
-                  <option>중퇴</option><option>수료</option><option>재학</option>
-                </select>
-              </div>
-              <div class="inner-box location-input">
-                <label for="">소재지</label>
-                <select v-model='tecUniv.location' name="location" id="school-location">
-                  <option disabled selected>선택</option>
-                  <option>서울</option><option>인천</option><option>부산</option>
-                  <option>대전</option><option>대구</option><option>광주</option>
-                  <option>울산</option><option>강원</option><option>경기</option>
-                  <option>경남</option><option>경북</option><option>전남</option>
-                  <option>전북</option><option>충남</option><option>충북</option><option>제주</option>
-                </select>
-              </div>
-            </div>
-            <div class="resume-input-inner-box">
-              <div class="inner-box entrance-date-input">
-                <label for="">입학년월</label><input type="text" v-model='tecUniv.entranceDate' placeholder="YYYY . MM">
-              </div>
-              <div class="inner-box graduation-date-input">
-                <label for="">졸업년월</label><input type="text" v-model='tecUniv.graduDate' placeholder="YYYY . MM">
-              </div>
-            </div>
-            <div class="resume-input-inner-box">
-              <div class="inner-box major-name-input">
-                <label for="">전공</label><input type="text" v-model="tecUniv.major" v-on:input="tecUniv.major = $event.target.value">
-              </div>
-              <div class="inner-box minor-name-input">
-                <label for="">부전공</label><input type="text" v-model="tecUniv.minor" v-on:input="tecUniv.minor = $event.target.value">
-              </div>
-              <div class="inner-box grade-input">
-                <label for="">학점</label>
-                <input type="text" placeholder="학점"  v-model="tecUniv.grade">
-                <select name="total-grade" id="grade-combo" v-model="tecUniv.totalGrade">
-                  <option disabled selected>선택</option>
-                  <option>4</option><option>4.3</option><option>4.5</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div v-if="isUniv" class="resume-license-univ-input-box resume-input-box">
-            <div class="resume-input-inner-box">
-              <div class="inner-box school-name-input">
-                <label for="">학교명</label>
-                <input v-model="univ.name" type="text" v-on:input="univ.name = $event.target.value" @keydown.enter="onModal('univ_list', univ.name, 100323, 'univ')">
-                <i class="fab fa-sistrix" @click="onModal('univ_list', univ.name, 100323, 'univ')"></i>
-              </div>
-              <div class="inner-box graduate-select-input">
-                <label for="">졸업구분</label>
-                <select v-model='univ.graduate' name="graduation" id="gradu-combo">
-                  <option disabled selected>선택</option>
-                  <option>졸업</option><option>졸업예정</option>
-                  <option>중퇴</option><option>수료</option><option>재학</option>
-                </select>
-              </div>
-              <div class="inner-box location-input">
-                <label for="">소재지</label>
-                <select v-model='univ.location' name="location" id="school-location">
-                  <option disabled selected>선택</option>
-                  <option>서울</option><option>인천</option><option>부산</option>
-                  <option>대전</option><option>대구</option><option>광주</option>
-                  <option>울산</option><option>강원</option><option>경기</option>
-                  <option>경남</option><option>경북</option><option>전남</option>
-                  <option>전북</option><option>충남</option><option>충북</option><option>제주</option>
-                </select>
-              </div>
-            </div>
-            <div class="resume-input-inner-box">
-              <div class="inner-box entrance-date-input">
-                <label for="">입학년월</label><input type="text" v-model='univ.entranceDate' placeholder="YYYY . MM">
-              </div>
-              <div class="inner-box graduation-date-input">
-                <label for="">졸업년월</label><input type="text" v-model='univ.graduDate' placeholder="YYYY . MM">
-              </div>
-            </div>
-            <div class="resume-input-inner-box">
-              <div class="inner-box major-name-input">
-                <label for="">전공</label><input type="text" v-model="univ.major" v-on:input="univ.major = $event.target.value">
-              </div>
-              <div class="inner-box minor-name-input">
-                <label for="">부전공</label><input type="text" v-model="univ.minor" v-on:input="univ.minor = $event.target.value">
-              </div>
-              <div class="inner-box grade-input">
-                <label for="">학점</label>
-                <input type="text" placeholder="학점"  v-model="univ.grade">
-                <select name="total-grade" id="grade-combo" v-model="univ.totalGrade">
-                  <option disabled selected>선택</option>
-                  <option>4</option><option>4.3</option><option>4.5</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div v-if="isMaster" class="resume-license-master-input-box resume-input-box">
-            <div class="resume-input-inner-box">
-              <div class="inner-box school-name-input">
-                <label for="">학교명</label>
-                <input v-model="master.name" type="text" v-on:input="master.name = $event.target.value" @keydown.enter="onModal('univ_list', master.name, 100323, 'master')">
-                <i class="fab fa-sistrix" @click="onModal('univ_list', master.name, 100323, 'master')"></i>
-              </div>
-              <div class="inner-box graduate-select-input">
-                <label for="">졸업구분</label>
-                <select v-model='master.graduate' name="graduation" id="gradu-combo">
-                  <option disabled selected>선택</option>
-                  <option>졸업</option><option>졸업예정</option>
-                  <option>중퇴</option><option>수료</option><option>재학</option>
-                </select>
-              </div>
-              <div class="inner-box location-input">
-                <label for="">소재지</label>
-                <select v-model='master.location' name="location" id="school-location">
-                  <option disabled selected>선택</option>
-                  <option>서울</option><option>인천</option><option>부산</option>
-                  <option>대전</option><option>대구</option><option>광주</option>
-                  <option>울산</option><option>강원</option><option>경기</option>
-                  <option>경남</option><option>경북</option><option>전남</option>
-                  <option>전북</option><option>충남</option><option>충북</option><option>제주</option>
-                </select>
-              </div>
-            </div>
-            <div class="resume-input-inner-box">
-              <div class="inner-box entrance-date-input">
-                <label for="">입학년월</label><input type="text" v-model='master.entranceDate' placeholder="YYYY . MM">
-              </div>
-              <div class="inner-box graduation-date-input">
-                <label for="">졸업년월</label><input type="text" v-model='master.graduDate' placeholder="YYYY . MM">
-              </div>
-            </div>
-            <div class="resume-input-inner-box">
-              <div class="inner-box major-name-input">
-                <label for="">전공</label><input type="text" v-model="master.major" v-on:input="master.major = $event.target.value">
-              </div>
-              <div class="inner-box minor-name-input">
-                <label for="">부전공</label><input type="text" v-model="master.minor" v-on:input="master.minor = $event.target.value">
-              </div>
-              <div class="inner-box grade-input">
-                <label for="">학점</label>
-                <input type="text" placeholder="학점"  v-model="master.grade">
-                <select name="total-grade" id="grade-combo" v-model="master.totalGrade">
-                  <option disabled selected>선택</option>
-                  <option>4</option><option>4.3</option><option>4.5</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div v-if="isDoctor" class="resume-license-doctor-input-box resume-input-box">
-            <div class="resume-input-inner-box">
-              <div class="inner-box school-name-input">
-                <label for="">학교명</label>
-                <input v-model="doctor.name" type="text" v-on:input="doctor.name = $event.target.value" @keydown.enter="onModal('univ_list', doctor.name, 100323, 'doctor')">
-                <i class="fab fa-sistrix" @click="onModal('univ_list', doctor.name, 100323, 'doctor')"></i>
-              </div>
-              <div class="inner-box graduate-select-input">
-                <label for="">졸업구분</label>
-                <select v-model='doctor.graduate' name="graduation" id="gradu-combo">
-                  <option disabled selected>선택</option>
-                  <option>졸업</option><option>졸업예정</option>
-                  <option>중퇴</option><option>수료</option><option>재학</option>
-                </select>
-              </div>
-              <div class="inner-box location-input">
-                <label for="">소재지</label>
-                <select v-model='doctor.location' name="location" id="school-location">
-                  <option disabled selected>선택</option>
-                  <option>서울</option><option>인천</option><option>부산</option>
-                  <option>대전</option><option>대구</option><option>광주</option>
-                  <option>울산</option><option>강원</option><option>경기</option>
-                  <option>경남</option><option>경북</option><option>전남</option>
-                  <option>전북</option><option>충남</option><option>충북</option><option>제주</option>
-                </select>
-              </div>
-            </div>
-            <div class="resume-input-inner-box">
-              <div class="inner-box entrance-date-input">
-                <label for="">입학년월</label><input type="text" v-model='doctor.entranceDate' placeholder="YYYY . MM">
-              </div>
-              <div class="inner-box graduation-date-input">
-                <label for="">졸업년월</label><input type="text" v-model='doctor.graduDate' placeholder="YYYY . MM">
-              </div>
-            </div>
-            <div class="resume-input-inner-box">
-              <div class="inner-box major-name-input">
-                <label for="">전공</label><input type="text" v-model="doctor.major" v-on:input="doctor.major = $event.target.value">
-              </div>
-              <div class="inner-box minor-name-input">
-                <label for="">부전공</label><input type="text" v-model="doctor.minor" v-on:input="doctor.minor = $event.target.value">
-              </div>
-              <div class="inner-box grade-input">
-                <label for="">학점</label>
-                <input type="text" placeholder="학점"  v-model="doctor.grade">
-                <select name="total-grade" id="grade-combo" v-model="doctor.totalGrade">
-                  <option disabled selected>선택</option>
-                  <option>4</option><option>4.3</option><option>4.5</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="resume-license-btn-box resume-input-box">
-            <div v-if="formHighSchool" class="resume-license-btn  on-license-btn" @click="addSchool('high')">인증하기</div>
-            <div v-if="formTecUniv" class="resume-license-btn  on-license-btn" @click="addSchool('tecUniv')">인증하기</div>
-            <div v-if="formUniv" class="resume-license-btn  on-license-btn" @click="addSchool('univ')">인증하기</div>
-            <div v-if="formMaster" class="resume-license-btn  on-license-btn" @click="addSchool('master')">인증하기</div>
-            <div v-if="formDoctor" class="resume-license-btn  on-license-btn" @click="addSchool('doctor')">인증하기</div>
-            <div v-if="!isResume" class="resume-license-btn">인증하기</div>
           </div>
         </div>
-      </div>
-      <div class="resume-box resume-license-box">
-        <p>자격사항</p>
-      </div>
-      <div class="resume-box resume-career-box">
-        <p>경력사항</p>
+        <div class="resume-data-content-box">
+          <p>자격사항</p>
+          <div class="resume-data-content">
+            <p v-if="getLicense.length===0">인증된 자격증이 없습니다.</p>
+            <div class="resume-license-resume-list" v-for='(license, index) in getLicense' :key='`license1-${index}`'>
+              <div class="resume-license-certified-list" v-if="license.name">
+                <div class="resume-detail resume-type">{{ license.name }}</div>
+                <div class="resume-detail">{{ license.publisher }}</div><div class="resume-detail">{{ license.date }}</div>
+                <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="resume-data-content-box">
+          <p>어학사항</p>
+          <div class="resume-data-content">
+            <p v-if="getLang.length===0">인증된 어학성적이 없습니다.</p>
+            <div class="resume-license-resume-list" v-for='(lang, index) in getLang' :key='`lang1-${index}`'>
+              <div class="resume-license-certified-list" v-if="lang.classification">
+                <div class="resume-detail resume-type">{{ lang.classification }}</div>
+                <div class="resume-detail">{{ lang.name }}</div><div class="resume-detail">{{ lang.score }}</div>
+                <div class="resume-detail">{{ lang.date }}</div>
+                <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="resume-data-content-box">
+          <p>경력사항</p>
+          <div class="resume-data-content">
+            <p v-if="getCareer.length===0">인증된 경력이 없습니다.</p>
+            <div class="resume-license-resume-list" v-for='(career, index1) in getCareer' :key='`career1-${index1}`'>
+              <div class="resume-license-certified-list" v-if="career.name">
+                <div class="resume-detail resume-type">{{ career.name }}</div>
+                <div class="resume-detail resume-detail-non-margin">{{ career.start_term }}</div>
+                <div class="resume-detail resume-detail-non-margin">~</div>
+                <div class="resume-detail">{{ career.end_term }}</div>
+                <div class="resume-detail">{{ career.retirement_reason }}</div><div class="resume-detail">{{ career.department }}</div>
+                <div class="resume-detail">{{ career.rank }}</div><div class="resume-detail">{{ career.duty }}</div>
+                <div class="resume-detail resume-detail-career-text" @click="onModal(career.statement)">
+                  경력기술서
+                </div>
+                <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="resume-data-content-box">
+          <p>기타</p>
+          <div class="resume-data-content">
+            <p v-if="(certifiedEtc[0].length+certifiedEtc[1].length)===0">인증된 기타사항이 없습니다.</p>
+            <div class="resume-license-resume-list" v-for='(etc, index) in certifiedEtc' :key='`etc-${index}`'>
+              <div class="resume-license-certified-list" v-if="(etc[0] || etc[1])">
+                <div class="resume-detail resume-type">{{ etc[0] }}</div>
+                <div class="resume-detail">{{ etc[1] }}</div><div class="resume-detail">{{ etc[2] }}</div>
+                <div class="resume-detail resume-mark-box"><i class="far fa-check-circle"></i>인증됨</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <SchoolSearch v-if="showModal" @close="showModal= false"/>
+    <CareerModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
-import { mapState,mapMutations } from 'vuex';
-import SchoolSearch from '../components/SchoolSearch.vue'
+import axios from 'axios';
+import { mapState, mapMutations } from 'vuex';
 import '../components/css/resume.css'
+import CareerModal from '../components/CareerModal.vue';
+
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
 export default {
   name: 'Resume',
   data() {
     return {
       showModal: false,
-      profileImg: '',
-      isResume: false,
-      isHighSchool: false,
-      isTecUniv: false,
-      isUniv: false,
-      isMaster: false,
-      isDoctor: false,
-      formHighSchool: false,
-      formTecUniv: false,
-      formUniv: false,
-      formMaster: false,
-      formDoctor: false,
-      highSchool: {
-        name: '',
-        graduate: '선택',
-        location: '선택',
-        entranceDate: '',
-        graduDate: ''
-      },
-      tecUniv: {
-        name: '',
-        graduate: '선택',
-        location: '선택',
-        entranceDate: '',
-        graduDate: '',
-        major: '',
-        minor: '',
-        grade: '',
-        totalGrade: '선택',
-      },
-      univ: {
-        name: '',
-        graduate: '선택',
-        location: '선택',
-        entranceDate: '',
-        graduDate: '',
-        major: '',
-        minor: '',
-        grade: '',
-        totalGrade: '선택',
-      },
-      master: {
-        name: '',
-        graduate: '선택',
-        location: '선택',
-        entranceDate: '',
-        graduDate: '',
-        major: '',
-        minor: '',
-        grade: '',
-        totalGrade: '선택',
-      },
-      doctor: {
-        name: '',
-        graduate: '선택',
-        location: '선택',
-        entranceDate: '',
-        graduDate: '',
-        major: '',
-        minor: '',
-        grade: '',
-        totalGrade: '선택',
-      },
-      certifiedSchool: [],
+      getData: [],
+      getLicense: [],
+      getLang: [],
+      getCareer: [],
+      certifiedSchool: [[],[],[],[],[]],
+      certifiedEtc: [[],[]],
+      isCareerText: [],
     }
   },
   components: {
-    SchoolSearch,
-  },
-  watch: {
-    selectedSchool() {
-      if (this.selectedSchoolType==='high') {this.highSchool.name = this.selectedSchool}
-      else if (this.selectedSchoolType==='tecUniv') {this.tecUniv.name = this.selectedSchool}
-      else if (this.selectedSchoolType==='univ') {this.univ.name = this.selectedSchool}
-      else if (this.selectedSchoolType==='master') {this.master.name = this.selectedSchool}
-      else if (this.selectedSchoolType==='doctor') {this.doctor.name = this.selectedSchool}      
-    },
-    highSchool: {
-      handler() {
-        this.checkResumeForm();
-      }, deep:true
-    },
-    tecUniv: {
-      handler() {
-        this.checkResumeForm();
-      }, deep:true
-    },
-    univ: {
-      handler() {
-        this.checkResumeForm();
-      }, deep:true
-    },
-    master: {
-      handler() {
-        this.checkResumeForm();
-      }, deep:true
-    },
-    doctor: {
-      handler() {
-        this.checkResumeForm();
-      }, deep:true
-    },
-  },
-  mounted() {
-    this.onHighSchool()
+    CareerModal,
   },
   computed: {
-    ...mapState(['selectedSchool', 'selectedSchoolType']),
+    ...mapState(['UserInfo']),
+  },
+  created() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  mounted() {
+    setTimeout(() => {
+      this.getResume()
+    }, 1000);
+  },
+  watch: {
   },
   methods: {
-    ...mapMutations(['setSchoolType', 'setSchoolName', 'setSchoolDetail', 'setSchoolType2']),
-    setProfileImg() {
-      const photoFile = document.getElementById("resume-user-img-edit");
-      this.profileImg = URL.createObjectURL(photoFile.files[0]);
+    ...mapMutations(['setCareerDetail']),
+    goResumeEdit() {
+      this.$router.push('/resume/edit').catch(()=>{})
     },
-    onHighSchool() {
-      const HIGH_SCHOOL = document.querySelector('.high-school-btn')
-      const TEC_UNIV = document.querySelector('.tec-univ-btn')
-      const UNIV = document.querySelector('.univ-btn')
-      const MASTER = document.querySelector('.master-btn')
-      const DOCTOR = document.querySelector('.doctor-btn')
+    handleScroll() {
+      const ORIGIN = 0
+      let TOP = window.scrollY
+      document.querySelector('.resume-user-content').style.top = (ORIGIN + TOP) + 'px';
+    },
+    onCareerText(text, idx) {
+      if (text === 'on') {
+        this.isCareerText[idx] = true
+      } else {
+        this.isCareerText[idx] = false
+      }
+    },
+    getResume() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/`, null, config)
+      .then(res => {
+        this.getData = res.data
+        this.sortSchool()
+        this.sortEtc()
+      })
+      .catch(() => {})
 
-      HIGH_SCHOOL.classList.add('on-school-btn')
-      TEC_UNIV.classList.remove('on-school-btn')
-      UNIV.classList.remove('on-school-btn')
-      MASTER.classList.remove('on-school-btn')
-      DOCTOR.classList.remove('on-school-btn')
-      this.isHighSchool = true; this.isTecUniv = false; this.isUniv = false; 
-      this.isMaster = false; this.isDoctor = false;
-      this.checkResumeForm()
-    },
-    onTecUniv() {
-      const HIGH_SCHOOL = document.querySelector('.high-school-btn')
-      const TEC_UNIV = document.querySelector('.tec-univ-btn')
-      const UNIV = document.querySelector('.univ-btn')
-      const MASTER = document.querySelector('.master-btn')
-      const DOCTOR = document.querySelector('.doctor-btn')
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/certificates/`, null, config)
+      .then(res => {
+        this.getLicense = res.data
+      })
+      .catch(() => {})
 
-      HIGH_SCHOOL.classList.remove('on-school-btn')
-      TEC_UNIV.classList.add('on-school-btn')
-      UNIV.classList.remove('on-school-btn')
-      MASTER.classList.remove('on-school-btn')
-      DOCTOR.classList.remove('on-school-btn')
-      this.isHighSchool = false; this.isTecUniv = true; this.isUniv = false; 
-      this.isMaster = false; this.isDoctor = false;
-      this.checkResumeForm()
-    },
-    onUniv() {
-      const HIGH_SCHOOL = document.querySelector('.high-school-btn')
-      const TEC_UNIV = document.querySelector('.tec-univ-btn')
-      const UNIV = document.querySelector('.univ-btn')
-      const MASTER = document.querySelector('.master-btn')
-      const DOCTOR = document.querySelector('.doctor-btn')
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/languages/`, null, config)
+      .then(res => {
+        this.getLang = res.data
+      })
+      .catch(() => {})
 
-      HIGH_SCHOOL.classList.remove('on-school-btn')
-      TEC_UNIV.classList.remove('on-school-btn')
-      UNIV.classList.add('on-school-btn')
-      MASTER.classList.remove('on-school-btn')
-      DOCTOR.classList.remove('on-school-btn')
-      this.isHighSchool = false; this.isTecUniv = false; this.isUniv = true; 
-      this.isMaster = false; this.isDoctor = false;
-      this.checkResumeForm()
+      axios.get(`${SERVER_URL}articles/${this.UserInfo.id}/careers/`, null, config)
+      .then(res => {
+        this.getCareer = res.data
+        for(let i=0; i<res.data.length; i++) {
+          this.isCareerText.push(false)
+        }
+      })
+      .catch(() => {})
     },
-    onMaster() {
-      const HIGH_SCHOOL = document.querySelector('.high-school-btn')
-      const TEC_UNIV = document.querySelector('.tec-univ-btn')
-      const UNIV = document.querySelector('.univ-btn')
-      const MASTER = document.querySelector('.master-btn')
-      const DOCTOR = document.querySelector('.doctor-btn')
-
-      HIGH_SCHOOL.classList.remove('on-school-btn')
-      TEC_UNIV.classList.remove('on-school-btn')
-      UNIV.classList.remove('on-school-btn')
-      MASTER.classList.add('on-school-btn')
-      DOCTOR.classList.remove('on-school-btn')
-      this.isHighSchool = false; this.isTecUniv = false; this.isUniv = false; 
-      this.isMaster = true; this.isDoctor = false;
-      this.checkResumeForm()
+    sortSchool() {
+      if(this.getData.highschool_name) {
+        let ARR = ['고등학교']
+        ARR.push(this.getData.highschool_name); ARR.push(this.getData.highschool_classification); ARR.push(this.getData.highschool_location);
+        ARR.push(this.getData.highschool_entrance_year); ARR.push(this.getData.highschool_graduation_year);
+        this.certifiedSchool[0] = ARR
+      }
+      if(this.getData.college_name) {
+        let ARR = ['전문대학']
+        ARR.push(this.getData.college_name); ARR.push(this.getData.college_classification); ARR.push(this.getData.college_location);
+        ARR.push(this.getData.college_entrance_year); ARR.push(this.getData.college_graduation_year); ARR.push(this.getData.college_major);
+        if (this.getData.college_minor) { ARR.push(this.getData.college_minor) } else { ARR.push('X') } ARR.push(this.getData.college_grade); ARR.push(this.getData.college_total)
+        this.certifiedSchool[1] = ARR
+      }
+      if(this.getData.university_name) {
+        let ARR = ['대학교']
+        ARR.push(this.getData.university_name); ARR.push(this.getData.university_classification); ARR.push(this.getData.university_location);
+        ARR.push(this.getData.university_entrance_year); ARR.push(this.getData.university_graduation_year); ARR.push(this.getData.university_major);
+        if (this.getData.university_minor) { ARR.push(this.getData.university_minor) } else { ARR.push('X') } ARR.push(this.getData.university_grade); ARR.push(this.getData.university_total)
+        this.certifiedSchool[2] = ARR
+      }
+      if(this.getData.master_name) {
+        let ARR = ['석사']
+        ARR.push(this.getData.master_name); ARR.push(this.getData.master_classification); ARR.push(this.getData.master_location);
+        ARR.push(this.getData.master_entrance_year); ARR.push(this.getData.master_graduation_year); ARR.push(this.getData.master_major);
+        if (this.getData.master_minor) { ARR.push(this.getData.master_minor) } else { ARR.push('X') } ARR.push(this.getData.master_grade); ARR.push(this.getData.master_total)
+        this.certifiedSchool[3] = ARR
+      }
+      if(this.getData.doctor_name) {
+        let ARR = ['박사']
+        ARR.push(this.getData.doctor_name); ARR.push(this.getData.doctor_classification); ARR.push(this.getData.doctor_location);
+        ARR.push(this.getData.doctor_entrance_year); ARR.push(this.getData.doctor_graduation_year); ARR.push(this.getData.doctor_major);
+        if (this.getData.doctor_minor) { ARR.push(this.getData.doctor_minor) } else { ARR.push('X') } ARR.push(this.getData.doctor_grade); ARR.push(this.getData.doctor_total)
+        this.certifiedSchool[4] = ARR
+      }
     },
-    onDoctor() {
-      const HIGH_SCHOOL = document.querySelector('.high-school-btn')
-      const TEC_UNIV = document.querySelector('.tec-univ-btn')
-      const UNIV = document.querySelector('.univ-btn')
-      const MASTER = document.querySelector('.master-btn')
-      const DOCTOR = document.querySelector('.doctor-btn')
-
-      HIGH_SCHOOL.classList.remove('on-school-btn')
-      TEC_UNIV.classList.remove('on-school-btn')
-      UNIV.classList.remove('on-school-btn')
-      MASTER.classList.remove('on-school-btn')
-      DOCTOR.classList.add('on-school-btn')
-      this.isHighSchool = false; this.isTecUniv = false; this.isUniv = false; 
-      this.isMaster = false; this.isDoctor = true;
-      this.checkResumeForm()
+    sortEtc() {
+      if(this.getData.veterans_classification) {
+        let ARR = ['보훈']
+        ARR.push(this.getData.veterans_classification); ARR.push(this.getData.veterans_number);
+        this.certifiedEtc[0] = ARR
+      }
+      if(this.getData.obstacle_classification) {
+        let ARR = ['장애']
+        ARR.push(this.getData.obstacle_classification); ARR.push(this.getData.obstacle_grade);
+        this.certifiedEtc[1] = ARR
+      }
     },
-    onModal(type, name, num, school) {
-      this.setSchoolType(type);
-      this.setSchoolName(name);
-      this.setSchoolDetail(num);
-      this.setSchoolType2(school);
+    onModal(detail) {
+      this.setCareerDetail(detail)
       this.showModal = true;
     },
-    checkResumeForm() {
-      if ((this.highSchool.graduate && this.highSchool.graduate != '선택') && (this.highSchool.location && this.highSchool.location != '선택')
-      && this.highSchool.name && this.highSchool.entranceDate && this.highSchool.graduDate && this.isHighSchool) {
-        this.formHighSchool = true; this.formTecUniv =  false; this.formUniv = false; this.formMaster = false; this.formDoctor = false;
-        this.isResume = true
-      } else if ((this.tecUniv.graduate && this.tecUniv.graduate != '선택') && (this.tecUniv.location && this.tecUniv.location != '선택')
-      && this.tecUniv.name && this.tecUniv.entranceDate && this.tecUniv.graduDate && this.tecUniv.major
-      && this.tecUniv.grade && (this.tecUniv.totalGrade && this.tecUniv.totalGrade != '선택') && this.isTecUniv) {
-        this.formHighSchool = false; this.formTecUniv =  true; this.formUniv = false; this.formMaster = false; this.formDoctor = false;
-        this.isResume = true
-      } else if ((this.univ.graduate && this.univ.graduate != '선택') && (this.univ.location && this.univ.location != '선택')
-      && this.univ.name && this.univ.entranceDate && this.univ.graduDate && this.univ.major
-      && this.univ.grade && (this.univ.totalGrade && this.univ.totalGrade != '선택') && this.isUniv){
-        this.formHighSchool = false; this.formTecUniv =  false; this.formUniv = true; this.formMaster = false; this.formDoctor = false;
-        this.isResume = true
-      } else if ((this.master.graduate && this.master.graduate != '선택') && (this.master.location && this.master.location != '선택')
-      && this.master.name && this.master.entranceDate && this.master.graduDate && this.master.major
-      && this.master.grade && (this.master.totalGrade && this.master.totalGrade != '선택') && this.isMaster){
-        this.formHighSchool = false; this.formTecUniv =  false; this.formUniv = false; this.formMaster = true; this.formDoctor = false;
-        this.isResume = true
-      } else if ((this.doctor.graduate && this.doctor.graduate != '선택') && (this.doctor.location && this.doctor.location != '선택')
-      && this.doctor.name && this.doctor.entranceDate && this.doctor.graduDate && this.doctor.major
-      && this.doctor.grade && (this.doctor.totalGrade && this.doctor.totalGrade != '선택') && this.isDoctor){
-        this.formHighSchool = false; this.formTecUniv =  false; this.formUniv = false; this.formMaster = false; this.formDoctor = true;
-        this.isResume = true
-      } else {
-        this.formHighSchool = false; this.formTecUniv =  false; this.formUniv = false; this.formMaster = false; this.formDoctor = false;
-        this.isResume = false
-      }
-    },
-    addSchool(type) {
-      if (type === 'high') {
-        let ARR = ['고등학교']
-        ARR.push(this.highSchool.name); ARR.push(this.highSchool.graduate); ARR.push(this.highSchool.location);
-        ARR.push(this.highSchool.entranceDate); ARR.push(this.highSchool.graduDate);
-        this.certifiedSchool.push(ARR)
-        this.highSchool.name = ''; this.highSchool.graduate = '선택'; this.highSchool.location = '선택';
-        this.highSchool.entranceDate = ''; this.highSchool.graduDate = '';
-      } else if (type === 'tecUniv'){
-        let ARR = ['전문대학']
-        ARR.push(this.tecUniv.name); ARR.push(this.tecUniv.graduate); ARR.push(this.tecUniv.location);
-        ARR.push(this.tecUniv.entranceDate); ARR.push(this.tecUniv.graduDate); ARR.push(this.tecUniv.major);
-        if (this.tecUniv.minor) { ARR.push(this.tecUniv.minor) } else { ARR.push('X') } ARR.push(this.tecUniv.grade); ARR.push(this.tecUniv.totalGrade)
-        this.certifiedSchool.push(ARR)
-        this.tecUniv.name = ''; this.tecUniv.graduate = '선택'; this.tecUniv.location = '선택';
-        this.tecUniv.entranceDate = ''; this.tecUniv.graduDate = ''; this.tecUniv.major = ''; this.tecUniv.minor = '';
-        this.tecUniv.grade = ''; this.tecUniv.totalGrade = '선택';
-      } else if (type === 'univ'){
-        let ARR = ['대학교']
-        ARR.push(this.univ.name); ARR.push(this.univ.graduate); ARR.push(this.univ.location);
-        ARR.push(this.univ.entranceDate); ARR.push(this.univ.graduDate); ARR.push(this.univ.major);
-        this.certifiedSchool.push(ARR)
-        if (this.univ.minor) { ARR.push(this.univ.minor) } else { ARR.push('X') } ARR.push(this.univ.grade); ARR.push(this.univ.totalGrade)
-        this.univ.name = ''; this.univ.graduate = '선택'; this.univ.location = '선택';
-        this.univ.entranceDate = ''; this.univ.graduDate = ''; this.univ.major = ''; this.univ.minor = '';
-        this.univ.grade = ''; this.univ.totalGrade = '선택'; 
-      } else if (type === 'master'){
-        let ARR = ['석사']
-        ARR.push(this.master.name); ARR.push(this.master.graduate); ARR.push(this.master.location);
-        ARR.push(this.master.entranceDate); ARR.push(this.master.graduDate); ARR.push(this.master.major);
-        this.certifiedSchool.push(ARR)
-        if (this.master.minor) { ARR.push(this.master.minor) } else { ARR.push('X') } ARR.push(this.master.grade); ARR.push(this.master.totalGrade)
-        this.master.name = ''; this.master.graduate = '선택'; this.master.location = '선택';
-        this.master.entranceDate = ''; this.master.graduDate = ''; this.master.major = ''; this.master.minor = '';
-        this.master.grade = ''; this.master.totalGrade = '선택'; 
-      } else if (type === 'doctor'){
-        let ARR = ['박사']
-        ARR.push(this.doctor.name); ARR.push(this.doctor.graduate); ARR.push(this.doctor.location);
-        ARR.push(this.doctor.entranceDate); ARR.push(this.doctor.graduDate); ARR.push(this.doctor.major);
-        this.certifiedSchool.push(ARR)
-        if (this.doctor.minor) { ARR.push(this.doctor.minor) } else { ARR.push('X') } ARR.push(this.doctor.grade); ARR.push(this.doctor.totalGrade)
-        this.doctor.name = ''; this.doctor.graduate = '선택'; this.doctor.location = '선택';
-        this.doctor.entranceDate = ''; this.doctor.graduDate = ''; this.doctor.major = ''; this.doctor.minor = '';
-        this.doctor.grade = ''; this.doctor.totalGrade = '선택'; 
-      }
-    }
-  }
+  },
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
 }
 </script>

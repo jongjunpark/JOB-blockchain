@@ -18,11 +18,11 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-import './css/mailvalidationmodal.css'
+import './css/mail-validation-modal.css'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-const SERVER_URL = 'http://127.0.0.1:8000/'
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
 
 export default {
   name: 'MailValidationModal',
@@ -55,7 +55,6 @@ export default {
     },
     codeValidation() {
       if (this.validInput == this.mailCode) {
-        console.log('success')
         Swal.fire({
           icon: 'success',
           title: '인증번호가 일치합니다.',
@@ -67,7 +66,6 @@ export default {
           }
         })
       } else {
-        console.log('no')
         this.setMailValid(false)
         Swal.fire({
           icon: 'error',
@@ -79,11 +77,11 @@ export default {
     reSubmit() {
       axios.post(SERVER_URL + `accounts/${this.email}/`)
         .then(res => {
-          console.log(res.data.result)
           this.setMailCode(res.data.result)
+          console.log(res.data.result)
         })
-        .catch((err) =>
-          console.log(err.data))
+        .catch(() =>
+          {})
     }
   }
 }

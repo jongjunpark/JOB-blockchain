@@ -5,6 +5,7 @@ import actions from './actions'
 import mutations from './mutations'
 
 const state = {
+  UserInfo: '',
   isLogin: false,
   authToken: '',
   isLoggedIn: false,
@@ -18,6 +19,16 @@ const state = {
   schoolDetail: '',
   selectedSchool: '',
   selectedSchoolType: '',
+  majorName: '',
+  majorType: '',
+  majorType2: '',
+  selectedMajor: '',
+  selectedMajorType: '',
+  selectedMajorType2: '',
+  UserModalId: '',
+  recruitId: '',
+  UserDivide: '',
+  careerDetail: '',
 }
 
 Vue.use(Vuex)

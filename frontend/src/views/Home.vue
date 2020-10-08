@@ -1,6 +1,6 @@
 <template>
   <div class='wrap'>
-    <div class="wrap-container home-container">
+    <div class="wrap-container">
       <div class="schedule-box">
         <div class="recruit-box">
           <p class="recruit-header">추천공고</p>
@@ -18,98 +18,20 @@
             <div id="recruit-slides">
               <div id="recruit-overflow">
                 <div class="recruit-inner">
-                  <div class="recruit-slide slide_1">
+                  <div class="recruit-slide slide_1" v-for="(recruitArr1,index1) in recruitList2" :key="`recruitArr1-${index1}`">
                     <div class="recruit-slide-content">
                       <div class="recruit-card-box">
-                        <div class="recruit-card">
+                        <div class="recruit-card" v-for="recruit in recruitArr1" :key="recruit.id" @click="onModal(recruit.id,'individual')">
                           <div class="recruit-card-img-box">
-                            <img src="@/assets/images/samsung.png" alt="">
+                            <img v-if="recruitImg2[recruit.user.id]" :src="'https://j3b104.p.ssafy.io'+recruitImg2[recruit.user.id]" alt="">
+                            <img v-else src="@/assets/images/company2.png" alt="">
                           </div>
-                          <p>삼성SDI</p>
-                        </div>
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/naver.png" alt="">
-                          </div>
-                          <p>네이버</p>
-                        </div>
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/kakao.png" alt="">
-                          </div>
-                          <p>카카오</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="recruit-slide slide_2">
-                    <div class="recruit-slide-content">
-                      <div class="recruit-card-box">
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/SK.png" alt="">
-                          </div>
-                          <p>SK그룹</p>
-                        </div>
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/LG.png" alt="">
-                          </div>
-                          <p>LG그룹</p>
-                        </div>
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/cj.png" alt="">
-                          </div>
-                          <p>CJ그룹</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="recruit-slide slide_3">
-                    <div class="recruit-slide-content">
-                      <div class="recruit-card-box">
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/doosan.png" alt="">
-                          </div>
-                          <p>두산그룹</p>
-                        </div>
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/hyundai.png" alt="">
-                          </div>
-                          <p>현대자동차</p>
-                        </div>
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/kia.png" alt="">
-                          </div>
-                          <p>기아자동차</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="recruit-slide slide_4">
-                    <div class="recruit-slide-content">
-                      <div class="recruit-card-box">
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/apm.png" alt="">
-                          </div>
-                          <p>Applied Materials</p>
-                        </div>
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/asml.png" alt="">
-                          </div>
-                          <p>ASML</p>
-                        </div>
-                        <div class="recruit-card">
-                          <div class="recruit-card-img-box">
-                            <img src="@/assets/images/gs.png" alt="">
-                          </div>
-                          <p>GS그룹</p>
+                          <p>{{ recruit.user.last_name }}</p>
+                          <p v-if="recruit.title.length<18">{{ recruit.title }}</p>
+                          <p v-else>{{ recruit.title.substring(0,18) + '...' }}</p>
+                          <p>~ {{recruit.deadline.substring(0,4)}}.{{recruit.deadline.substring(4,6)}}.{{recruit.deadline.substring(6,8)}}
+                             {{recruit.deadline.substring(8,10)}}:{{recruit.deadline.substring(10,)}}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -119,8 +41,10 @@
             </div>
           </div>          
         </div>
+      </div>
+      <div class="schedule-box">
         <div class="test-box">
-          <p class="test-header">다가오는 시험</p>
+          <p class="test-header">마감임박 공고</p>
           <div id="test-slider">
             <input type="radio" name='slider2' id='test-slide1' checked>
             <input type="radio" name='slider2' id='test-slide2'>
@@ -135,213 +59,189 @@
             <div id="test-slides">
               <div id="test-overflow">
                 <div class="test-inner">
-                  <div class="test-slide slide_1">
+                  <div class="test-slide slide_1" v-for="(recruitArr2,index2) in recruitList" :key="`recruitArr2-${index2}`">
                     <div class="test-slide-content">
                       <div class="test-card-box">
-                        <div class="test-card">
-                          <div class="test-card-countdown countdown-lastday">D - 1</div>
-                          <div class="test-card-content">
-                            <p class="test-card-head">2020 기사 제4회 실기시험</p>
-                            <p class="test-card-footer">한국산업인력공단</p>
+                        <div class="test-card" v-for="recruit in recruitArr2" :key="recruit.id" @click="onModal(recruit.id,'individual')">
+                          <div class="test-card-img-box">
+                            <img v-if="recruitImg[recruit.user.id]" :src="'https://j3b104.p.ssafy.io'+recruitImg[recruit.user.id]" alt="">
+                            <img v-else src="@/assets/images/company2.png" alt="">
                           </div>
-                        </div>
-                        <div class="test-card">
-                          <div class="test-card-countdown">D - 3</div>
-                          <div class="test-card-content">
-                            <p class="test-card-head">제49회 SQLD</p>
-                            <p class="test-card-footer">한국데이터산업진흥원</p>
-                          </div>
+                          <p>{{ recruit.user.last_name }}</p>
+                          <p v-if="recruit.title.length<18">{{ recruit.title }}</p>
+                          <p v-else>{{ recruit.title.substring(0,18) + '...' }}</p>
+                          <p>~ {{recruit.deadline.substring(0,4)}}.{{recruit.deadline.substring(4,6)}}.{{recruit.deadline.substring(6,8)}}
+                             {{recruit.deadline.substring(8,10)}}:{{recruit.deadline.substring(10,)}}
+                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="test-slide slide_2">
-                    <div class="test-slide-content">
-                      <div class="test-card-box">
-                        <div class="test-card">
-                          <div class="test-card-countdown">D - 6</div>
-                          <div class="test-card-content">
-                            <p class="test-card-head">2020 기사 제5회 필기시험</p>
-                            <p class="test-card-footer">한국산업인력공단</p>
-                          </div>
-                        </div>
-                        <div class="test-card">
-                          <div class="test-card-countdown">D - 7</div>
-                          <div class="test-card-content">
-                            <p class="test-card-head">OPIC</p>
-                            <p class="test-card-footer">ACTFL</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="test-slide slide_3">
-                    <div class="test-slide-content">
-                      <div class="test-card-box">
-                        <div class="test-card">
-                          <div class="test-card-countdown">D - 11</div>
-                          <div class="test-card-content">
-                            <p class="test-card-head">제 129회 TOEIC</p>
-                            <p class="test-card-footer">한국 토익 위원회</p>
-                          </div>
-                        </div>
-                        <div class="test-card">
-                          <div class="test-card-countdown">D - 14</div>
-                          <div class="test-card-content">
-                            <p class="test-card-head">제50회 SQLD</p>
-                            <p class="test-card-footer">한국데이터산업진흥원</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="test-slide slide_4">
-                    <div class="test-slide-content">
-                      <div class="test-card-box">
-                        <div class="test-card">
-                          <div class="test-card-countdown">D - 17</div>
-                          <div class="test-card-content">
-                            <p class="test-card-head">2020 기능사 제4회 필기시험</p>
-                            <p class="test-card-footer">한국산업인력공단</p>
-                          </div>
-                        </div>
-                        <div class="test-card">
-                          <div class="test-card-countdown">D - 20</div>
-                          <div class="test-card-content">
-                            <p class="test-card-head">제215회 워드프로세서</p>
-                            <p class="test-card-footer">대한상공회의소</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>    
-          </div>
-        </div>
-      </div>
-      <div class="calendar-box">
-        <p class="calendar-header">일정</p>
-        <div class="calendar">
-          <SingleDatePicker class='test' @selectDate='selectDate'/>
-          <div class="calendar-content">
-            <div v-if="!isSelect">
-              <span>오늘의 일정</span>
-              <div class='calendar-select-box'>
-                <div v-for="recruit in todayRecruits" :key="recruit" class='calendar-recruit-box'>
-                  <div class='calendar-select-type'>채용</div>
-                  {{ recruit }}
-                </div>
-                <div v-for="test in todayTests" :key="test" class='calendar-test-box'>
-                  <div class='calendar-select-type'>시험</div>
-                  {{ test }}
                 </div>
               </div>
             </div>
-            <div v-if='isSelect'>
-              <span>{{ selectYear.substring(0,2) }}.</span>
-              <span>{{ selectMonth }}.</span>
-              <span>{{ selectDay }} 일정 </span>
-              <div class='calendar-select-box'>
-                <div v-for="recruit in selectRecruits" :key="recruit" class='calendar-recruit-box'>
-                  <div class='calendar-select-type'>채용</div>
-                  {{ recruit }}
-                </div>
-                <div v-for="test in selectTests" :key="test" class='calendar-test-box'>
-                  <div class='calendar-select-type'>시험</div>
-                  {{ test }}
-                </div>
-              </div>
-            </div>
-          </div>
+          </div>          
         </div>
       </div>
     </div>
+
+    <RecruitModal v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
-import SingleDatePicker from 'vue-single-date-picker';
-import 'vue-single-date-picker/dist/vue-single-date-picker.css';
+import axios from 'axios'
+import { mapState, mapMutations } from 'vuex';
+import RecruitModal from '../components/RecruitModal.vue'
 import '../components/css/home.css'
+
+const SERVER_URL = 'https://j3b104.p.ssafy.io/api/'
+// const WORK_API_KEY = process.env.VUE_APP_WORK_API_KEY
 
 export default {
   name: 'Home',
   data() {
     return {
-      selectYear: '',
-      selectMonth: '',
-      selectDay: '',
-      isSelect: false,
-      defaultSchedule: {
-        200916 : {
-          recruit: ['네이버', '삼성전자', '카카오'],
-          test: ['제49회 SQLD', '기사 제4회 실기시험'],
-        },
-        200917 : {
-          recruit: ['네이버', '삼성전자', '카카오'],
-          test: ['제49회 SQLD', '기사 제4회 실기시험'],
-        },
-        200918 : {
-          recruit: ['네이버', '삼성전자', '카카오'],
-          test: ['제49회 SQLD', '기사 제4회 실기시험'],
-        },
-        200919 : {
-          recruit: ['삼성전자', '카카오'],
-          test: ['기사 제4회 실기시험'],
-        },
-      },
-      todayRecruits: [],
-      todayTests: [],
-      selectRecruits: [],
-      selectTests: [],
+      showModal: false,
+      recruitImg: {},
+      recruitImg2: {},
+      recruitList: [],
+      recruitList2: [],
     }
   },
   components: {
-    SingleDatePicker
+    RecruitModal
+  },
+  computed: {
+    ...mapState(['UserInfo']),
   },
   mounted() {
-    let today = new Date();   
-    let year = String(today.getFullYear()).substring(0,2);
-    let month = '0' + String(today.getMonth() + 1);
-    let date = String(today.getDate());
-    let custom_date = Number(year + month + date)
-    this.todatSchedule(custom_date)
+    this.getRecruit()
+    this.getRecruit2()
   },
   methods: {
-    selectDate() {
-      this.isSelect = true
-      const Day = event.path[0].innerText
-      if (Day.length == 1) {
-        this.selectDay = '0' + Day
-      } else {
-        this.selectDay = Day
+    ...mapMutations(['setUserDivide', 'setRecruitId']),
+    onModal(id, type) {
+      this.setRecruitId(id)
+      this.setUserDivide(type)
+      this.showModal = true;
+    },
+    getRecruit() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
       }
-      const Month = event.path[5].childNodes[0].childNodes[1].innerText.split(' ')[0].substring(0,3)
-      this.setMonth(Month)
-      this.selectYear = event.path[5].childNodes[0].childNodes[1].innerText.split(' ')[1]
-      this.selectSchedule(Number(this.selectYear.substring(0,2)+this.selectMonth+this.selectDay))
+      axios.get(`${SERVER_URL}recruitments/showlist/`, null, config)
+      .then(res => {
+        for(let k=0; k<res.data.length; k++) {
+          this.recruitImg[res.data[k].user.id] = '';
+        }
+        let cnt = 0
+        for(let key in this.recruitImg) {
+          axios.get(`${SERVER_URL}articles/${key}/`, null, config)
+          .then(response => {
+            this.recruitImg[key] = response.data.image
+            cnt += 1
+            if (cnt === Object.keys(this.recruitImg).length) {
+              this.recruitList = tmp
+            }
+          })
+          .catch(() => {})
+        }
+        let tmp = []
+        if(res.data.length>5) {
+          for(let j=0; j<res.data.length/5; j++){
+            if(j==4) {
+              break
+            }
+            let ARR = []
+            for(let i=0; i<5; i++) {
+              if(res.data.length<=j*5+i){
+                break
+              } else {
+                ARR.push(res.data[j*5+i])
+              }
+            }
+            tmp.push(ARR)
+          }
+        } else {
+          let ARR = []
+          for(let i=0; i<res.data.length; i++) {
+              ARR.push(res.data[i])
+          }
+          tmp.push(ARR)
+        }
+      })
+      .catch(() => {})
     },
-    setMonth(month) {
-      if (month === 'Jan') {this.selectMonth = '01'} else if (month === 'Feb') {this.selectMonth = '02'}
-      else if (month === 'Mar') {this.selectMonth = '03'} else if (month === 'Apr') {this.selectMonth = '04'}
-      else if (month === 'May') {this.selectMonth = '05'} else if (month === 'Jun') {this.selectMonth = '06'}
-      else if (month === 'Jul') {this.selectMonth = '07'} else if (month === 'Aug') {this.selectMonth = '08'}
-      else if (month === 'Sep') {this.selectMonth = '09'} else if (month === 'Oct') {this.selectMonth = '10'}
-      else if (month === 'Nov') {this.selectMonth = '11'} else {this.selectMonth = '12'}
-    },
-    selectSchedule(date) {
-      // console.log(this.defaultSchedule[date])
-      // console.log(this.defaultSchedule[date].recruit)
-      // console.log(this.defaultSchedule[date].test)
-      this.selectRecruits = this.defaultSchedule[date].recruit
-      this.selectTests = this.defaultSchedule[date].test
-    },
-    todatSchedule(date) {
-      this.todayRecruits = this.defaultSchedule[date].recruit
-      this.todayTests = this.defaultSchedule[date].test
+    getRecruit2() {
+      const config = {
+        headers: {
+          Authorization: `Token ${this.$cookies.get('auth-token')}`
+        }
+      }
+      axios.get(`${SERVER_URL}recruitments/showlist2/`, null, config)
+      .then(res => {
+        for(let k=0; k<res.data.length; k++) {
+          this.recruitImg2[res.data[k].user.id] = '';
+        }
+        let cnt2 = 0
+        for(let key in this.recruitImg2) {
+          axios.get(`${SERVER_URL}articles/${key}/`, null, config)
+          .then(response => {
+            this.recruitImg2[key] = response.data.image
+            cnt2 += 1
+            if (cnt2 === Object.keys(this.recruitImg2).length) {
+              this.recruitList2 = tmp2
+            }
+          })
+          .catch(() => {})
+        }
+        let tmp2 = []
+        if(res.data.length>5) {
+          for(let j=0; j<res.data.length/5; j++){
+            if(j==4) {
+              break
+            }
+            let ARR = []
+            for(let i=0; i<5; i++) {
+              if(res.data.length<=j*5+i){
+                break
+              } else {
+                ARR.push(res.data[j*5+i])
+              }
+            }
+            tmp2.push(ARR)
+          }
+        } else {
+          let ARR = []
+          for(let i=0; i<res.data.length; i++) {
+              ARR.push(res.data[i])
+          }
+          tmp2.push(ARR)
+        }
+      })
+      .catch(() => {})
     }
+    // getRecruitInform() {
+    //   console.log(WORK_API_KEY)
+    //   axios.get('http://openapi.work.go.kr/opi/opi/opia/wantedApi.do', {
+    //     params: {
+    //       authKey: WORK_API_KEY,
+    //       callTp: 'L',
+    //       returnType: 'XML',
+    //       startPage: 1,
+    //       display: 10,
+    //       coTp: '01'
+    //     }
+    //   }).then(res => {
+    //     console.log(res)
+    //   })
+    //   .catch(err =>{
+    //     console.log(err.response)
+    //   })
+    // }
   }
 }
 </script>
